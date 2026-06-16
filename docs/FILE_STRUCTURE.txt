@@ -1,0 +1,142 @@
+╔════════════════════════════════════════════════════════════════╗
+║          SITEMAP BUILDER - FOLDER STRUCTURE GUIDE               ║
+╚════════════════════════════════════════════════════════════════╝
+
+STEP 1: CREATE FOLDER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📦 sitemap-builder/     ← Your main project folder
+   (creează cu: mkdir sitemap-builder)
+
+
+STEP 2: COPY ROOT FILES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Copy these files la ROOT (în sitemap-builder/):
+
+📦 sitemap-builder/
+   ├── 📄 package.json              ✅ COPIAZĂ
+   ├── 📄 tailwind.config.js        ✅ COPIAZĂ
+   ├── 📄 postcss.config.js         ✅ COPIAZĂ
+   ├── 📄 index.html                ✅ COPIAZĂ (din outputs)
+   ├── 📄 .gitignore                ✅ COPIAZĂ
+   │
+   └── ... rest va veni
+
+
+STEP 3: CREATE FOLDERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+In VS Code, create these folders:
+
+📦 sitemap-builder/
+   ├── 📁 public/                   ← Create (React needs it)
+   │   └── (leave empty for now)
+   │
+   └── 📁 src/                      ← Create
+       └── 📁 components/           ← Create
+
+
+STEP 4: COPY SRC FILES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Copy into src/ folder:
+
+📦 sitemap-builder/
+   └── 📁 src/
+       ├── 📄 index.js              ✅ COPIAZĂ
+       ├── 📄 index.css             ✅ COPIAZĂ
+       ├── 📄 App.jsx               ✅ COPIAZĂ
+       │
+       └── 📁 components/
+           └── 📄 SitemapBuilder.jsx ✅ COPIAZĂ
+
+
+STEP 5: FINAL STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+After npm install, your folder should look like:
+
+📦 sitemap-builder/
+   ├── 📁 node_modules/             (created by npm)
+   ├── 📁 public/
+   ├── 📁 src/
+   │   ├── 📁 components/
+   │   │   └── SitemapBuilder.jsx
+   │   ├── App.jsx
+   │   ├── index.js
+   │   └── index.css
+   ├── 📄 package.json
+   ├── 📄 package-lock.json         (created by npm)
+   ├── 📄 tailwind.config.js
+   ├── 📄 postcss.config.js
+   ├── 📄 index.html
+   ├── 📄 .gitignore
+   └── 📄 README.md                 (optional)
+
+
+WHICH FILES FROM OUTPUTS TO COPY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+From the outputs folder you received:
+
+ROOT (sitemap-builder/):
+  ✅ package.json
+  ✅ tailwind.config.js
+  ✅ postcss.config.js
+  ✅ index.html
+  ✅ .gitignore
+
+SRC (src/):
+  ✅ App.jsx
+  ✅ index.js
+  ✅ index.css
+
+SRC/COMPONENTS (src/components/):
+  ✅ SitemapBuilder.jsx
+
+OPTIONAL:
+  📖 README.md
+  📖 QUICKSTART.md
+  📖 SETUP.md
+  📖 ADVANCED.md
+  📖 example-sitemap.json
+
+
+WHAT NOT TO COPY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ Do NOT copy these:
+   - example-sitemap.json (it's just an example)
+   - README.md, SETUP.md, ADVANCED.md (reference docs)
+   - FILE_STRUCTURE.txt (this file)
+   - QUICKSTART.md (you're using this now)
+
+
+QUICK COPY CHECKLIST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[ ] Create: sitemap-builder/ folder
+[ ] Create: src/ folder inside it
+[ ] Create: public/ folder inside it
+[ ] Create: src/components/ folder
+[ ] Copy: package.json → root
+[ ] Copy: tailwind.config.js → root
+[ ] Copy: postcss.config.js → root
+[ ] Copy: index.html → root
+[ ] Copy: .gitignore → root
+[ ] Copy: index.js → src/
+[ ] Copy: index.css → src/
+[ ] Copy: App.jsx → src/
+[ ] Copy: SitemapBuilder.jsx → src/components/
+
+
+THEN RUN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+In terminal (from sitemap-builder folder):
+
+$ npm install      (wait 1-2 minutes)
+$ npm start        (opens browser automatically)
+
+Done! 🎉

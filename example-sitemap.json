@@ -1,0 +1,100 @@
+[
+  {
+    "id": "1",
+    "label": "Home",
+    "url": "/",
+    "parentId": null,
+    "children": []
+  },
+  {
+    "id": "2",
+    "label": "Product",
+    "url": "/product",
+    "parentId": "1",
+    "children": []
+  },
+  {
+    "id": "3",
+    "label": "Features",
+    "url": "/product/features",
+    "parentId": "2",
+    "children": []
+  },
+  {
+    "id": "4",
+    "label": "Pricing",
+    "url": "/product/pricing",
+    "parentId": "2",
+    "children": []
+  },
+  {
+    "id": "5",
+    "label": "Documentation",
+    "url": "/docs",
+    "parentId": "1",
+    "children": []
+  },
+  {
+    "id": "6",
+    "label": "Getting Started",
+    "url": "/docs/getting-started",
+    "parentId": "5",
+    "children": []
+  },
+  {
+    "id": "7",
+    "label": "API Reference",
+    "url": "/docs/api",
+    "parentId": "5",
+    "children": []
+  },
+  {
+    "id": "8",
+    "label": "FAQ",
+    "url": "/docs/faq",
+    "parentId": "5",
+    "children": []
+  },
+  {
+    "id": "9",
+    "label": "Company",
+    "url": "/company",
+    "parentId": "1",
+    "children": []
+  },
+  {
+    "id": "10",
+    "label": "About",
+    "url": "/company/about",
+    "parentId": "9",
+    "children": []
+  },
+  {
+    "id": "11",
+    "label": "Team",
+    "url": "/company/team",
+    "parentId": "9",
+    "children": []
+  },
+  {
+    "id": "12",
+    "label": "Careers",
+    "url": "/company/careers",
+    "parentId": "9",
+    "children": []
+  },
+  {
+    "id": "13",
+    "label": "Blog",
+    "url": "/blog",
+    "parentId": "1",
+    "children": []
+  },
+  {
+    "id": "14",
+    "label": "Contact",
+    "url": "/contact",
+    "parentId": "1",
+    "children": []
+  }
+]
