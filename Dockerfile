@@ -8,6 +8,9 @@ COPY . .
 ARG REACT_APP_API_URL
 ENV REACT_APP_API_URL=$REACT_APP_API_URL
 ENV CI=false
+# keep the CRA build lean so it doesn't OOM on small servers
+ENV GENERATE_SOURCEMAP=false
+ENV NODE_OPTIONS=--max-old-space-size=2048
 RUN npm run build
 
 FROM nginx:alpine
