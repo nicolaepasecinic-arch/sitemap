@@ -561,7 +561,20 @@ const BROWSER_HEADERS = {
 
 const PORT = Number(process.env.PORT) || 3000;
 
-initDb()
+// Connect to the DB with retries — Postgres may accept connections a few seconds after the
+// container starts, and we don't want a transient hiccup to crash-loop the whole app.
+async function initDbWithRetry(attempts = 12, delayMs = 3000): Promise<void> {
+  for (let i = 1; i <= attempts; i++) {
+    try { await initDb(); return; }
+    catch (e) {
+      console.error(`DB connect attempt ${i}/${attempts} failed:`, (e as Error).message);
+      if (i < attempts) await new Promise((r) => setTimeout(r, delayMs));
+    }
+  }
+  throw new Error('Could not connect to the database after retries — check DATABASE_URL (host must be the Postgres internal service name, both on the same network).');
+}
+
+initDbWithRetry()
   .then(() => migrateMarkupFiles(MARKUP_DIR).catch(() => {}))
   .then(() => {
     app.listen(PORT, () => console.log(`Qoders API listening on :${PORT}`));
