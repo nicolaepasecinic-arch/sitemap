@@ -23,6 +23,13 @@ function parseReset() {
   try { return new URLSearchParams(m[1] || '').get('token') || ''; } catch (e) { return ''; }
 }
 
+// invite signup link (#/signup?email=...) — returns the prefilled email, or null when not an invite link
+function parseInvite() {
+  const m = (window.location.hash || '').match(/^#\/signup(?:\?(.*))?$/);
+  if (!m) return null;
+  try { return new URLSearchParams(m[1] || '').get('email') || ''; } catch (e) { return ''; }
+}
+
 // read the project id from the URL hash (#/p/<id>)
 function parseHash() {
   const m = (window.location.hash || '').match(/^#\/p\/(.+)$/);
@@ -105,6 +112,7 @@ export default function App() {
   const [moodboard, setMoodboard] = useState(() => parseMoodboard());
   const [sgView, setSgView] = useState(() => parseStyleGuideView());
   const [resetToken, setResetToken] = useState(() => parseReset());
+  const [invite, setInvite] = useState(() => parseInvite());
   const [viewProject, setViewProject] = useState(null);
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -119,7 +127,7 @@ export default function App() {
 
   // keep state in sync with browser navigation (back/forward, manual URL)
   useEffect(() => {
-    const onHash = () => { setOpenId(parseHash()); setViewId(parseView()); setMarkup(parseMarkup()); setDesign(parseDesign()); setBoards(parseProjects()); setStyleGuides(parseStyleGuides()); setMoodboard(parseMoodboard()); setSgView(parseStyleGuideView()); setResetToken(parseReset()); };
+    const onHash = () => { setOpenId(parseHash()); setViewId(parseView()); setMarkup(parseMarkup()); setDesign(parseDesign()); setBoards(parseProjects()); setStyleGuides(parseStyleGuides()); setMoodboard(parseMoodboard()); setSgView(parseStyleGuideView()); setResetToken(parseReset()); setInvite(parseInvite()); };
     window.addEventListener('hashchange', onHash);
     return () => window.removeEventListener('hashchange', onHash);
   }, []);
@@ -183,7 +191,7 @@ export default function App() {
     return <MarkupEditor key={`mview-${markup.id}`} id={markup.id} pub focusCommentId={markup.commentId || ''} onBack={() => { window.location.hash = '#/'; }} />;
   }
 
-  if (!auth) return <Login onLogin={(u) => setAuthState(u)} />;
+  if (!auth) return <Login onLogin={(u) => { setAuthState(u); if ((window.location.hash || '').startsWith('#/signup')) window.location.hash = '#/'; }} initialMode={invite !== null ? 'signup' : 'login'} initialEmail={invite || ''} />;
 
   // ---- Markup module ----
   if (markup) {

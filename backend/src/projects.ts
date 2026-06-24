@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { pool } from './db';
+import { sendInviteEmail } from './mailer';
 import { requireAuth, AuthedRequest, teamRoleOf } from './auth';
 import { fetchAcProject, createAcProject, syncAcTask } from './activecollab';
 
@@ -243,6 +244,7 @@ projectsRouter.post('/:id/members', async (req: AuthedRequest, res: Response) =>
        ON CONFLICT (project_id, email) DO UPDATE SET role = EXCLUDED.role`,
       [req.params.id, cleanEmail, r]
     );
+    sendInviteEmail({ req, email: cleanEmail, what: 'a project' });
     return res.status(201).json({ userId: null, name: cleanEmail, email: cleanEmail, role: r, pending: true });
   }
 

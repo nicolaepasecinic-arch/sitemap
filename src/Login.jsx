@@ -3,10 +3,10 @@ import { Star, ArrowRight, Mail, Lock } from 'lucide-react';
 import BrandStar, { BrandWordmark } from './components/Brand';
 import { loginUser, registerUser, forgotPassword } from './auth';
 
-export default function Login({ onLogin }) {
-  const [mode, setMode] = useState('login'); // login | signup | forgot
+export default function Login({ onLogin, initialMode = 'login', initialEmail = '' }) {
+  const [mode, setMode] = useState(initialMode); // login | signup | forgot
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(initialEmail);
   const [pw, setPw] = useState('');
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(false);

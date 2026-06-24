@@ -5,6 +5,7 @@ import { randomUUID } from 'crypto';
 import AdmZip from 'adm-zip';
 import { Firecrawl } from 'firecrawl';
 import { pool } from './db';
+import { sendInviteEmail } from './mailer';
 import { requireAuth, AuthedRequest, teamRoleOf } from './auth';
 import { fetchAcProject, createAcProject, syncAcTask, syncAcSubtask } from './activecollab';
 import { userAcToken, canSyncAcRole } from './projects';
@@ -946,6 +947,7 @@ markupRouter.post('/projects/:id/members', async (req: AuthedRequest, res: Respo
        ON CONFLICT (project_id, email) DO UPDATE SET role = EXCLUDED.role`,
       [req.params.id, cleanEmail, r]
     );
+    sendInviteEmail({ req, email: cleanEmail, what: 'a project' });
     return res.status(201).json({ userId: null, name: cleanEmail, email: cleanEmail, role: r, pending: true });
   }
   const { rows: owner } = await pool.query('SELECT user_id FROM markup_projects WHERE id = $1', [req.params.id]);

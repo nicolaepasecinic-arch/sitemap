@@ -1,5 +1,6 @@
 import { Router, Response } from 'express';
 import { pool } from './db';
+import { sendInviteEmail } from './mailer';
 import { requireAuth, AuthedRequest } from './auth';
 
 export const TEAM_ROLES = ['pm', 'production', 'client'];
@@ -84,6 +85,7 @@ teamsRouter.post('/members', async (req: AuthedRequest, res: Response) => {
        ON CONFLICT (team_id, email) DO UPDATE SET role = EXCLUDED.role`,
       [team.id, cleanEmail, r]
     );
+    sendInviteEmail({ req, email: cleanEmail, what: 'their team' });
     return res.status(201).json({ userId: null, name: cleanEmail, email: cleanEmail, role: r, pending: true });
   }
   if (target.id === team.ownerId) return res.status(400).json({ error: 'That user owns this team.' });
