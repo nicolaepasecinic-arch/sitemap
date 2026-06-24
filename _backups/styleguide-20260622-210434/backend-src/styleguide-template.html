@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+
+<!-- ════════════════════════════════════════════════════════════════
+     DESIGN TOKENS — the single source of truth.
+     Every visual property in the document below references one of
+     these via var(...), so editing a token propagates everywhere.
+     ════════════════════════════════════════════════════════════════ -->
+<style id="sg-tokens">
+:root{
+  /* ── Color primitives ── */
+  --color-brand:        #1F2937;   /* Primary — headings, nav, dark surfaces */
+  --color-accent:       #2563EB;   /* Action — buttons, links */
+  --color-accent-hover: #1D4ED8;
+  --color-text:         #111827;   /* Body text */
+  --color-muted:        #6B7280;   /* Secondary text */
+  --color-border:       #E5E7EB;   /* Borders / dividers */
+  --color-surface-page: #FFFFFF;   /* Page background */
+  --color-surface-alt:  #F3F4F6;   /* Alt section background */
+  --color-surface-card: #FFFFFF;   /* Card background */
+
+  /* ── Semantic colour aliases (content uses these) ── */
+  --text-heading:    var(--color-brand);
+  --text-primary:    var(--color-text);
+  --text-muted:      var(--color-muted);
+  --text-on-dark:    #FFFFFF;
+
+  /* ── Typography ── */
+  --font-heading: "Inter", system-ui, -apple-system, sans-serif;
+  --font-body:    "Inter", system-ui, -apple-system, sans-serif;
+  --text-h1: 64px; --text-h2: 48px; --text-h3: 36px;
+  --text-h4: 28px; --text-h5: 22px; --text-h6: 18px;
+  --text-body-lg: 18px; --text-body-sm: 16px; --text-caption: 14px;
+  /* responsive size variants — media queries below swap to these per breakpoint */
+  --text-h1-t: 48px; --text-h1-m: 36px;
+  --text-h2-t: 38px; --text-h2-m: 30px;
+  --text-h3-t: 30px; --text-h3-m: 24px;
+  --lh-heading: 1.15; --lh-body: 1.6;
+  --ls-heading: -0.02em; --ls-body: 0em;
+  --fw-regular: 400; --fw-medium: 500; --fw-semibold: 600; --fw-bold: 700; --fw-extrabold: 800;
+  --fw-h1: 800; --fw-h2: 700; --fw-h3: 700; --fw-h4: 700; --fw-h5: 700; --fw-h6: 700; --fw-body: 400;
+
+  /* ── Spacing scale (base 4px) ── */
+  --space-0: 0;   --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
+  --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-12: 48px;
+  --space-16: 64px; --space-20: 80px; --space-24: 96px; --space-32: 128px;
+
+  /* ── Layout / sections ── */
+  --section-padding-y:  96px;  --section-padding-y-t: 72px; --section-padding-y-m: 56px;
+  --container-padding-x: 24px; --container-padding-x-m: 16px;
+  --container-max-width: 1200px;
+  --gap: 24px;
+
+  /* ── Border radii — semantic, role-based ── */
+  --radius-card: 20px; --radius-image: 20px; --radius-button: 10px;
+  --radius-input: 10px; --radius-icon-btn: 10px; --radius-tag: 999px;
+  --radius-sm: 6px; --radius-md: 10px; --radius-lg: 16px; /* internal chrome */
+
+  /* ── Responsive breakpoints (drive the token overrides below) ── */
+  --bp-tablet: 1024px;
+  --bp-mobile: 640px;
+
+  /* ── Links ── */
+  --link-color: var(--color-accent);
+  --link-color-hover: var(--color-accent-hover);
+  --link-decoration: none;
+  --link-decoration-hover: underline;
+  --link-weight: var(--fw-medium);
+
+  /* ── Lists ── */
+  --list-gap: 8px; --list-indent: 24px; --list-marker: var(--color-accent);
+
+  /* ── Blockquote ── */
+  --bq-border-color: var(--color-accent); --bq-border-width: 4px;
+  --bq-text-color: var(--color-text); --bq-padding: 20px;
+
+  /* ── Forms ── */
+  --input-bg: #FFFFFF; --input-border: var(--color-border); --input-radius: var(--radius-input);
+  --input-padding: 12px; --input-text: var(--color-text); --input-focus-border: var(--color-accent);
+
+  /* ── Buttons ── */
+  --btn-bg: var(--color-accent); --btn-text: #FFFFFF; --btn-radius: var(--radius-button);
+  --btn-padding-y: 12px; --btn-padding-x: 22px; --btn-weight: var(--fw-semibold);
+
+  /* ── Components ── */
+  --card-bg: var(--color-surface-card); --card-radius: var(--radius-card);
+  --card-padding: 24px; --card-border: var(--color-border); --card-shadow: 0 1px 3px rgba(17,24,39,.08);
+  --nav-bg: #FFFFFF; --nav-text: var(--color-brand); --nav-height: 64px; --nav-link-hover: var(--color-accent);
+  --footer-bg: var(--color-brand); --footer-text: #FFFFFF; --footer-padding: 64px;
+}
+</style>
+
+<!-- ════ Base element styles — every value is a token ════ -->
+<style id="sg-base">
+*{ box-sizing: border-box; }
+html,body{ margin:0; }
+body{
+  font-family: var(--font-body);
+  font-size: var(--text-body-lg);
+  line-height: var(--lh-body);
+  letter-spacing: var(--ls-body);
+  font-weight: var(--fw-body);
+  color: var(--text-primary);
+  background: var(--color-surface-page);
+  -webkit-font-smoothing: antialiased;
+}
+h1,h2,h3,h4,h5,h6{
+  font-family: var(--font-heading);
+  color: var(--text-heading);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-heading);
+  margin: 0 0 var(--space-4);
+}
+h1{ font-size: var(--text-h1); font-weight: var(--fw-h1); }
+h2{ font-size: var(--text-h2); font-weight: var(--fw-h2); }
+h3{ font-size: var(--text-h3); font-weight: var(--fw-h3); }
+h4{ font-size: var(--text-h4); font-weight: var(--fw-h4); }
+h5{ font-size: var(--text-h5); font-weight: var(--fw-h5); }
+h6{ font-size: var(--text-h6); font-weight: var(--fw-h6); }
+p{ margin: 0 0 var(--space-4); font-size: var(--text-body-lg); }
+small,.caption{ font-size: var(--text-caption); color: var(--text-muted); }
+.lead{ font-size: var(--text-body-lg); color: var(--text-muted); }
+.eyebrow{ font-size: var(--text-caption); font-weight: var(--fw-bold);
+  letter-spacing: .08em; text-transform: uppercase; color: var(--color-accent); margin: 0 0 var(--space-3); }
+a{ color: var(--link-color); text-decoration: var(--link-decoration); font-weight: var(--link-weight); }
+a:hover{ color: var(--link-color-hover); text-decoration: var(--link-decoration-hover); }
+ul,ol{ margin: 0 0 var(--space-4); padding-left: var(--list-indent); }
+ul li,ol li{ margin-bottom: var(--list-gap); }
+ul li::marker,ol li::marker{ color: var(--list-marker); }
+blockquote{
+  margin: 0 0 var(--space-4); padding: var(--bq-padding);
+  border-left: var(--bq-border-width) solid var(--bq-border-color);
+  color: var(--bq-text-color); background: var(--color-surface-alt);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0; font-size: var(--text-body-lg);
+}
+hr{ border:0; border-top:1px solid var(--color-border); margin: var(--space-8) 0; }
+label{ display:block; font-size: var(--text-body-sm); font-weight: var(--fw-medium);
+  color: var(--text-primary); margin-bottom: var(--space-2); }
+input[type=text],input[type=email],input[type=password],textarea,select{
+  width:100%; font-family: var(--font-body); font-size: var(--text-body-sm);
+  background: var(--input-bg); color: var(--input-text);
+  border: 1px solid var(--input-border); border-radius: var(--input-radius);
+  padding: var(--input-padding); outline: none;
+}
+input:focus,textarea:focus,select:focus{ border-color: var(--input-focus-border);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--input-focus-border) 18%, transparent); }
+.btn{ display:inline-flex; align-items:center; gap: var(--space-2); cursor:pointer; border:0;
+  font-family: var(--font-body); font-weight: var(--btn-weight); font-size: var(--text-body-sm);
+  background: var(--btn-bg); color: var(--btn-text); border-radius: var(--btn-radius);
+  padding: var(--btn-padding-y) var(--btn-padding-x); text-decoration:none; }
+.btn:hover{ background: var(--color-accent-hover); color: var(--btn-text); }
+.btn-secondary{ background: transparent; color: var(--color-brand);
+  border: 1px solid var(--color-border); }
+.btn-secondary:hover{ background: var(--color-surface-alt); color: var(--color-brand); }
+</style>
+
+<!-- ════ Layout + style-guide display chrome ════ -->
+<style id="sg-layout">
+.container{ max-width: var(--container-max-width); margin: 0 auto; padding: 0 var(--container-padding-x); }
+.section{ padding: var(--section-padding-y) 0; }
+.section.alt{ background: var(--color-surface-alt); }
+.section-head{ margin-bottom: var(--space-12); }
+.section-head h2{ margin-bottom: var(--space-2); }
+.grid{ display:grid; gap: var(--gap); }
+.cols-2{ grid-template-columns: repeat(2,1fr); }
+.cols-3{ grid-template-columns: repeat(3,1fr); }
+.cols-4{ grid-template-columns: repeat(4,1fr); }
+@media (max-width:1024px){ .cols-3,.cols-4{ grid-template-columns: repeat(2,1fr); } }
+@media (max-width:640px){ .cols-2,.cols-3,.cols-4{ grid-template-columns: 1fr; } }
+.swatches{ display:grid; gap: var(--space-4); grid-template-columns: repeat(3,1fr); }
+@media (max-width:1024px){ .swatches{ grid-template-columns: repeat(2,1fr); } }
+@media (max-width:640px){ .swatches{ grid-template-columns: 1fr; } }
+.sw{ border:1px solid var(--color-border); border-radius: var(--radius-lg); overflow:hidden; background: var(--color-surface-card); }
+.sw .chip{ height: 96px; }
+.sw .body{ padding: var(--space-4); }
+.sw .nm{ font-family: var(--font-heading); font-weight: var(--fw-semibold); color: var(--text-heading); font-size: var(--text-body-sm); }
+.sw .hx{ font-size: var(--text-caption); color: var(--text-muted); text-transform: uppercase; letter-spacing:.04em; }
+.sw .use{ font-size: var(--text-caption); color: var(--text-muted); margin-top: var(--space-1); }
+.specimen{ display:flex; align-items:baseline; justify-content:space-between; gap: var(--space-6);
+  padding: var(--space-5) 0; border-bottom: 1px solid var(--color-border); }
+.specimen .meta{ font-size: var(--text-caption); color: var(--text-muted); white-space:nowrap; }
+.scale-row{ display:flex; align-items:center; gap: var(--space-4); padding: var(--space-2) 0; }
+.scale-row .bar{ height: 16px; background: var(--color-accent); border-radius: var(--radius-sm); }
+.scale-row .lbl{ font-size: var(--text-caption); color: var(--text-muted); width: 96px; }
+.radii{ display:grid; gap: var(--space-6); grid-template-columns: repeat(6,1fr); align-items:end; }
+@media (max-width:1024px){ .radii{ grid-template-columns: repeat(3,1fr); } }
+@media (max-width:640px){ .radii{ grid-template-columns: repeat(2,1fr); } }
+.radii .box{ text-align:center; cursor:pointer; }
+.radii .swatch{ height: 110px; background: var(--color-surface-card); border:1px solid var(--color-border); margin-bottom: var(--space-3); }
+.radii .rname{ font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: var(--text-caption); font-weight: var(--fw-semibold); color: var(--text-heading); }
+.radii .rval{ font-size: var(--text-caption); color: var(--text-muted); margin-top: var(--space-1); }
+.bp-table{ width:100%; border-collapse:collapse; }
+.bp-table th,.bp-table td{ text-align:left; padding: var(--space-3) var(--space-4); border-bottom:1px solid var(--color-border); font-size: var(--text-body-sm); }
+.bp-table th{ color: var(--text-muted); font-weight: var(--fw-semibold); font-size: var(--text-caption); text-transform:uppercase; letter-spacing:.04em; }
+.card{ background: var(--card-bg); border:1px solid var(--card-border); border-radius: var(--card-radius);
+  padding: var(--card-padding); box-shadow: var(--card-shadow); }
+.card h4{ margin-bottom: var(--space-2); }
+.demo-nav{ display:flex; align-items:center; justify-content:space-between; height: var(--nav-height);
+  background: var(--nav-bg); border:1px solid var(--color-border); border-radius: var(--radius-lg);
+  padding: 0 var(--space-6); }
+.demo-nav .brand{ font-family: var(--font-heading); font-weight: var(--fw-bold); color: var(--nav-text); font-size: var(--text-h6); }
+.demo-nav .links{ display:flex; gap: var(--space-6); }
+.demo-nav .links a{ color: var(--nav-text); font-size: var(--text-body-sm); }
+.demo-nav .links a:hover{ color: var(--nav-link-hover); }
+.demo-footer{ background: var(--footer-bg); color: var(--footer-text); border-radius: var(--radius-lg);
+  padding: var(--footer-padding) var(--space-8); }
+.demo-footer a{ color: var(--footer-text); opacity:.85; }
+.demo-footer .cols{ display:flex; gap: var(--space-16); flex-wrap:wrap; }
+.form-grid{ display:grid; gap: var(--space-4); grid-template-columns: repeat(2,1fr); }
+@media (max-width:640px){ .form-grid{ grid-template-columns:1fr; } }
+.field{ margin-bottom: var(--space-4); }
+.page-head{ padding: var(--space-20) 0 var(--space-12); }
+.page-head .title{ font-size: var(--text-h1); }
+</style>
+
+<!-- ════ Responsive — each breakpoint swaps the size binding to its own token,
+     so editing a per-breakpoint token (Properties mode) is a simple flat edit. ════ -->
+<style id="sg-responsive">
+@media (max-width: 1024px){
+  h1,.page-head .title{ font-size: var(--text-h1-t); }
+  h2{ font-size: var(--text-h2-t); }
+  h3{ font-size: var(--text-h3-t); }
+  .section{ padding: var(--section-padding-y-t) 0; }
+}
+@media (max-width: 640px){
+  h1,.page-head .title{ font-size: var(--text-h1-m); }
+  h2{ font-size: var(--text-h2-m); }
+  h3{ font-size: var(--text-h3-m); }
+  .section{ padding: var(--section-padding-y-m) 0; }
+  .container{ padding: 0 var(--container-padding-x-m); }
+}
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <div class="container">
+    <div class="eyebrow">Design System</div>
+    <h1 class="title">Brand Style Guide</h1>
+    <p class="lead">A living set of design tokens — colours, typography, spacing and components. Edit a token and it updates everywhere it is used.</p>
+  </div>
+</header>
+
+<!-- ════ 01 · COLORS ════ -->
+<section id="colors" class="section">
+  <div class="container">
+    <div class="section-head"><div class="eyebrow">01 · Foundations</div><h2>Colors</h2><p class="lead">The core palette. Brand and accent drive everything; surfaces and muted handle backgrounds and secondary text.</p></div>
+    <div class="swatches">
+      <div class="sw" data-copy="#1F2937"><div class="chip" style="background:var(--color-brand)"></div><div class="body"><div class="nm">Brand Color</div><div class="hx">#1F2937</div><div class="use">Headings · Nav · Dark surfaces</div></div></div>
+      <div class="sw" data-copy="#2563EB"><div class="chip" style="background:var(--color-accent)"></div><div class="body"><div class="nm">Accent Color</div><div class="hx">#2563EB</div><div class="use">Buttons · Links · Highlights</div></div></div>
+      <div class="sw" data-copy="#F3F4F6"><div class="chip" style="background:var(--color-surface-alt)"></div><div class="body"><div class="nm">Surface Alt</div><div class="hx">#F3F4F6</div><div class="use">Alt section background</div></div></div>
+      <div class="sw" data-copy="#FFFFFF"><div class="chip" style="background:var(--color-surface-card);box-shadow:inset 0 0 0 1px var(--color-border)"></div><div class="body"><div class="nm">Surface Card</div><div class="hx">#FFFFFF</div><div class="use">Card background</div></div></div>
+      <div class="sw" data-copy="#FFFFFF"><div class="chip" style="background:var(--color-surface-page);box-shadow:inset 0 0 0 1px var(--color-border)"></div><div class="body"><div class="nm">Surface Page</div><div class="hx">#FFFFFF</div><div class="use">Page background</div></div></div>
+      <div class="sw" data-copy="#6B7280"><div class="chip" style="background:var(--color-muted)"></div><div class="body"><div class="nm">Muted</div><div class="hx">#6B7280</div><div class="use">Captions · Secondary text</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ 02 · TYPOGRAPHY ════ -->
+<section id="typography" class="section alt">
+  <div class="container">
+    <div class="section-head"><div class="eyebrow">02 · Foundations</div><h2>Typography</h2><p class="lead">One type family, a clear scale. Sizes are shown as <strong>Desktop / Tablet / Mobile</strong> and scale down per breakpoint.</p></div>
+    <div class="specimen"><h1 style="margin:0">Heading 1</h1><span class="meta" data-typ="--text-h1" data-resp="1" data-role="H1">H1</span></div>
+    <div class="specimen"><h2 style="margin:0">Heading 2</h2><span class="meta" data-typ="--text-h2" data-resp="1" data-role="H2">H2</span></div>
+    <div class="specimen"><h3 style="margin:0">Heading 3</h3><span class="meta" data-typ="--text-h3" data-resp="1" data-role="H3">H3</span></div>
+    <div class="specimen"><h4 style="margin:0">Heading 4</h4><span class="meta" data-typ="--text-h4" data-role="H4">H4</span></div>
+    <div class="specimen"><h5 style="margin:0">Heading 5</h5><span class="meta" data-typ="--text-h5" data-role="H5">H5</span></div>
+    <div class="specimen"><h6 style="margin:0">Heading 6</h6><span class="meta" data-typ="--text-h6" data-role="H6">H6</span></div>
+    <div class="specimen"><p style="margin:0">Body — the quick brown fox jumps over the lazy dog.</p><span class="meta" data-typ="--text-body-lg" data-role="Body">Body</span></div>
+    <div class="specimen"><span class="caption">Caption / metadata text</span><span class="meta" data-typ="--text-caption" data-role="Caption">Caption</span></div>
+  </div>
+</section>
+
+<!-- ════ 03 · SPACING ════ -->
+<section id="spacing" class="section">
+  <div class="container">
+    <div class="section-head"><div class="eyebrow">03 · Foundations</div><h2>Spacing</h2><p class="lead">A 4px-based scale drives all padding and gaps. Section padding is a single token applied everywhere, responsive by breakpoint.</p></div>
+    <div class="grid cols-2">
+      <div>
+        <h5>Scale</h5>
+        <div class="scale-row"><span class="lbl">space-1 · 4</span><span class="bar" style="width:var(--space-1)"></span></div>
+        <div class="scale-row"><span class="lbl">space-2 · 8</span><span class="bar" style="width:var(--space-2)"></span></div>
+        <div class="scale-row"><span class="lbl">space-3 · 12</span><span class="bar" style="width:var(--space-3)"></span></div>
+        <div class="scale-row"><span class="lbl">space-4 · 16</span><span class="bar" style="width:var(--space-4)"></span></div>
+        <div class="scale-row"><span class="lbl">space-6 · 24</span><span class="bar" style="width:var(--space-6)"></span></div>
+        <div class="scale-row"><span class="lbl">space-8 · 32</span><span class="bar" style="width:var(--space-8)"></span></div>
+        <div class="scale-row"><span class="lbl">space-12 · 48</span><span class="bar" style="width:var(--space-12)"></span></div>
+        <div class="scale-row"><span class="lbl">space-16 · 64</span><span class="bar" style="width:var(--space-16)"></span></div>
+        <div class="scale-row"><span class="lbl">space-24 · 96</span><span class="bar" style="width:var(--space-24)"></span></div>
+      </div>
+      <div>
+        <h5>Layout tokens <span class="caption" style="font-weight:400">— click a value to edit</span></h5>
+        <ul>
+          <li><strong>Section padding Y</strong> — <span class="meta" data-typ="--section-padding-y" data-resp="1" data-role="">96 / 72 / 56 px</span> <span class="caption">(Desktop / Tablet / Mobile)</span></li>
+          <li><strong>Container padding X</strong> — <span class="meta" data-typ="--container-padding-x" data-role="">24px</span></li>
+          <li><strong>Container max width</strong> — <span class="meta" data-typ="--container-max-width" data-role="">1200px</span></li>
+          <li><strong>Gap</strong> — <span class="meta" data-typ="--gap" data-role="">24px</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ 04 · RADIUS ════ -->
+<section id="radii" class="section alt">
+  <div class="container">
+    <div class="section-head"><div class="eyebrow">04 · Foundations</div><h2>Border Radius</h2><p class="lead">Role-based corner radii. Editing one updates the matching component everywhere.</p></div>
+    <div class="radii">
+      <div class="box" data-radius="--radius-card"><div class="swatch" style="border-radius:var(--radius-card)"></div><div class="rname">--radius-card</div><div class="rval" data-radval="--radius-card">20px</div></div>
+      <div class="box" data-radius="--radius-image"><div class="swatch" style="border-radius:var(--radius-image)"></div><div class="rname">--radius-image</div><div class="rval" data-radval="--radius-image">20px</div></div>
+      <div class="box" data-radius="--radius-button"><div class="swatch" style="border-radius:var(--radius-button);background:var(--btn-bg);border-color:transparent"></div><div class="rname">--radius-button</div><div class="rval" data-radval="--radius-button">10px</div></div>
+      <div class="box" data-radius="--radius-input"><div class="swatch" style="border-radius:var(--radius-input)"></div><div class="rname">--radius-input</div><div class="rval" data-radval="--radius-input">10px</div></div>
+      <div class="box" data-radius="--radius-icon-btn"><div class="swatch" style="border-radius:var(--radius-icon-btn);height:64px;width:64px;margin:46px auto var(--space-3)"></div><div class="rname">--radius-icon-btn</div><div class="rval" data-radval="--radius-icon-btn">10px</div></div>
+      <div class="box" data-radius="--radius-tag"><div class="swatch" style="border-radius:var(--radius-tag);height:52px;margin-top:58px"></div><div class="rname">--radius-tag</div><div class="rval" data-radval="--radius-tag">pill</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ 05 · LINKS, LISTS & QUOTES ════ -->
+<section id="content" class="section">
+  <div class="container">
+    <div class="section-head"><div class="eyebrow">05 · Elements</div><h2>Links, Lists &amp; Quotes</h2></div>
+    <div class="grid cols-2">
+      <div>
+        <h5>Links</h5>
+        <p>Inline text with a <a href="#">default link</a> and a <a href="#">second link</a> showing the hover style.</p>
+        <h5>Unordered list</h5>
+        <ul><li>First item in the list</li><li>Second item with a bit more text</li><li>Third item</li></ul>
+        <h5>Ordered list</h5>
+        <ol><li>Step one</li><li>Step two</li><li>Step three</li></ol>
+      </div>
+      <div>
+        <h5>Blockquote</h5>
+        <blockquote>Design is not just what it looks like and feels like. Design is how it works.</blockquote>
+        <p class="caption">— attribution text</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ 06 · FORMS & BUTTONS ════ -->
+<section id="forms" class="section alt">
+  <div class="container">
+    <div class="section-head"><div class="eyebrow">06 · Elements</div><h2>Forms &amp; Buttons</h2></div>
+    <div class="grid cols-2">
+      <div>
+        <div class="form-grid">
+          <div class="field"><label>First name</label><input type="text" value="Jane"></div>
+          <div class="field"><label>Last name</label><input type="text" value="Doe"></div>
+        </div>
+        <div class="field"><label>Email</label><input type="email" value="jane@example.com"></div>
+        <div class="field"><label>Message</label><textarea rows="3">Your message…</textarea></div>
+      </div>
+      <div>
+        <h5>Buttons</h5>
+        <p><a class="btn" href="#">Primary action</a> &nbsp; <a class="btn btn-secondary" href="#">Secondary</a></p>
+        <h5>Select</h5>
+        <div class="field"><select><option>Option one</option><option>Option two</option></select></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ 07 · COMPONENTS ════ -->
+<section id="components" class="section">
+  <div class="container">
+    <div class="section-head"><div class="eyebrow">07 · Components</div><h2>Components</h2><p class="lead">Composed from the tokens above — change a token and every component follows.</p></div>
+
+    <h5>Content Cards</h5>
+    <div class="grid cols-3" style="margin-bottom:var(--space-12)">
+      <div class="card"><div class="eyebrow">Category</div><h4>Card title one</h4><p class="caption">A short supporting description for the card content.</p><a href="#">Read more</a></div>
+      <div class="card"><div class="eyebrow">Category</div><h4>Card title two</h4><p class="caption">A short supporting description for the card content.</p><a href="#">Read more</a></div>
+      <div class="card"><div class="eyebrow">Category</div><h4>Card title three</h4><p class="caption">A short supporting description for the card content.</p><a href="#">Read more</a></div>
+    </div>
+
+    <h5>Navigation Bar</h5>
+    <div class="demo-nav" style="margin-bottom:var(--space-12)">
+      <span class="brand">Brand</span>
+      <span class="links"><a href="#">Home</a><a href="#">Products</a><a href="#">About</a><a href="#">Contact</a></span>
+      <a class="btn" href="#">Get started</a>
+    </div>
+
+    <h5>Footer</h5>
+    <div class="demo-footer">
+      <div class="cols">
+        <div><div class="brand" style="color:var(--footer-text);font-family:var(--font-heading);font-weight:var(--fw-bold);font-size:var(--text-h6)">Brand</div><p style="color:var(--footer-text);opacity:.8;font-size:var(--text-body-sm)">Short tagline about the company.</p></div>
+        <div><p style="color:var(--footer-text);opacity:.6;font-size:var(--text-caption);text-transform:uppercase;letter-spacing:.06em;margin-bottom:var(--space-2)">Product</p><a href="#">Features</a><br><a href="#">Pricing</a><br><a href="#">Docs</a></div>
+        <div><p style="color:var(--footer-text);opacity:.6;font-size:var(--text-caption);text-transform:uppercase;letter-spacing:.06em;margin-bottom:var(--space-2)">Company</p><a href="#">About</a><br><a href="#">Blog</a><br><a href="#">Careers</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ 08 · BREAKPOINTS ════ -->
+<section id="breakpoints" class="section alt">
+  <div class="container">
+    <div class="section-head"><div class="eyebrow">08 · Foundations</div><h2>Responsive Breakpoints</h2></div>
+    <table class="bp-table">
+      <thead><tr><th>Name</th><th>Range</th><th>Token</th></tr></thead>
+      <tbody>
+        <tr><td>Desktop</td><td>above tablet</td><td>—</td></tr>
+        <tr><td>Tablet</td><td data-bpval="--bp-tablet">&le; 1024px</td><td>var(--bp-tablet)</td></tr>
+        <tr><td>Mobile</td><td data-bpval="--bp-mobile">&le; 640px</td><td>var(--bp-mobile)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</body>
+</html>

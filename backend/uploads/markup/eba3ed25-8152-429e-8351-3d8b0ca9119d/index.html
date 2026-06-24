@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en" data-scribe-recorder-ready="true"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UPQODE — Web Design Agency</title>
+<style>
+  :root{
+    --bg:#ffffff;
+    --bg-soft:#f6f5f8;
+    --bg-soft2:#faf7fb;
+    --ink:#15131c;
+    --ink-soft:#5b5667;
+    --line:#ece9f1;
+    --accent:#e5147f;
+    --accent-soft:#ffeaf5;
+    --accent-2:#7a3acf;
+    --radius:18px;
+    --shadow:0 18px 48px -24px rgba(33,18,46,.28);
+    --max:1180px;
+    font-synthesis:none;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);
+    background:var(--bg);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 28px}
+  .eyebrow{
+    font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:14px;display:inline-block;
+  }
+  .btn{
+    display:inline-flex;align-items:center;gap:9px;
+    background:var(--accent);color:#fff;font-weight:600;font-size:15px;
+    padding:14px 26px;border-radius:100px;transition:.2s transform,.2s box-shadow;
+    box-shadow:0 12px 26px -12px rgba(229,20,127,.7);
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 18px 34px -12px rgba(229,20,127,.75)}
+  .btn.ghost{
+    background:transparent;color:var(--ink);border:1.5px solid var(--line);
+    box-shadow:none;
+  }
+  .btn.ghost:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+
+  /* ---------- header ---------- */
+  header{
+    position:sticky;top:0;z-index:50;background:rgba(255,255,255,.82);
+    backdrop-filter:saturate(180%) blur(14px);border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;height:74px}
+  .logo{font-weight:800;font-size:22px;letter-spacing:-.02em}
+  .logo span{color:var(--accent)}
+  .menu{display:flex;gap:30px;font-size:15px;font-weight:500;color:var(--ink-soft)}
+  .menu a:hover{color:var(--ink)}
+  .nav-cta{display:flex;align-items:center;gap:18px}
+  @media(max-width:860px){.menu{display:none}}
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;overflow:hidden;
+    background:
+      radial-gradient(1100px 520px at 88% -10%, var(--accent-soft), transparent 60%),
+      radial-gradient(800px 400px at 0% 110%, #eef0ff, transparent 60%);
+    padding:88px 0 70px;
+  }
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center}
+  .hero h1{
+    font-size:clamp(38px,5.4vw,66px);line-height:1.04;font-weight:800;
+    letter-spacing:-.03em;margin-bottom:22px;
+  }
+  .hero h1 em{font-style:normal;color:var(--accent)}
+  .hero p.lede{font-size:19px;color:var(--ink-soft);max-width:520px;margin-bottom:30px}
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:36px}
+  .stats{display:flex;gap:38px;flex-wrap:wrap}
+  .stat b{display:block;font-size:30px;font-weight:800;letter-spacing:-.02em}
+  .stat span{font-size:13.5px;color:var(--ink-soft)}
+  .hero-card{
+    background:#fff;border:1px solid var(--line);border-radius:24px;padding:22px;
+    box-shadow:var(--shadow);
+  }
+  .hero-card .browser{display:flex;gap:7px;margin-bottom:16px}
+  .hero-card .browser i{width:11px;height:11px;border-radius:50%;background:#e7e4ee}
+  .hero-card .browser i:first-child{background:#ff5f57}
+  .hero-card .browser i:nth-child(2){background:#febc2e}
+  .hero-card .browser i:nth-child(3){background:#28c840}
+  .mock-shot{
+    border-radius:14px;overflow:hidden;border:1px solid var(--line);
+    background:linear-gradient(135deg,#fff,#faf6fb);
+  }
+  .mock-shot .mh{height:120px;background:linear-gradient(120deg,var(--accent),#ff77b6);position:relative}
+  .mock-shot .mh:after{content:"";position:absolute;left:22px;bottom:18px;width:120px;height:14px;border-radius:7px;background:rgba(255,255,255,.85)}
+  .mock-shot .mh:before{content:"";position:absolute;left:22px;bottom:40px;width:180px;height:18px;border-radius:9px;background:rgba(255,255,255,.95)}
+  .mock-body{padding:18px 20px;display:grid;gap:10px}
+  .mock-body .row{height:11px;border-radius:6px;background:#efebf3}
+  .mock-body .row.s{width:60%}
+  .mock-body .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
+  .mock-body .cards div{height:54px;border-radius:10px;background:#f3eff7;border:1px solid var(--line)}
+  .mock-body .cards div:first-child{background:var(--accent-soft);border-color:#ffd6ec}
+  @media(max-width:860px){.hero-grid{grid-template-columns:1fr;gap:40px}}
+
+  /* ---------- logos / trust ---------- */
+  .trust{padding:30px 0;border-bottom:1px solid var(--line)}
+  .trust p{text-align:center;font-size:13px;color:var(--ink-soft);margin-bottom:18px;letter-spacing:.04em}
+  .trust-row{display:flex;justify-content:center;gap:46px;flex-wrap:wrap;opacity:.65;font-weight:700;font-size:18px;letter-spacing:.02em}
+
+  /* ---------- section base ---------- */
+  section.block{padding:84px 0}
+  .sec-head{max-width:660px;margin-bottom:46px}
+  .sec-head h2{font-size:clamp(28px,3.6vw,42px);font-weight:800;letter-spacing:-.025em;line-height:1.1}
+  .sec-head p{color:var(--ink-soft);font-size:17px;margin-top:14px}
+
+  /* ---------- work ---------- */
+  .work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .work-card{
+    border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:#fff;
+    transition:.25s transform,.25s box-shadow;
+  }
+  .work-card:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
+  .work-thumb{height:172px;position:relative}
+  .w1{background:linear-gradient(135deg,#ff6aa9,#e5147f)}
+  .w2{background:linear-gradient(135deg,#6f8cff,#3b59e0)}
+  .w3{background:linear-gradient(135deg,#34d6c0,#0fb89c)}
+  .w4{background:linear-gradient(135deg,#ffb15c,#ff7a45)}
+  .w5{background:linear-gradient(135deg,#b07cff,#7a3acf)}
+  .w6{background:linear-gradient(135deg,#5ad1ff,#2f9fe0)}
+  .work-meta{padding:18px 20px}
+  .work-meta h3{font-size:18px;font-weight:700;margin-bottom:4px}
+  .work-meta span{font-size:13.5px;color:var(--ink-soft)}
+  .work-thumb .tag{
+    position:absolute;top:14px;left:14px;background:rgba(255,255,255,.92);
+    color:var(--ink);font-size:12px;font-weight:700;padding:6px 12px;border-radius:100px;
+  }
+  @media(max-width:860px){.work-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:560px){.work-grid{grid-template-columns:1fr}}
+
+  /* ---------- services ---------- */
+  .services{background:var(--bg-soft)}
+  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .svc{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:30px 26px;transition:.25s transform}
+  .svc:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
+  .svc .ic{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;background:var(--accent-soft);font-size:24px;margin-bottom:18px}
+  .svc h3{font-size:20px;font-weight:700;margin-bottom:8px}
+  .svc p{color:var(--ink-soft);font-size:15px;margin-bottom:16px}
+  .svc a.more{font-size:14px;font-weight:700;color:var(--accent)}
+  @media(max-width:860px){.svc-grid{grid-template-columns:1fr}}
+
+  /* ---------- process ---------- */
+  .proc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+  .proc{padding:26px 22px;border-radius:var(--radius);border:1px solid var(--line);background:#fff}
+  .proc b.n{font-size:14px;font-weight:800;color:var(--accent)}
+  .proc h4{font-size:17px;font-weight:700;margin:10px 0 6px}
+  .proc p{font-size:14px;color:var(--ink-soft)}
+  @media(max-width:860px){.proc-grid{grid-template-columns:1fr 1fr}}
+
+  /* ---------- awards band ---------- */
+  .awards{background:linear-gradient(120deg,#1a1322,#2a1830);color:#fff;border-radius:28px;padding:54px 44px;margin:0 0 0;display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center}
+  .awards h2{font-size:clamp(26px,3.4vw,40px);font-weight:800;letter-spacing:-.02em;line-height:1.1}
+  .awards p{color:#d9cfe2;margin-top:12px}
+  .award-stats{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .award-stats div b{display:block;font-size:34px;font-weight:800;color:#ff86c2}
+  .award-stats div span{font-size:14px;color:#cdbfd6}
+
+  /* ---------- testimonials ---------- */
+  .tst-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .tst{border:1px solid var(--line);border-radius:var(--radius);padding:28px 26px;background:#fff}
+  .tst .stars{color:#ffb400;font-size:15px;letter-spacing:2px;margin-bottom:14px}
+  .tst p{font-size:15px;color:#2c2735;margin-bottom:18px}
+  .tst .who{display:flex;align-items:center;gap:12px}
+  .tst .who .av{width:42px;height:42px;border-radius:50%;background:var(--accent-soft);display:grid;place-items:center;font-weight:700;color:var(--accent)}
+  .tst .who b{font-size:15px;display:block}
+  .tst .who span{font-size:13px;color:var(--ink-soft)}
+  @media(max-width:860px){.tst-grid{grid-template-columns:1fr}}
+
+  /* ---------- CTA ---------- */
+  .cta{
+    text-align:center;background:
+      radial-gradient(700px 320px at 50% 0%, var(--accent-soft), transparent 65%);
+    padding:90px 0;
+  }
+  .cta h2{font-size:clamp(30px,4vw,50px);font-weight:800;letter-spacing:-.03em;max-width:760px;margin:0 auto 18px}
+  .cta p{color:var(--ink-soft);font-size:18px;max-width:540px;margin:0 auto 30px}
+
+  /* ---------- footer ---------- */
+  footer{background:#fff;border-top:1px solid var(--line);padding:56px 0 30px}
+  .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:30px;margin-bottom:40px}
+  .foot-grid h5{font-size:13px;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-soft);margin-bottom:16px}
+  .foot-grid a{display:block;font-size:15px;color:#2c2735;margin-bottom:10px}
+  .foot-grid a:hover{color:var(--accent)}
+  .foot-brand p{color:var(--ink-soft);font-size:14.5px;max-width:280px;margin-top:12px}
+  .foot-bottom{border-top:1px solid var(--line);padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:13.5px;color:var(--ink-soft)}
+  @media(max-width:860px){.foot-grid{grid-template-columns:1fr 1fr}.awards{grid-template-columns:1fr;padding:40px 28px}}
+</style>
+</head>
+<body>
+
+<header data-mk-id="mk-egv0xa0">
+  <div class="wrap nav" data-mk-id="mk-w0lteo1">
+    <div class="logo" data-mk-id="mk-skcfgt2">UP<span data-mk-id="mk-j3mfud3">QODE</span></div>
+    <nav class="menu" data-mk-id="mk-ezuqcw4">
+      <a href="#work" data-mk-id="mk-33pku45">Our Work</a>
+      <a href="#services" data-mk-id="mk-69epzl6">Services</a>
+      <a href="#process" data-mk-id="mk-ommnqq7">Process</a>
+      <a href="#awards" data-mk-id="mk-vo5dnv8">Awards</a>
+      <a href="#contact" data-mk-id="mk-roatlk9">About</a>
+    </nav>
+    <div class="nav-cta" data-mk-id="mk-awp1wza">
+      <a href="#contact" class="btn ghost" data-mk-id="mk-uvdn8sb">Get a Proposal</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" data-mk-id="mk-3wzpzbc">
+  <div class="wrap hero-grid" data-mk-id="mk-mcdiurd" draggable="true">
+    <div data-mk-id="mk-x2cohne">
+      <span class="eyebrow" data-mk-id="mk-wphsnsf">Award-winning web design agency</span>
+      <h1 data-mk-id="mk-4oa4kcg">Nick&nbsp;<em data-mk-id="mk-ig50ohh">web-design</em> business for success.</h1>
+      <p class="lede" data-mk-id="mk-7l0qbli">A full-stack digital agency crafting custom websites, ecommerce, and SEO that turn visitors into customers — design that performs, code that lasts.</p>
+      <div class="hero-actions" data-mk-id="mk-yvk8coj">
+        <a href="#contact" class="btn" data-mk-id="mk-5kl3c2k">Start your project →</a>
+        <a href="#work" class="btn ghost" data-mk-id="mk-rb0f4rl">View our work</a>
+      </div>
+      <div class="stats" data-mk-id="mk-lwzdham">
+        <div class="stat" data-mk-id="mk-wnjp4bn"><b data-mk-id="mk-0qekfuo">40+</b><span data-mk-id="mk-op249zp">Industry awards</span></div>
+        <div class="stat" data-mk-id="mk-0y6jn5q"><b data-mk-id="mk-ljexe6r">500+</b><span data-mk-id="mk-lt5jhcs">Sites launched</span></div>
+        <div class="stat" data-mk-id="mk-4iz18qt"><b data-mk-id="mk-b1hajuu">32</b><span data-mk-id="mk-dzbl5ev">Cities served</span></div>
+        <div class="stat" data-mk-id="mk-om2y4mw"><b data-mk-id="mk-5b59rbx">2014</b><span data-mk-id="mk-jchchuy">Since</span></div>
+      </div>
+    </div>
+    <div class="hero-card" data-mk-id="mk-4mj3v5z">
+      <div class="browser" data-mk-id="mk-pus3vh10"><i data-mk-id="mk-qnv1fu11"></i><i data-mk-id="mk-9wk8nb12"></i><i data-mk-id="mk-ancis513"></i></div>
+      <div class="mock-shot" data-mk-id="mk-0bnyg614">
+        <div class="mh" data-mk-id="mk-nl3ty615"></div>
+        <div class="mock-body" data-mk-id="mk-wmfr0o16">
+          <div class="row" data-mk-id="mk-iz4wgs17"></div>
+          <div class="row s" data-mk-id="mk-kc9tyx18"></div>
+          <div class="cards" data-mk-id="mk-dwwx9z19"><div data-mk-id="mk-92ile21a"></div><div data-mk-id="mk-27kbrl1b"></div><div data-mk-id="mk-1o0thm1c"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<div class="trust" data-mk-id="mk-ft52mi1d">
+  <div class="wrap" data-mk-id="mk-o7vzdr1e">
+    <p data-mk-id="mk-c1125b1f">Trusted by growing businesses and funded startups</p>
+    <div class="trust-row" data-mk-id="mk-xu0d211g">
+      <span data-mk-id="mk-1o0p1i1h">Concentric&nbsp;AI</span><span data-mk-id="mk-tn6zlr1i">RippaSend</span><span data-mk-id="mk-g2k5lu1j">Telegraph</span><span data-mk-id="mk-0jesvk1k">Propelr</span><span data-mk-id="mk-wag7p91l">Bethesda</span><span data-mk-id="mk-2ixzkn1m">AdPipe</span>
+    </div>
+  </div>
+</div>
+
+<!-- WORK -->
+
+
+<!-- SERVICES -->
+<section class="block services" id="services" data-mk-id="mk-3y88ua2u">
+  <div class="wrap" data-mk-id="mk-ttcnbf2v">
+    <div class="sec-head" data-mk-id="mk-ht7vc62w">
+      <span class="eyebrow" data-mk-id="mk-be1kn32x">Our services</span>
+      <h2 data-mk-id="mk-z6aaer2y">Everything digital under one roof.</h2>
+      <p data-mk-id="mk-gxqjpg2z">The only customer-focused, quality-driven agency that can support all of your website needs.</p>
+    </div>
+    <div class="svc-grid" data-mk-id="mk-b39p9f30">
+      <div class="svc" data-mk-id="mk-9kzg5v31"><div class="ic" data-mk-id="mk-clt51y32">🎨</div><h3 data-mk-id="mk-h0wf2533">Web Design &amp; Development</h3><p data-mk-id="mk-vymsyc34">Custom, responsive websites and Shopify stores built to convert and easy to manage.</p><a class="more" href="#contact" data-mk-id="mk-xdmgxc35">Learn more →</a></div>
+      <div class="svc" data-mk-id="mk-hyywdg36"><div class="ic" data-mk-id="mk-069u2z37">📈</div><h3 data-mk-id="mk-66oayl38">SEO &amp; Digital Marketing</h3><p data-mk-id="mk-iws0zh39">Search optimization, PPC, and content that brings qualified traffic and measurable growth.</p><a class="more" href="#contact" data-mk-id="mk-v5655d3a">Learn more →</a></div>
+      <div class="svc" data-mk-id="mk-oi5ug43b"><div class="ic" data-mk-id="mk-gyamf03c">🛠️</div><h3 data-mk-id="mk-sbq65x3d">Maintenance &amp; Support</h3><p data-mk-id="mk-157efa3e">Ongoing WordPress care, security, analytics, and social — so your site stays fast and safe.</p><a class="more" href="#contact" data-mk-id="mk-6ec3q63f">Learn more →</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="block" id="work" data-mk-id="mk-f639zn1n" draggable="true">
+  <div class="wrap" data-mk-id="mk-nco3gy1o">
+    <div class="sec-head" data-mk-id="mk-lbq1qy1p">
+      <span class="eyebrow" data-mk-id="mk-dsztrb1q">Our portfolio</span>
+      <h2 data-mk-id="mk-k7csu61r">People dress to impress. We web-design business for success.</h2>
+      <p data-mk-id="mk-m73jjv1s">A selection of recent work across SaaS, ecommerce, healthcare, finance, and logistics.</p>
+    </div>
+    <div class="work-grid" data-mk-id="mk-bku7vg1t">
+      <div class="work-card" data-mk-id="mk-hrzgyq1u"><div class="work-thumb w1" data-mk-id="mk-bcjnk01v"><span class="tag" data-mk-id="mk-qvlsd01w">Arts &amp; Media</span></div><div class="work-meta" data-mk-id="mk-9pezok1x"><h3 data-mk-id="mk-xhytav1y">RippaSend</h3><span data-mk-id="mk-otk0bw1z">Publishing platform redesign</span></div></div>
+      <div class="work-card" data-mk-id="mk-jtlfto20"><div class="work-thumb w2" data-mk-id="mk-1h1vib21"><span class="tag" data-mk-id="mk-zjztpc22">Data Security</span></div><div class="work-meta" data-mk-id="mk-c1o2ts23"><h3 data-mk-id="mk-d6a0o624">Concentric AI</h3><span data-mk-id="mk-lwe55f25">SaaS product website</span></div></div>
+      <div class="work-card" data-mk-id="mk-3r3b5g26"><div class="work-thumb w3" data-mk-id="mk-jxbuz727"><span class="tag" data-mk-id="mk-5sg3c228">Logistics</span></div><div class="work-meta" data-mk-id="mk-xuxey929"><h3 data-mk-id="mk-5u4auz2a">Telegraph</h3><span data-mk-id="mk-umnp0c2b">Transportation &amp; logistics</span></div></div>
+      <div class="work-card" data-mk-id="mk-s8jivk2c"><div class="work-thumb w4" data-mk-id="mk-24b84e2d"><span class="tag" data-mk-id="mk-zm3b3m2e">Finance</span></div><div class="work-meta" data-mk-id="mk-sgxveu2f"><h3 data-mk-id="mk-eu4amd2g">Propelr</h3><span data-mk-id="mk-xoig0y2h">Financial services site</span></div></div>
+      <div class="work-card" data-mk-id="mk-1fhzzd2i"><div class="work-thumb w5" data-mk-id="mk-ly1qc22j"><span class="tag" data-mk-id="mk-qtys012k">Health Care</span></div><div class="work-meta" data-mk-id="mk-hlbvad2l"><h3 data-mk-id="mk-ukwjso2m">Bethesda</h3><span data-mk-id="mk-qpjgom2n">Healthcare organization</span></div></div>
+      <div class="work-card" data-mk-id="mk-9wrd0g2o"><div class="work-thumb w6" data-mk-id="mk-1tu9bq2p"><span class="tag" data-mk-id="mk-6imt372q">Software</span></div><div class="work-meta" data-mk-id="mk-4awitp2r"><h3 data-mk-id="mk-qrahi82s">AdPipe</h3><span data-mk-id="mk-5haq372t">AI video platform</span></div></div>
+    </div>
+  </div>
+</section><section class="block" id="process" data-mk-id="mk-qi60up3g">
+  <div class="wrap" data-mk-id="mk-zqpnxp3h">
+    <div class="sec-head" data-mk-id="mk-v6uss83i">
+      <span class="eyebrow" data-mk-id="mk-jvfrmy3j">Working process</span>
+      <h2 data-mk-id="mk-i47eb53k">A clear path from idea to launch.</h2>
+    </div>
+    <div class="proc-grid" data-mk-id="mk-05eud53l">
+      <div class="proc" data-mk-id="mk-3y3pc63m"><b class="n" data-mk-id="mk-mtx84e3n">01</b><h4 data-mk-id="mk-ote3ax3o">Discover</h4><p data-mk-id="mk-2l29fg3p">We learn your business goals, audience, and brand values.</p></div>
+      <div class="proc" data-mk-id="mk-jopq4x3q"><b class="n" data-mk-id="mk-8fi5hl3r">02</b><h4 data-mk-id="mk-cuatf13s">Design</h4><p data-mk-id="mk-cww8sr3t">Wireframes and high-fidelity visuals tailored to convert.</p></div>
+      <div class="proc" data-mk-id="mk-kaqb9o3u"><b class="n" data-mk-id="mk-dw2bsq3v">03</b><h4 data-mk-id="mk-jafb7q3w">Build</h4><p data-mk-id="mk-rpnns33x">Clean, scalable code with weekly sprints and demos.</p></div>
+      <div class="proc" data-mk-id="mk-8cnh9u3y"><b class="n" data-mk-id="mk-qxf02g3z">04</b><h4 data-mk-id="mk-vqwuuu40">Grow</h4><p data-mk-id="mk-kc0q4m41">Launch, optimize, and support your ongoing success.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- AWARDS -->
+<section class="block" id="awards" data-mk-id="mk-kv34k142">
+  <div class="wrap" data-mk-id="mk-u40gsk43">
+    <div class="awards" data-mk-id="mk-a8vseg44">
+      <div data-mk-id="mk-6l47qp45">
+        <span class="eyebrow" style="color:#ff86c2" data-mk-id="mk-7l328l46">Recognition</span>
+        <h2 data-mk-id="mk-06cvpo47">More than 40 awards for design &amp; development.</h2>
+        <p data-mk-id="mk-ve889s48">Recognized by Clutch, UpCity, and the global design community for craft and client results.</p>
+      </div>
+      <div class="award-stats" data-mk-id="mk-tqu0gj49">
+        <div data-mk-id="mk-pdg3k74a"><b data-mk-id="mk-r7whvi4b">40+</b><span data-mk-id="mk-rxlsgq4c">Awards won</span></div>
+        <div data-mk-id="mk-kqxoj04d"><b data-mk-id="mk-xxibge4e">5.0</b><span data-mk-id="mk-17jhhl4f">Avg. Clutch rating</span></div>
+        <div data-mk-id="mk-i7hgtk4g"><b data-mk-id="mk-urtxvi4h">98%</b><span data-mk-id="mk-qwtn8m4i">Client retention</span></div>
+        <div data-mk-id="mk-nodzpg4j"><b data-mk-id="mk-ce3i7m4k">10+</b><span data-mk-id="mk-4yrnlv4l">Years in business</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="block services" data-mk-id="mk-k3630w4m">
+  <div class="wrap" data-mk-id="mk-u8l4r34n">
+    <div class="sec-head" data-mk-id="mk-ndycfj4o">
+      <span class="eyebrow" data-mk-id="mk-fvv1164p">Testimonials</span>
+      <h2 data-mk-id="mk-buvfgq4q">What clients say.</h2>
+    </div>
+    <div class="tst-grid" data-mk-id="mk-qfemup4r">
+      <div class="tst" data-mk-id="mk-3d68gj4s"><div class="stars" data-mk-id="mk-heyp2q4t">★★★★★</div><p data-mk-id="mk-geff164u">"A team that pays great attention to detail and does great work. You aren't just getting a developer — you're getting great project management and organization. 100% recommended."</p><div class="who" data-mk-id="mk-fattod4v"><div class="av" data-mk-id="mk-kgzmy94w">ED</div><div data-mk-id="mk-8faogc4x"><b data-mk-id="mk-j5edfw4y">Erik DiMarco</b><span data-mk-id="mk-fi9k0n4z">Manager, NimbleDesk</span></div></div></div>
+      <div class="tst" data-mk-id="mk-rlu43j50"><div class="stars" data-mk-id="mk-d41xe951">★★★★★</div><p data-mk-id="mk-5p6qm352">"UPQODE delivers high-quality web work quickly thanks to their PHP and WordPress expertise. They respond far more quickly to changes than our core team could."</p><div class="who" data-mk-id="mk-9jr1yp53"><div class="av" data-mk-id="mk-41x83j54">JK</div><div data-mk-id="mk-dxb1ok55"><b data-mk-id="mk-bsu16r56">Jim Kreyenhagen</b><span data-mk-id="mk-0g2zvb57">VP Marketing, doxo</span></div></div></div>
+      <div class="tst" data-mk-id="mk-1c9fvf58"><div class="stars" data-mk-id="mk-8arhuh59">★★★★★</div><p data-mk-id="mk-5v692l5a">"They created a beautiful website that we love. UPQODE's attentiveness and flexibility support a successful partnership — their responsiveness was their most impressive quality."</p><div class="who" data-mk-id="mk-253uj85b"><div class="av" data-mk-id="mk-s7a5395c">JE</div><div data-mk-id="mk-8s2v485d"><b data-mk-id="mk-yvd0b25e">Jessica Echevarria</b><span data-mk-id="mk-v08fnj5f">Administrator, University Division</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="contact" data-mk-id="mk-ih8lde5g">
+  <div class="wrap" data-mk-id="mk-j87f1g5h">
+    <span class="eyebrow" data-mk-id="mk-n82ifj5i">Let's talk</span>
+    <h2 data-mk-id="mk-t4dxlh5j">Let's create your online success together.</h2>
+    <p data-mk-id="mk-ertyud5k">Tell us about your project and get a tailored proposal within 48 hours.</p>
+    <a href="#" class="btn" data-mk-id="mk-rlp4rv5l">Get a Proposal →</a>
+    <p style="margin-top:26px;font-size:15px" data-mk-id="mk-vj494o5m">📍 41 Peabody St, Nashville, TN 37210 &nbsp; · &nbsp; ☎ +1 615-693-5055</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer data-mk-id="mk-mk7sxq5n">
+  <div class="wrap" data-mk-id="mk-ou570a5o">
+    <div class="foot-grid" data-mk-id="mk-lg7kus5p">
+      <div class="foot-brand" data-mk-id="mk-fxvc1p5q">
+        <div class="logo" data-mk-id="mk-ce9ufg5r">UP<span data-mk-id="mk-p65d725s">QODE</span></div>
+        <p data-mk-id="mk-epw2kj5t">A digital marketing and custom web design agency. Part of the Qoders family. Growing businesses since 2014.</p>
+      </div>
+      <div data-mk-id="mk-7w129x5u">
+        <h5 data-mk-id="mk-ukvssp5v">Who we are</h5>
+        <a href="#" data-mk-id="mk-o6gvsh5w">About us</a><a href="#" data-mk-id="mk-7mbnrb5x">Our Values</a><a href="#" data-mk-id="mk-imbc785y">Awards</a><a href="#" data-mk-id="mk-oh3an35z">Working Process</a><a href="#" data-mk-id="mk-knk2x760">Careers</a>
+      </div>
+      <div data-mk-id="mk-ou0c2361">
+        <h5 data-mk-id="mk-bzab6k62">Services</h5>
+        <a href="#" data-mk-id="mk-7em9fp63">Web Design</a><a href="#" data-mk-id="mk-vzeifw64">SEO</a><a href="#" data-mk-id="mk-05v5pr65">Web Development</a><a href="#" data-mk-id="mk-8nav7o66">Maintenance</a><a href="#" data-mk-id="mk-953inc67">eCommerce</a>
+      </div>
+      <div data-mk-id="mk-g0er6268">
+        <h5 data-mk-id="mk-g3w64b69">Get in touch</h5>
+        <a href="#" data-mk-id="mk-qwd4rd6a">Nashville, TN</a><a href="#" data-mk-id="mk-mtblsa6b">+1 615-693-5055</a><a href="#" data-mk-id="mk-5o6d566c">Contact us</a><a href="#" data-mk-id="mk-q9rqfx6d">Request a Design</a>
+      </div>
+    </div>
+    <div class="foot-bottom" data-mk-id="mk-q84rbk6e">
+      <span data-mk-id="mk-ifvjb46f">© 2026 UPQODE. All rights reserved.</span>
+      <span data-mk-id="mk-i8i8hk6g">Privacy Policy · Cookie Policy</span>
+    </div>
+  </div>
+</footer>
+
+
+
+</body></html>

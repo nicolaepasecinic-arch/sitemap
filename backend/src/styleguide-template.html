@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+
+<!-- ════════════════════════════════════════════════════════════════
+     DESIGN TOKENS — the single source of truth.
+     Every visual property in the document below references one of
+     these via var(...), so editing a token propagates everywhere.
+     ════════════════════════════════════════════════════════════════ -->
+<style id="sg-tokens">
+:root{
+  /* ── Color primitives ── */
+  --color-brand:        #1F2937;   /* Primary — headings, nav, dark surfaces */
+  --color-secondary:    #4B5563;   /* Secondary — supporting colour */
+  --color-accent:       #2563EB;   /* Action — buttons, links */
+  --color-accent-hover: #1D4ED8;
+  --color-text:         #111827;   /* Body text */
+  --color-muted:        #6B7280;   /* Secondary text */
+  --color-border:       #E5E7EB;   /* Borders / dividers */
+  --color-surface-page: #FFFFFF;   /* Page background */
+  --color-surface-alt:  #F3F4F6;   /* Alt section background */
+  --color-surface-card: #FFFFFF;   /* Card background */
+
+  /* ── Semantic colour aliases (content uses these) ── */
+  --text-heading:    var(--color-brand);
+  --text-primary:    var(--color-text);
+  --text-muted:      var(--color-muted);
+  --text-on-dark:    #FFFFFF;
+
+  /* ── Typography ── */
+  --font-heading: "Inter", system-ui, -apple-system, sans-serif;
+  --font-body:    "Inter", system-ui, -apple-system, sans-serif;
+  --text-h1: 64px; --text-h2: 48px; --text-h3: 36px;
+  --text-h4: 28px; --text-h5: 22px; --text-h6: 18px;
+  --text-body-lg: 18px; --text-body-sm: 16px; --text-caption: 14px;
+  /* responsive size variants — media queries below swap to these per breakpoint */
+  --text-h1-t: 48px; --text-h1-m: 36px;
+  --text-h2-t: 38px; --text-h2-m: 30px;
+  --text-h3-t: 30px; --text-h3-m: 24px;
+  --lh-heading: 1.15; --lh-body: 1.6;
+  --ls-heading: -0.02em; --ls-body: 0em;
+  --fw-regular: 400; --fw-medium: 500; --fw-semibold: 600; --fw-bold: 700; --fw-extrabold: 800;
+  --fw-h1: 800; --fw-h2: 700; --fw-h3: 700; --fw-h4: 700; --fw-h5: 700; --fw-h6: 700; --fw-body: 400;
+
+  /* ── Spacing scale (base 4px) ── */
+  --space-0: 0;   --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
+  --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-12: 48px;
+  --space-16: 64px; --space-20: 80px; --space-24: 96px; --space-32: 128px;
+
+  /* ── Layout / sections ── */
+  --section-padding-y:  96px;  --section-padding-y-t: 72px; --section-padding-y-m: 56px;
+  --container-padding-x: 24px; --container-padding-x-m: 16px;
+  --container-max-width: 1200px;
+  --gap: 24px;
+
+  /* ── Border radii — semantic, role-based ── */
+  --radius-card: 20px; --radius-image: 20px; --radius-button: 10px;
+  --radius-input: 10px; --radius-icon-btn: 10px; --radius-tag: 999px;
+  --radius-sm: 6px; --radius-md: 10px; --radius-lg: 16px; /* internal chrome */
+
+  /* ── Responsive breakpoints (drive the token overrides below) ── */
+  --bp-tablet: 1024px;
+  --bp-mobile: 640px;
+
+  /* ── Links ── */
+  --link-color: var(--color-accent);
+  --link-color-hover: var(--color-accent-hover);
+  --link-decoration: none;
+  --link-decoration-hover: underline;
+  --link-weight: var(--fw-medium);
+
+  /* ── Lists ── */
+  --list-gap: 8px; --list-indent: 24px; --list-marker: var(--color-accent);
+
+  /* ── Blockquote ── */
+  --bq-border-color: var(--color-accent); --bq-border-width: 4px;
+  --bq-text-color: var(--color-text); --bq-padding: 20px;
+
+  /* ── Forms ── */
+  --input-bg: #FFFFFF; --input-border: var(--color-border); --input-radius: var(--radius-input);
+  --input-padding: 12px; --input-text: var(--color-text); --input-focus-border: var(--color-accent);
+
+  /* ── Buttons ── */
+  --btn-bg: var(--color-accent); --btn-text: #FFFFFF; --btn-radius: var(--radius-button);
+  --btn-padding-y: 12px; --btn-padding-x: 22px; --btn-weight: var(--fw-semibold);
+
+  /* ── Components ── */
+  --card-bg: var(--color-surface-card); --card-radius: var(--radius-card);
+  --card-padding: 24px; --card-border: var(--color-border); --card-shadow: 0 1px 3px rgba(17,24,39,.08);
+  --nav-bg: #FFFFFF; --nav-text: var(--color-brand); --nav-height: 64px; --nav-link-hover: var(--color-accent);
+  --footer-bg: var(--color-brand); --footer-text: #FFFFFF; --footer-padding: 64px;
+}
+</style>
+
+<!-- ════ Base element styles — every value is a token ════ -->
+<style id="sg-base">
+*{ box-sizing: border-box; }
+html,body{ margin:0; }
+body{
+  font-family: var(--body-font-family, var(--font-body));
+  font-size: var(--body-font-size, var(--text-body-lg));
+  line-height: var(--body-line-height, var(--lh-body));
+  letter-spacing: var(--body-letter-spacing, var(--ls-body));
+  font-weight: var(--body-font-weight, var(--fw-body));
+  color: var(--body-color, var(--text-primary));
+  background: var(--color-surface-page);
+  -webkit-font-smoothing: antialiased;
+}
+h1,h2,h3,h4,h5,h6{
+  font-family: var(--font-heading);
+  color: var(--text-heading);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-heading);
+  margin: 0 0 var(--space-4);
+}
+/* per-heading full field set — each falls back to the shared scale until overridden */
+h1{ font-family: var(--h1-font-family, var(--font-heading)); font-size: var(--h1-font-size, var(--text-h1)); font-weight: var(--h1-font-weight, var(--fw-h1)); line-height: var(--h1-line-height, var(--lh-heading)); letter-spacing: var(--h1-letter-spacing, var(--ls-heading)); color: var(--h1-color, var(--text-heading)); margin-top: var(--h1-margin-top, 0); margin-bottom: var(--h1-margin-bottom, var(--space-4)); text-transform: var(--h1-text-transform, none); }
+h2{ font-family: var(--h2-font-family, var(--font-heading)); font-size: var(--h2-font-size, var(--text-h2)); font-weight: var(--h2-font-weight, var(--fw-h2)); line-height: var(--h2-line-height, var(--lh-heading)); letter-spacing: var(--h2-letter-spacing, var(--ls-heading)); color: var(--h2-color, var(--text-heading)); margin-top: var(--h2-margin-top, 0); margin-bottom: var(--h2-margin-bottom, var(--space-4)); text-transform: var(--h2-text-transform, none); }
+h3{ font-family: var(--h3-font-family, var(--font-heading)); font-size: var(--h3-font-size, var(--text-h3)); font-weight: var(--h3-font-weight, var(--fw-h3)); line-height: var(--h3-line-height, var(--lh-heading)); letter-spacing: var(--h3-letter-spacing, var(--ls-heading)); color: var(--h3-color, var(--text-heading)); margin-top: var(--h3-margin-top, 0); margin-bottom: var(--h3-margin-bottom, var(--space-4)); text-transform: var(--h3-text-transform, none); }
+h4{ font-family: var(--h4-font-family, var(--font-heading)); font-size: var(--h4-font-size, var(--text-h4)); font-weight: var(--h4-font-weight, var(--fw-h4)); line-height: var(--h4-line-height, var(--lh-heading)); letter-spacing: var(--h4-letter-spacing, var(--ls-heading)); color: var(--h4-color, var(--text-heading)); margin-top: var(--h4-margin-top, 0); margin-bottom: var(--h4-margin-bottom, var(--space-4)); text-transform: var(--h4-text-transform, none); }
+h5{ font-family: var(--h5-font-family, var(--font-heading)); font-size: var(--h5-font-size, var(--text-h5)); font-weight: var(--h5-font-weight, var(--fw-h5)); line-height: var(--h5-line-height, var(--lh-heading)); letter-spacing: var(--h5-letter-spacing, var(--ls-heading)); color: var(--h5-color, var(--text-heading)); margin-top: var(--h5-margin-top, 0); margin-bottom: var(--h5-margin-bottom, var(--space-4)); text-transform: var(--h5-text-transform, none); }
+h6{ font-family: var(--h6-font-family, var(--font-heading)); font-size: var(--h6-font-size, var(--text-h6)); font-weight: var(--h6-font-weight, var(--fw-h6)); line-height: var(--h6-line-height, var(--lh-heading)); letter-spacing: var(--h6-letter-spacing, var(--ls-heading)); color: var(--h6-color, var(--text-heading)); margin-top: var(--h6-margin-top, 0); margin-bottom: var(--h6-margin-bottom, var(--space-4)); text-transform: var(--h6-text-transform, none); }
+p{ font-family: var(--p-font-family, inherit); font-size: var(--p-font-size, var(--text-body-lg)); font-weight: var(--p-font-weight, var(--fw-regular)); line-height: var(--p-line-height, var(--lh-body)); color: var(--p-color, var(--text-primary)); margin: 0 0 var(--p-margin-bottom, var(--space-4)); max-width: var(--p-max-width, none); }
+small,.caption{ font-size: var(--text-caption); color: var(--text-muted); }
+.lead{ font-size: var(--text-body-lg); color: var(--text-muted); }
+.eyebrow{ font-size: var(--text-caption); font-weight: var(--fw-bold);
+  letter-spacing: .08em; text-transform: uppercase; color: var(--color-accent); margin: 0 0 var(--space-3); }
+a{ font-family: var(--a-font-family, inherit); color: var(--a-color, var(--link-color)); text-decoration: var(--a-text-decoration, var(--link-decoration)); font-weight: var(--a-font-weight, var(--link-weight)); transition: var(--a-transition, color .15s ease); }
+a:hover{ color: var(--a-color-hover, var(--link-color-hover)); text-decoration: var(--a-text-decoration-hover, var(--link-decoration-hover)); }
+ul{ font-family: var(--ul-font-family, inherit); list-style-type: var(--ul-list-style-type, disc); padding-left: var(--ul-padding-left, var(--list-indent)); margin: 0 0 var(--ul-margin-bottom, var(--space-4)); }
+ol{ font-family: var(--ol-font-family, inherit); list-style-type: var(--ol-list-style-type, decimal); padding-left: var(--ol-padding-left, var(--list-indent)); margin: 0 0 var(--ol-margin-bottom, var(--space-4)); }
+ul li{ line-height: var(--ul-li-line-height, var(--lh-body)); margin-bottom: var(--ul-li-margin-bottom, var(--list-gap)); }
+ol li{ line-height: var(--ol-li-line-height, var(--lh-body)); margin-bottom: var(--ol-li-margin-bottom, var(--list-gap)); }
+ul li::marker,ol li::marker{ color: var(--list-marker); }
+blockquote{
+  font-family: var(--bq-font-family, inherit);
+  font-size: var(--bq-font-size, var(--text-body-lg));
+  font-style: var(--bq-font-style, normal);
+  font-weight: var(--bq-font-weight, var(--fw-regular));
+  line-height: var(--bq-line-height, var(--lh-body));
+  color: var(--bq-text-color);
+  margin: var(--bq-margin, 0 0 var(--space-4));
+  padding-left: var(--bq-padding-left, var(--bq-padding));
+  padding-top: var(--bq-padding); padding-bottom: var(--bq-padding); padding-right: var(--bq-padding);
+  border-left: var(--bq-border-left-width, var(--bq-border-width)) solid var(--bq-border-left-color, var(--bq-border-color));
+  background: var(--color-surface-alt);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+hr{ border:0; border-top:1px solid var(--color-border); margin: var(--space-8) 0; }
+label{ display:block; font-size: var(--text-body-sm); font-weight: var(--fw-medium);
+  color: var(--text-primary); margin-bottom: var(--space-2); }
+input[type=text],input[type=email],input[type=password],textarea,select{
+  width:100%; font-family: var(--font-body);
+  font-size: var(--input-font-size, var(--text-body-sm));
+  line-height: var(--input-line-height, var(--lh-body));
+  font-weight: var(--input-font-weight, var(--fw-regular));
+  letter-spacing: var(--input-letter-spacing, normal);
+  background: var(--input-bg); color: var(--input-text);
+  border: 1px solid var(--input-border); border-radius: var(--input-radius);
+  padding: var(--input-padding); outline: none;
+}
+input::placeholder,textarea::placeholder{ color: var(--input-placeholder-color, var(--color-muted)); }
+input:focus,textarea:focus,select:focus{ border-color: var(--input-focus-border);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--input-focus-border) 18%, transparent); }
+.btn{ display:inline-flex; align-items:center; gap: var(--space-2); cursor:pointer; border:0;
+  font-family: var(--btn-font-family, var(--font-body));
+  font-weight: var(--btn-weight);
+  font-size: var(--btn-font-size, var(--text-body-sm));
+  letter-spacing: var(--btn-letter-spacing, normal);
+  text-transform: var(--btn-text-transform, none);
+  background: var(--btn-bg); color: var(--btn-text); border-radius: var(--btn-radius);
+  padding: var(--btn-padding-y) var(--btn-padding-x); text-decoration:none;
+  transition: var(--btn-transition, background .2s ease); }
+.btn:hover{ background: var(--btn-bg-hover, var(--color-accent-hover)); color: var(--btn-text-hover, var(--btn-text)); }
+.btn-secondary{ background: transparent; color: var(--color-brand);
+  border: 1px solid var(--color-border); }
+.btn-secondary:hover{ background: var(--color-surface-alt); color: var(--color-brand); }
+</style>
+
+<!-- ════ Layout + style-guide display chrome ════ -->
+<style id="sg-layout">
+.container{ max-width: var(--container-max-width); margin: 0 auto; padding: 0 var(--container-padding-x); }
+.section{ padding: var(--section-padding-y) 0; }
+.section.alt{ background: var(--color-surface-alt); }
+.section-head{ margin-bottom: var(--space-12); }
+.section-head h2{ margin-bottom: var(--space-2); }
+.grid{ display:grid; gap: var(--gap); }
+.cols-2{ grid-template-columns: repeat(2,1fr); }
+.cols-3{ grid-template-columns: repeat(3,1fr); }
+.cols-4{ grid-template-columns: repeat(4,1fr); }
+@media (max-width:1024px){ .cols-3,.cols-4{ grid-template-columns: repeat(2,1fr); } }
+@media (max-width:640px){ .cols-2,.cols-3,.cols-4{ grid-template-columns: 1fr; } }
+.swatches{ display:grid; gap: var(--space-4); grid-template-columns: repeat(3,1fr); }
+@media (max-width:1024px){ .swatches{ grid-template-columns: repeat(2,1fr); } }
+@media (max-width:640px){ .swatches{ grid-template-columns: 1fr; } }
+.sw{ border:1px solid var(--color-border); border-radius: var(--radius-lg); overflow:hidden; background: var(--color-surface-card); }
+.sw .chip{ height: 96px; }
+.sw .body{ padding: var(--space-4); }
+.sw .nm{ font-family: var(--font-heading); font-weight: var(--fw-semibold); color: var(--text-heading); font-size: var(--text-body-sm); }
+.sw .hx{ font-size: var(--text-caption); color: var(--text-muted); text-transform: uppercase; letter-spacing:.04em; }
+.sw .use{ font-size: var(--text-caption); color: var(--text-muted); margin-top: var(--space-1); }
+/* Colors — Brand Palette + Semantic Tokens panels */
+.cpanel{ border:1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-8); background: var(--color-surface-card); margin-bottom: var(--space-6); }
+.cpanel-label{ font-size: var(--text-caption); font-weight: var(--fw-bold); letter-spacing:.08em; text-transform:uppercase; color: var(--text-muted); margin: 0 0 var(--space-6); }
+.palette{ display:grid; grid-template-columns: repeat(3,1fr); gap: var(--space-8) var(--space-6); }
+@media (max-width:1024px){ .palette{ grid-template-columns: repeat(2,1fr); } }
+@media (max-width:640px){ .palette{ grid-template-columns: 1fr; } }
+.pal{ cursor:pointer; }
+.pal .block{ height: 128px; border-radius: var(--radius-md); border:1px solid var(--color-border); }
+.pal .nm{ font-family: var(--font-heading); font-weight: var(--fw-bold); color: var(--text-heading); font-size: var(--text-body-sm); margin-top: var(--space-4); }
+.pal .hx{ font-family: ui-monospace,"SF Mono",Menlo,monospace; font-size: var(--text-caption); color: var(--text-muted); margin-top: var(--space-1); text-transform: uppercase; }
+.pal .use{ font-size: var(--text-caption); color: var(--text-muted); margin-top: var(--space-2); }
+.sem-grid{ display:grid; grid-template-columns: repeat(4,1fr); gap: var(--space-6); }
+@media (max-width:1024px){ .sem-grid{ grid-template-columns: repeat(2,1fr); } }
+@media (max-width:640px){ .sem-grid{ grid-template-columns: 1fr; } }
+.sem{ display:flex; gap: var(--space-3); align-items:flex-start; cursor:pointer; }
+.sem .sq{ width:36px; height:36px; border-radius: var(--radius-sm); border:1px solid var(--color-border); flex-shrink:0; }
+.sem .tk{ font-family: ui-monospace,"SF Mono",Menlo,monospace; font-size: var(--text-caption); color: var(--text-heading); font-weight: var(--fw-semibold); }
+.sem .ds{ font-size: var(--text-caption); color: var(--text-muted); margin-top: 2px; }
+/* Typography — font-family cards + specimen rows */
+.famrow{ display:grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-6); }   /* max 3 columns per row */
+@media (max-width:640px){ .famrow{ grid-template-columns: 1fr; } }
+.famrow .fam{ padding: var(--space-6); border:1px solid var(--color-border); border-radius: var(--radius-md); cursor:pointer; background: var(--color-surface-page); }
+.fam-name{ font-family: var(--font-heading); font-weight: var(--fw-bold); color: var(--text-heading); font-size: 34px; line-height:1.1; }
+.fam-use{ font-size: var(--text-caption); color: var(--text-muted); margin-top: var(--space-3); }
+.fam-weights{ margin-top: var(--space-3); display:flex; gap: var(--space-4); flex-wrap:wrap; color: var(--text-muted); font-size: var(--text-body-sm); }
+.tspec{ display:grid; grid-template-columns: 96px 1fr auto; align-items:center; gap: var(--space-6);
+  padding: var(--space-6) 0; border-bottom: 1px solid var(--color-border); }
+.tspec:last-child{ border-bottom:0; }
+.tspec .tlabel{ font-family: ui-monospace,"SF Mono",Menlo,monospace; font-size: var(--text-caption); color: var(--text-muted); }
+.tspec .tsample{ min-width:0; }
+.tspec .tsample > *{ margin:0; }
+.tspec .tmeta{ font-family: ui-monospace,"SF Mono",Menlo,monospace; font-size: var(--text-caption); color: var(--text-muted); white-space:nowrap; }
+@media (max-width:640px){ .tspec{ grid-template-columns: 64px 1fr; } .tspec .tmeta{ grid-column: 2; } }
+/* Brand — logo slots */
+.logos{ display:grid; grid-template-columns: 1fr 1fr; }
+@media (max-width:640px){ .logos{ grid-template-columns: 1fr; } }
+.logo-slot{ padding: var(--space-16) var(--space-8); text-align:center; cursor:pointer; }
+.logo-slot.light{ background: var(--color-surface-page); }
+.logo-slot.dark{ background: var(--color-brand); }
+.logo-slot .brand-logo{ height: 56px; max-width: 70%; object-fit: contain; }
+.logo-cap{ margin-top: var(--space-6); font-size: var(--text-caption); color: var(--text-muted); }
+.logo-slot.dark .logo-cap{ color: rgba(255,255,255,.7); }
+/* Spacing & Radii — section bars + token chips */
+.sbars{ display:grid; grid-template-columns: repeat(3,1fr); gap: var(--space-8); }
+@media (max-width:640px){ .sbars{ grid-template-columns:1fr; } }
+.sbar{ cursor:pointer; }
+.sbar .track{ height:10px; border-radius:999px; background: var(--color-brand); }
+.sbar .nm{ font-family: ui-monospace,"SF Mono",Menlo,monospace; font-size: var(--text-caption); color: var(--text-heading); margin-top: var(--space-4); }
+.sbar .vl{ font-size: var(--text-caption); color: var(--text-muted); margin-top: var(--space-1); }
+.sdiv{ height:1px; background: var(--color-border); margin: var(--space-8) 0; }
+.schips{ display:flex; flex-wrap:wrap; gap: var(--space-4); }
+.schip{ font-family: ui-monospace,"SF Mono",Menlo,monospace; font-size: var(--text-caption); color: var(--text-heading); background: var(--color-surface-alt); border-radius: var(--radius-sm); padding: 10px 14px; cursor:pointer; }
+.specimen{ display:flex; align-items:baseline; justify-content:space-between; gap: var(--space-6);
+  padding: var(--space-5) 0; border-bottom: 1px solid var(--color-border); }
+.specimen .meta{ font-size: var(--text-caption); color: var(--text-muted); white-space:nowrap; }
+.scale-row{ display:flex; align-items:center; gap: var(--space-4); padding: var(--space-2) 0; }
+.scale-row .bar{ height: 16px; background: var(--color-accent); border-radius: var(--radius-sm); }
+.scale-row .lbl{ font-size: var(--text-caption); color: var(--text-muted); width: 96px; }
+.radii{ display:grid; gap: var(--space-6); grid-template-columns: repeat(6,1fr); align-items:end; }
+@media (max-width:1024px){ .radii{ grid-template-columns: repeat(3,1fr); } }
+@media (max-width:640px){ .radii{ grid-template-columns: repeat(2,1fr); } }
+.radii .box{ text-align:center; cursor:pointer; }
+.radii .swatch{ height: 110px; background: var(--color-surface-card); border:1px solid var(--color-border); margin-bottom: var(--space-3); }
+.radii .rname{ font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: var(--text-caption); font-weight: var(--fw-semibold); color: var(--text-heading); }
+.radii .rval{ font-size: var(--text-caption); color: var(--text-muted); margin-top: var(--space-1); }
+.bp-table{ width:100%; border-collapse:collapse; }
+.bp-table th,.bp-table td{ text-align:left; padding: var(--space-3) var(--space-4); border-bottom:1px solid var(--color-border); font-size: var(--text-body-sm); }
+.bp-table th{ color: var(--text-muted); font-weight: var(--fw-semibold); font-size: var(--text-caption); text-transform:uppercase; letter-spacing:.04em; }
+.card{ background: var(--card-bg); border:1px solid var(--card-border); border-radius: var(--card-radius);
+  padding: var(--card-padding); box-shadow: var(--card-shadow); }
+.card h4{ margin-bottom: var(--space-2); }
+.demo-nav{ display:flex; align-items:center; justify-content:space-between; height: var(--nav-height);
+  background: var(--nav-bg); border:1px solid var(--color-border); border-radius: var(--radius-lg);
+  padding: 0 var(--space-6); }
+.demo-nav .brand{ font-family: var(--font-heading); font-weight: var(--fw-bold); color: var(--nav-text); font-size: var(--text-h6); }
+.demo-nav .links{ display:flex; gap: var(--space-6); }
+.demo-nav .links a{ color: var(--nav-text); font-size: var(--text-body-sm); }
+.demo-nav .links a:hover{ color: var(--nav-link-hover); }
+.demo-footer{ background: var(--footer-bg); color: var(--footer-text); border-radius: var(--radius-lg);
+  padding: var(--footer-padding) var(--space-8); }
+.demo-footer a{ color: var(--footer-text); opacity:.85; }
+.demo-footer .cols{ display:flex; gap: var(--space-16); flex-wrap:wrap; }
+.form-grid{ display:grid; gap: var(--space-4); grid-template-columns: repeat(2,1fr); }
+@media (max-width:640px){ .form-grid{ grid-template-columns:1fr; } }
+.field{ margin-bottom: var(--space-4); }
+.page-head{ padding: var(--space-20) 0 var(--space-12); }
+.page-head .title{ font-size: var(--text-h1); }
+</style>
+
+<!-- ════ Responsive — each breakpoint swaps the size binding to its own token,
+     so editing a per-breakpoint token (Properties mode) is a simple flat edit. ════ -->
+<style id="sg-responsive">
+@media (max-width: 1024px){
+  h1,.page-head .title{ font-size: var(--text-h1-t); }
+  h2{ font-size: var(--text-h2-t); }
+  h3{ font-size: var(--text-h3-t); }
+  .section{ padding: var(--section-padding-y-t) 0; }
+}
+@media (max-width: 640px){
+  h1,.page-head .title{ font-size: var(--text-h1-m); }
+  h2{ font-size: var(--text-h2-m); }
+  h3{ font-size: var(--text-h3-m); }
+  .section{ padding: var(--section-padding-y-m) 0; }
+  .container{ padding: 0 var(--container-padding-x-m); }
+}
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <div class="container">
+    <div class="eyebrow">Design System</div>
+    <h1 class="title">Brand Style Guide</h1>
+    <p class="lead">A living set of design tokens — colours, typography, spacing and components. Edit a token and it updates everywhere it is used.</p>
+  </div>
+</header>
+
+<!-- ════ 00 · BRAND ════ -->
+<section id="brand" class="section">
+  <div class="container">
+    <div class="section-head"><div class="eyebrow">Identity</div><h2>Brand</h2><p class="lead">Logo variants used across the site. Click a logo to upload your own.</p></div>
+    <div class="cpanel-label">Logos</div>
+    <div class="cpanel" style="padding:0;overflow:hidden">
+      <div class="logos">
+        <div class="logo-slot light"><img class="brand-logo" alt="Logo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='56'%3E%3Crect x='1' y='1' width='158' height='54' rx='8' fill='none' stroke='%23D8D4CE'/%3E%3Ctext x='80' y='35' text-anchor='middle' font-family='sans-serif' font-weight='700' font-size='18' fill='%231F2937'%3ELOGO%3C/text%3E%3C/svg%3E"><div class="logo-cap">Dark — on white / light backgrounds</div></div>
+        <div class="logo-slot dark"><img class="brand-logo" alt="Logo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='56'%3E%3Crect x='1' y='1' width='158' height='54' rx='8' fill='none' stroke='rgba(255,255,255,.4)'/%3E%3Ctext x='80' y='35' text-anchor='middle' font-family='sans-serif' font-weight='700' font-size='18' fill='%23FFFFFF'%3ELOGO%3C/text%3E%3C/svg%3E"><div class="logo-cap">White — on dark / brand backgrounds</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ 01 · COLORS ════ -->
+<section id="colors" class="section">
+  <div class="container">
+    <div class="section-head"><div class="eyebrow">01 · Foundations</div><h2>Colors</h2><p class="lead">A two-tier palette: brand colours define the raw values, semantic tokens decide where each colour is used. Click a brand colour to change its value, or a semantic token to point it at a different brand colour. A colour set directly on an element (e.g. an H1) overrides the token.</p></div>
+    <div class="cpanel">
+      <div class="cpanel-label">Brand Palette</div>
+      <div class="palette">
+        <div class="pal" data-role-token="--color-brand" data-copy="#1F2937"><div class="block" style="background:var(--color-brand)"></div><div class="nm">Primary</div><div class="hx">#1F2937</div><div class="use">Main brand color</div></div>
+        <div class="pal" data-role-token="--color-secondary" data-copy="#4B5563"><div class="block" style="background:var(--color-secondary)"></div><div class="nm">Secondary</div><div class="hx">#4B5563</div><div class="use">Supporting color</div></div>
+        <div class="pal" data-role-token="--color-accent" data-copy="#2563EB"><div class="block" style="background:var(--color-accent)"></div><div class="nm">Accent</div><div class="hx">#2563EB</div><div class="use">Highlights &amp; CTA</div></div>
+        <div class="pal" data-role-token="--color-text" data-copy="#111827"><div class="block" style="background:var(--color-text)"></div><div class="nm">Text</div><div class="hx">#111827</div><div class="use">Primary text</div></div>
+        <div class="pal" data-role-token="--color-surface-page" data-copy="#FFFFFF"><div class="block" style="background:var(--color-surface-page)"></div><div class="nm">Background</div><div class="hx">#FFFFFF</div><div class="use">Page background</div></div>
+        <div class="pal" data-role-token="--color-border" data-copy="#E5E7EB"><div class="block" style="background:var(--color-border)"></div><div class="nm">Border</div><div class="hx">#E5E7EB</div><div class="use">Borders &amp; dividers</div></div>
+      </div>
+    </div>
+    <div class="cpanel">
+      <div class="cpanel-label">Semantic Tokens</div>
+      <div class="sem-grid">
+        <div class="sem" data-sem-token="--text-heading"><div class="sq" style="background:var(--text-heading)"></div><div><div class="tk">--text-heading</div><div class="ds">Headings (H1–H6)</div></div></div>
+        <div class="sem" data-sem-token="--text-primary"><div class="sq" style="background:var(--text-primary)"></div><div><div class="tk">--text-primary</div><div class="ds">Body / paragraphs</div></div></div>
+        <div class="sem" data-sem-token="--text-muted"><div class="sq" style="background:var(--text-muted)"></div><div><div class="tk">--text-muted</div><div class="ds">Captions / metadata</div></div></div>
+        <div class="sem" data-sem-token="--link-color"><div class="sq" style="background:var(--link-color)"></div><div><div class="tk">--link-color</div><div class="ds">Links</div></div></div>
+        <div class="sem" data-sem-token="--btn-bg"><div class="sq" style="background:var(--btn-bg)"></div><div><div class="tk">--btn-bg</div><div class="ds">Button fill</div></div></div>
+        <div class="sem" data-sem-token="--btn-text"><div class="sq" style="background:var(--btn-text);box-shadow:inset 0 0 0 1px var(--color-border)"></div><div><div class="tk">--btn-text</div><div class="ds">Button text</div></div></div>
+        <div class="sem" data-sem-token="--color-surface-alt"><div class="sq" style="background:var(--color-surface-alt)"></div><div><div class="tk">--surface-alt</div><div class="ds">Alt sections</div></div></div>
+        <div class="sem" data-sem-token="--color-border"><div class="sq" style="background:var(--color-border)"></div><div><div class="tk">--border-default</div><div class="ds">Borders / dividers</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ 02 · TYPOGRAPHY ════ -->
+<section id="typography" class="section alt">
+  <div class="container">
+    <div class="section-head"><div class="eyebrow">02 · Foundations</div><h2>Typography</h2><p class="lead">Two type families drive the system. Choose the heading and body fonts below, then each element picks which of the two it uses.</p></div>
+
+    <div class="cpanel-label">Font Families</div>
+    <div class="cpanel">
+      <div class="famrow">
+        <div class="fam" data-font="--font-heading">
+          <div class="fam-name" style="font-family:var(--font-heading)">Heading font</div>
+          <div class="fam-use">H1 · H2 · H3 — Display / Headings</div>
+          <div class="fam-weights"><span style="font-weight:400">Regular</span><span style="font-weight:600">SemiBold</span><span style="font-weight:700">Bold</span><span style="font-weight:800">ExtraBold</span></div>
+        </div>
+        <div class="fam" data-font="--font-body">
+          <div class="fam-name" style="font-family:var(--font-body)">Body font</div>
+          <div class="fam-use">H4 · H5 · H6 · Body · Buttons · Nav</div>
+          <div class="fam-weights"><span style="font-weight:300">Light</span><span style="font-weight:400">Regular</span><span style="font-weight:500">Medium</span><span style="font-weight:600">SemiBold</span><span style="font-weight:700">Bold</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cpanel-label">Display Scale</div>
+    <div class="cpanel">
+      <div class="tspec"><div class="tlabel">H1</div><div class="tsample"><h1 style="margin:0">Hospitality, unleashed.</h1></div><span class="meta tmeta" data-typ="--text-h1" data-resp="1" data-role="">H1</span></div>
+      <div class="tspec"><div class="tlabel">H2</div><div class="tsample"><h2 style="margin:0">Trusted by leading teams</h2></div><span class="meta tmeta" data-typ="--text-h2" data-resp="1" data-role="">H2</span></div>
+      <div class="tspec"><div class="tlabel">H3</div><div class="tsample"><h3 style="margin:0">A clear, confident scale for every screen</h3></div><span class="meta tmeta" data-typ="--text-h3" data-resp="1" data-role="">H3</span></div>
+    </div>
+
+    <div class="cpanel-label">Body &amp; UI</div>
+    <div class="cpanel">
+      <div class="tspec"><div class="tlabel">H4</div><div class="tsample"><h4 style="margin:0">Built to scale</h4></div><span class="meta tmeta" data-typ="--text-h4" data-role="">H4</span></div>
+      <div class="tspec"><div class="tlabel">H5 / Body LG</div><div class="tsample"><h5 style="margin:0">We turn complexity into clarity for growing teams.</h5></div><span class="meta tmeta" data-typ="--text-h5" data-role="">H5</span></div>
+      <div class="tspec"><div class="tlabel">H6 / Body SM</div><div class="tsample"><h6 style="margin:0">From research and strategy to design and delivery.</h6></div><span class="meta tmeta" data-typ="--text-h6" data-role="">H6</span></div>
+      <div class="tspec"><div class="tlabel">Body</div><div class="tsample"><p style="margin:0">The quick brown fox jumps over the lazy dog — body copy sets the baseline for comfortable reading at every size.</p></div><span class="meta tmeta" data-typ="--text-body-lg" data-role="">Body</span></div>
+      <div class="tspec"><div class="tlabel">Eyebrow</div><div class="tsample"><span class="eyebrow">Partner Spotlight</span></div><span class="meta tmeta" data-typ="--text-caption" data-role="">Eyebrow</span></div>
+      <div class="tspec"><div class="tlabel">Caption</div><div class="tsample"><span class="caption">Caption / metadata text</span></div><span class="meta tmeta" data-typ="--text-caption" data-role="">Caption</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ 03 · SPACING & RADII ════ -->
+<section id="spacing" class="section">
+  <div class="container">
+    <div class="section-head"><div class="eyebrow">03 · Foundations</div><h2>Spacing &amp; Radii</h2><p class="lead">Generous section rhythm, a fixed container, and a small set of radius tokens.</p></div>
+
+    <div class="cpanel-label">Section Spacing</div>
+    <div class="cpanel">
+      <div class="sbars">
+        <div class="sbar" data-typ="--section-padding-y" data-role=""><div class="track" style="width:100%"></div><div class="nm">--section-padding</div><div class="vl"><span class="meta" data-typ="--section-padding-y" data-role="">96px</span> desktop</div></div>
+        <div class="sbar" data-typ="--section-padding-y-t" data-role=""><div class="track" style="width:80%;opacity:.7"></div><div class="nm">--section-padding-md</div><div class="vl"><span class="meta" data-typ="--section-padding-y-t" data-role="">72px</span> tablet</div></div>
+        <div class="sbar" data-typ="--section-padding-y-m" data-role=""><div class="track" style="width:62%;opacity:.5"></div><div class="nm">--section-padding-sm</div><div class="vl"><span class="meta" data-typ="--section-padding-y-m" data-role="">56px</span> mobile</div></div>
+      </div>
+      <div class="sdiv"></div>
+      <div class="schips">
+        <div class="schip" data-typ="--container-max-width" data-role="">--container-width: <span class="meta" data-typ="--container-max-width" data-role="">1200px</span></div>
+        <div class="schip" data-typ="--container-padding-x" data-role="">--container-padding: <span class="meta" data-typ="--container-padding-x" data-role="">24px</span></div>
+        <div class="schip" data-typ="--gap" data-role="">--gap: <span class="meta" data-typ="--gap" data-role="">24px</span></div>
+      </div>
+    </div>
+
+    <div class="cpanel-label">Border Radii</div>
+    <div class="cpanel">
+      <div class="radii">
+        <div class="box" data-radius="--radius-card"><div class="swatch" style="border-radius:var(--radius-card)"></div><div class="rname">--radius-card</div><div class="rval" data-radval="--radius-card">20px</div></div>
+        <div class="box" data-radius="--radius-image"><div class="swatch" style="border-radius:var(--radius-image)"></div><div class="rname">--radius-image</div><div class="rval" data-radval="--radius-image">20px</div></div>
+        <div class="box" data-radius="--radius-button"><div class="swatch" style="border-radius:var(--radius-button);background:var(--btn-bg);border-color:transparent"></div><div class="rname">--radius-button</div><div class="rval" data-radval="--radius-button">10px</div></div>
+        <div class="box" data-radius="--radius-input"><div class="swatch" style="border-radius:var(--radius-input)"></div><div class="rname">--radius-input</div><div class="rval" data-radval="--radius-input">10px</div></div>
+        <div class="box" data-radius="--radius-icon-btn"><div class="swatch" style="border-radius:var(--radius-icon-btn);height:64px;width:64px;margin:46px auto var(--space-3)"></div><div class="rname">--radius-icon-btn</div><div class="rval" data-radval="--radius-icon-btn">10px</div></div>
+        <div class="box" data-radius="--radius-tag"><div class="swatch" style="border-radius:var(--radius-tag);height:52px;margin-top:58px"></div><div class="rname">--radius-tag</div><div class="rval" data-radval="--radius-tag">pill</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ 05 · LINKS, LISTS & QUOTES ════ -->
+<section id="content" class="section">
+  <div class="container">
+    <div class="section-head"><div class="eyebrow">05 · Elements</div><h2>Links, Lists &amp; Quotes</h2></div>
+    <div class="grid cols-2">
+      <div>
+        <h5>Links</h5>
+        <p>Inline text with a <a href="#">default link</a> and a <a href="#">second link</a> showing the hover style.</p>
+        <h5>Unordered list</h5>
+        <ul><li>First item in the list</li><li>Second item with a bit more text</li><li>Third item</li></ul>
+        <h5>Ordered list</h5>
+        <ol><li>Step one</li><li>Step two</li><li>Step three</li></ol>
+      </div>
+      <div>
+        <h5>Blockquote</h5>
+        <blockquote>Design is not just what it looks like and feels like. Design is how it works.</blockquote>
+        <p class="caption">— attribution text</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ 06 · FORMS & BUTTONS ════ -->
+<section id="forms" class="section alt">
+  <div class="container">
+    <div class="section-head"><div class="eyebrow">06 · Elements</div><h2>Forms &amp; Buttons</h2></div>
+    <div class="grid cols-2">
+      <div>
+        <div class="form-grid">
+          <div class="field"><label>First name</label><input type="text" value="Jane"></div>
+          <div class="field"><label>Last name</label><input type="text" value="Doe"></div>
+        </div>
+        <div class="field"><label>Email</label><input type="email" value="jane@example.com"></div>
+        <div class="field"><label>Message</label><textarea rows="3">Your message…</textarea></div>
+      </div>
+      <div>
+        <h5>Buttons</h5>
+        <p><a class="btn" href="#">Primary action</a> &nbsp; <a class="btn btn-secondary" href="#">Secondary</a></p>
+        <h5>Select</h5>
+        <div class="field"><select><option>Option one</option><option>Option two</option></select></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ 07 · COMPONENTS ════ -->
+<section id="components" class="section">
+  <div class="container">
+    <div class="section-head"><div class="eyebrow">07 · Components</div><h2>Components</h2><p class="lead">Composed from the tokens above — change a token and every component follows.</p></div>
+
+    <h5>Content Cards</h5>
+    <div class="grid cols-3" style="margin-bottom:var(--space-12)">
+      <div class="card"><div class="eyebrow">Category</div><h4>Card title one</h4><p class="caption">A short supporting description for the card content.</p><a href="#">Read more</a></div>
+      <div class="card"><div class="eyebrow">Category</div><h4>Card title two</h4><p class="caption">A short supporting description for the card content.</p><a href="#">Read more</a></div>
+      <div class="card"><div class="eyebrow">Category</div><h4>Card title three</h4><p class="caption">A short supporting description for the card content.</p><a href="#">Read more</a></div>
+    </div>
+
+    <h5>Navigation Bar</h5>
+    <div class="demo-nav" style="margin-bottom:var(--space-12)">
+      <span class="brand">Brand</span>
+      <span class="links"><a href="#">Home</a><a href="#">Products</a><a href="#">About</a><a href="#">Contact</a></span>
+      <a class="btn" href="#">Get started</a>
+    </div>
+
+    <h5>Footer</h5>
+    <div class="demo-footer">
+      <div class="cols">
+        <div><div class="brand" style="color:var(--footer-text);font-family:var(--font-heading);font-weight:var(--fw-bold);font-size:var(--text-h6)">Brand</div><p style="color:var(--footer-text);opacity:.8;font-size:var(--text-body-sm)">Short tagline about the company.</p></div>
+        <div><p style="color:var(--footer-text);opacity:.6;font-size:var(--text-caption);text-transform:uppercase;letter-spacing:.06em;margin-bottom:var(--space-2)">Product</p><a href="#">Features</a><br><a href="#">Pricing</a><br><a href="#">Docs</a></div>
+        <div><p style="color:var(--footer-text);opacity:.6;font-size:var(--text-caption);text-transform:uppercase;letter-spacing:.06em;margin-bottom:var(--space-2)">Company</p><a href="#">About</a><br><a href="#">Blog</a><br><a href="#">Careers</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ 08 · BREAKPOINTS ════ -->
+<section id="breakpoints" class="section alt">
+  <div class="container">
+    <div class="section-head"><div class="eyebrow">08 · Foundations</div><h2>Responsive Breakpoints</h2></div>
+    <table class="bp-table">
+      <thead><tr><th>Name</th><th>Range</th><th>Token</th></tr></thead>
+      <tbody>
+        <tr><td>Desktop</td><td>above tablet</td><td>—</td></tr>
+        <tr><td>Tablet</td><td data-bpval="--bp-tablet">&le; 1024px</td><td>var(--bp-tablet)</td></tr>
+        <tr><td>Mobile</td><td data-bpval="--bp-mobile">&le; 640px</td><td>var(--bp-mobile)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</body>
+</html>

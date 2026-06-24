@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us — UPQODE</title>
+<meta name="description" content="Meet UPQODE — a web design &amp; development studio building fast, beautiful, conversion-focused websites for ambitious brands.">
+<style>
+  :root{
+    --bg:#070711;
+    --bg-soft:#0d0d1c;
+    --surface:#12122a;
+    --surface-2:#181838;
+    --line:rgba(255,255,255,.08);
+    --txt:#eef0ff;
+    --muted:#a3a6c9;
+    --accent:#7c5cff;
+    --accent-2:#19e3c2;
+    --accent-3:#ff5c9d;
+    --grad:linear-gradient(120deg,#7c5cff 0%,#19e3c2 100%);
+    --grad-soft:linear-gradient(120deg,rgba(124,92,255,.18),rgba(25,227,194,.12));
+    --radius:18px;
+    --maxw:1180px;
+    --ease:cubic-bezier(.16,1,.3,1);
+    font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--txt);
+    line-height:1.6;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding-left:24px;padding-right:24px}
+  .accent-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+  /* ambient glow */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:-2;
+    background:
+      radial-gradient(600px 400px at 12% 8%,rgba(124,92,255,.22),transparent 60%),
+      radial-gradient(700px 480px at 88% 22%,rgba(25,227,194,.16),transparent 60%),
+      radial-gradient(700px 500px at 50% 100%,rgba(255,92,157,.12),transparent 60%);
+  }
+  body::after{
+    content:"";position:fixed;inset:0;z-index:-1;opacity:.4;
+    background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+    background-size:64px 64px;
+    -webkit-mask-image:radial-gradient(circle at 50% 30%,#000,transparent 75%);
+            mask-image:radial-gradient(circle at 50% 30%,#000,transparent 75%);
+  }
+
+  /* ===== Nav ===== */
+  header{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(7,7,17,.55);border-bottom:1px solid var(--line)}
+  nav{display:flex;align-items:center;justify-content:space-between;height:70px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px;font-size:1.25rem}
+  .logo .dot{width:12px;height:12px;border-radius:50%;background:var(--grad);box-shadow:0 0 18px rgba(124,92,255,.8)}
+  .nav-links{display:flex;gap:32px;align-items:center}
+  .nav-links a:not(.btn){color:#ffffff;font-size:.95rem;font-weight:500;transition:opacity .2s}
+  .nav-links a:not(.btn):hover{opacity:.7}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:999px;font-weight:600;font-size:.95rem;cursor:pointer;border:none;transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+  .btn-primary{background:linear-gradient(120deg,#7c5cff,#5a3cff 55%,#9a6bff);color:#ffffff;box-shadow:0 8px 30px rgba(124,92,255,.45)}
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 14px 44px rgba(124,92,255,.6)}
+  .btn-ghost{background:rgba(255,255,255,.05);color:var(--txt);border:1px solid var(--line)}
+  .btn-ghost:hover{background:rgba(255,255,255,.1);transform:translateY(-2px)}
+  .nav-toggle{display:none;background:none;border:none;color:var(--txt);font-size:1.6rem;cursor:pointer}
+
+  /* ===== Hero ===== */
+  .hero{position:relative;padding:130px 24px 120px;text-align:center}
+  .badge{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;border:1px solid var(--line);background:var(--grad-soft);color:var(--muted);font-size:.85rem;font-weight:500;margin-bottom:28px}
+  .badge .pulse{width:8px;height:8px;border-radius:50%;background:var(--accent-2);box-shadow:0 0 0 0 rgba(25,227,194,.6);animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(25,227,194,.5)}70%{box-shadow:0 0 0 12px rgba(25,227,194,0)}100%{box-shadow:0 0 0 0 rgba(25,227,194,0)}}
+  .hero h1{font-size:clamp(2.6rem,6vw,4.7rem);font-weight:800;line-height:1.05;letter-spacing:-1.5px;max-width:14ch;margin:0 auto 22px}
+  .hero p.lead{font-size:clamp(1.05rem,2vw,1.3rem);color:var(--muted);max-width:60ch;margin:0 auto 38px}
+  .hero-cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+  .hero-stats{display:flex;gap:48px;justify-content:center;flex-wrap:wrap;margin-top:96px;padding-top:24px}
+  .stat .num{font-size:2.4rem;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat .lbl{color:var(--muted);font-size:.9rem}
+  /* hero creative animation */
+  .hero h1 .accent-text{background:linear-gradient(120deg,#7c5cff,#19e3c2,#ff5c9d,#7c5cff);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:hueflow 9s linear infinite}
+  @keyframes hueflow{to{background-position:300% 0}}
+  .orbs{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+  .orb{position:absolute;border-radius:50%;filter:blur(55px);opacity:.5;mix-blend-mode:screen;will-change:transform;animation:floaty 20s ease-in-out infinite}
+  .orb.o1{width:360px;height:360px;background:#7c5cff;top:-50px;left:6%;animation-delay:0s}
+  .orb.o2{width:300px;height:300px;background:#19e3c2;top:30px;right:5%;animation-delay:-7s}
+  .orb.o3{width:260px;height:260px;background:#ff5c9d;bottom:-70px;left:44%;animation-delay:-13s}
+  @keyframes floaty{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(34px,-44px) scale(1.14)}66%{transform:translate(-28px,26px) scale(.92)}}
+  .hero h1{animation:riseIn .9s var(--ease) both}
+  .hero .badge{animation:riseIn .7s var(--ease) both}
+  .hero p.lead{animation:riseIn .9s .12s var(--ease) both}
+  .hero .hero-cta{animation:riseIn .9s .22s var(--ease) both}
+  @keyframes riseIn{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+  @media(prefers-reduced-motion:reduce){.orb,.hero h1 .accent-text,.hero h1,.hero .badge,.hero p.lead,.hero .hero-cta{animation:none}}
+
+  /* marquee */
+  .marquee{margin-top:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:26px 0;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+  .marquee-track{display:flex;gap:64px;width:max-content;animation:scroll 26s linear infinite}
+  .marquee-track span{color:var(--muted);font-weight:700;font-size:1.15rem;letter-spacing:1px;opacity:.6;white-space:nowrap}
+  @keyframes scroll{to{transform:translateX(-50%)}}
+
+  /* ===== Sections ===== */
+  /* scroll-margin-top keeps section headings from landing under the 70px sticky header
+     when navigated to via the menu (≥80px clear gap below the header). */
+  section{padding:120px 0;scroll-margin-top:150px}
+  .sec-head{text-align:center;max-width:640px;margin:0 auto 60px}
+  .eyebrow{text-transform:uppercase;letter-spacing:3px;font-size:.78rem;font-weight:700;color:var(--accent-2);margin-bottom:14px}
+  .sec-head h2{font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-1px;line-height:1.1;margin-bottom:16px}
+  .sec-head p{color:var(--muted);font-size:1.05rem}
+
+  /* services */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .card{position:relative;background:linear-gradient(180deg,var(--surface),var(--bg-soft));border:1px solid var(--line);border-radius:var(--radius);padding:34px 30px;transition:transform .35s var(--ease),border-color .35s}
+  .card:hover{transform:translateY(-6px);border-color:rgba(124,92,255,.5)}
+  .card .ico{width:54px;height:54px;border-radius:14px;display:grid;place-items:center;background:var(--grad-soft);border:1px solid var(--line);margin-bottom:20px;font-size:1.5rem}
+  .card h3{font-size:1.25rem;font-weight:700;margin-bottom:10px}
+  .card p{color:var(--muted);font-size:.96rem}
+
+  /* portfolio */
+  .work-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+  .work{position:relative;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);min-height:280px;display:flex;flex-direction:column;justify-content:flex-end;padding:30px;transition:transform .4s var(--ease)}
+  .work:hover{transform:translateY(-6px)}
+  .work::before{content:"";position:absolute;inset:0;z-index:0;opacity:.9;transition:transform .6s var(--ease)}
+  .work:hover::before{transform:scale(1.06)}
+  .work::before{background-size:cover;background-position:center}
+  .work.w1::before{background-image:linear-gradient(135deg,rgba(124,92,255,.6),rgba(58,28,145,.55)),url("https://picsum.photos/seed/nimbus/800/600")}
+  .work.w2::before{background-image:linear-gradient(135deg,rgba(25,227,194,.55),rgba(15,110,122,.6)),url("https://picsum.photos/seed/verdant/800/600")}
+  .work.w3::before{background-image:linear-gradient(135deg,rgba(255,92,157,.55),rgba(122,31,85,.6)),url("https://picsum.photos/seed/pulse/800/600")}
+  .work.w4::before{background-image:linear-gradient(135deg,rgba(255,181,71,.55),rgba(168,83,27,.6)),url("https://picsum.photos/seed/ledgerly/800/600")}
+  .work::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,transparent 30%,rgba(7,7,17,.85))}
+  .work .meta{position:relative;z-index:2}
+  .work .tag{font-size:.78rem;text-transform:uppercase;letter-spacing:2px;opacity:.85;font-weight:600}
+  .work h3{position:relative;z-index:2;font-size:1.5rem;font-weight:800;margin-top:6px}
+  .work .arrow{position:absolute;top:24px;right:24px;z-index:2;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.15);backdrop-filter:blur(6px);display:grid;place-items:center;font-size:1.2rem;transition:.3s}
+  .work:hover .arrow{background:#fff;color:#08081a;transform:rotate(-45deg)}
+
+  /* process */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;counter-reset:step}
+  .step{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:30px 24px;position:relative}
+  .step .n{font-size:2.6rem;font-weight:800;line-height:1;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:14px}
+  .step h4{font-size:1.1rem;font-weight:700;margin-bottom:8px}
+  .step p{color:var(--muted);font-size:.92rem}
+
+  /* testimonials */
+  .quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+  /* testimonials — redesigned card style */
+  .quote{position:relative;background:linear-gradient(180deg,rgba(124,92,255,.08),rgba(13,13,28,.6));border:1px solid var(--line);border-radius:20px;padding:46px 30px 30px;overflow:hidden;transition:transform .35s var(--ease),border-color .35s,box-shadow .35s}
+  .quote::after{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:var(--grad);opacity:.9}
+  .quote::before{content:"\201C";position:absolute;top:8px;right:24px;font-family:Georgia,"Times New Roman",serif;font-size:5.5rem;line-height:1;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;opacity:.35;pointer-events:none}
+  .quote:hover{transform:translateY(-8px);border-color:rgba(124,92,255,.55);box-shadow:0 18px 50px rgba(124,92,255,.18)}
+  .quote .stars{color:var(--accent-2);letter-spacing:3px;margin-bottom:16px}
+  .quote p{position:relative;z-index:1;font-size:1.05rem;line-height:1.7;margin-bottom:24px}
+  .quote .who{padding-top:18px;border-top:1px solid var(--line)}
+  .who{display:flex;align-items:center;gap:12px}
+  .who .av{width:44px;height:44px;border-radius:50%;background:var(--grad);display:grid;place-items:center;font-weight:800;color:#08081a}
+  .who .nm{font-weight:700;font-size:.95rem}
+  .who .rl{color:var(--muted);font-size:.82rem}
+
+  /* CTA — compact horizontal band */
+  .cta{position:relative;border:1px solid var(--line);border-radius:22px;padding:38px 44px;text-align:left;overflow:hidden;background:var(--grad-soft)}
+  .cta-inner{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap}
+  .cta h2{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:800;letter-spacing:-.5px;margin-bottom:6px}
+  .cta p{color:var(--muted);max-width:42ch;font-size:1rem;margin:0}
+  .cta .hero-cta{justify-content:flex-start;flex-shrink:0}
+  .cta-glow{position:absolute;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(124,92,255,.45),transparent 65%);top:-150px;right:-60px;left:auto;transform:none;z-index:0;filter:blur(16px)}
+  @media(max-width:640px){.cta{text-align:center}.cta-inner{justify-content:center}.cta .hero-cta{justify-content:center}}
+
+  /* footer */
+  footer{border-top:1px solid var(--line);padding:60px 0 36px;margin-top:40px}
+  .foot-grid{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;margin-bottom:42px}
+  .foot-brand{max-width:300px}
+  .foot-brand p{color:var(--muted);margin-top:14px;font-size:.95rem}
+  .foot-col h5{font-size:.85rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:16px}
+  .foot-col a{display:block;color:var(--txt);opacity:.8;margin-bottom:10px;font-size:.95rem;transition:opacity .2s}
+  .foot-col a:hover{opacity:1}
+  .foot-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;border-top:1px solid var(--line);padding-top:26px;color:var(--muted);font-size:.88rem}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+
+  @media(max-width:900px){
+    .grid,.quotes{grid-template-columns:1fr 1fr}
+    .steps{grid-template-columns:1fr 1fr}
+  }
+  @media(max-width:760px){
+    .nav-links{display:none}
+    .nav-toggle{display:block}
+    .grid,.quotes,.work-grid,.steps{grid-template-columns:1fr}
+    .hero-stats{gap:32px}
+  }
+
+  /* ===== About extras ===== */
+  .split{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+  .split h2{font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:800;letter-spacing:-1px;line-height:1.12;margin-bottom:18px}
+  .split p{color:var(--muted);margin-bottom:16px;font-size:1.02rem}
+  .panel{background:linear-gradient(180deg,var(--surface),var(--bg-soft));border:1px solid var(--line);border-radius:var(--radius);padding:34px;display:grid;grid-template-columns:1fr 1fr;gap:28px}
+  .panel .num{font-size:2.2rem;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .panel .lbl{color:var(--muted);font-size:.9rem;margin-top:2px}
+  .team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+  .member{background:linear-gradient(180deg,var(--surface),var(--bg-soft));border:1px solid var(--line);border-radius:var(--radius);padding:30px 24px;text-align:center;transition:transform .35s var(--ease),border-color .35s}
+  .member:hover{transform:translateY(-6px);border-color:rgba(124,92,255,.5)}
+  .member .ava{width:84px;height:84px;border-radius:50%;margin:0 auto 16px;background:var(--grad);display:grid;place-items:center;font-weight:800;font-size:1.5rem;color:#08081a}
+  .member .mname{font-weight:700;font-size:1.05rem}
+  .member .mrole{color:var(--muted);font-size:.88rem;margin-top:2px}
+  @media(max-width:900px){.split{grid-template-columns:1fr}.team-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:560px){.team-grid{grid-template-columns:1fr 1fr}.panel{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<header data-mk-id="mk-u75p3s0">
+  <nav class="wrap" data-mk-id="mk-zznrxo1">
+    <a class="logo" href="index.html" data-mk-id="mk-qyeexz2">UPQODE</a>
+    <div class="nav-links" data-mk-id="mk-ri9jp13">
+      <a href="index.html#services" data-mk-id="mk-wgi1ly4">Services</a>
+      <a href="index.html#work" data-mk-id="mk-3hc7t25">Work</a>
+      <a href="index.html#process" data-mk-id="mk-y6a4io6">Process</a>
+      <a href="about.html" data-mk-id="mk-db77yn7">About</a>
+      <a class="btn btn-primary" href="index.html#contact" data-mk-id="mk-w392kg8">Start a project →</a>
+    </div>
+    <button class="nav-toggle" aria-label="Menu" data-mk-id="mk-x039ky9">☰</button>
+  </nav>
+</header>
+
+<main id="top" data-mk-id="mk-o9p9laa">
+
+  <!-- HERO -->
+  <section class="hero" data-mk-id="mk-jikyafb">
+    <div class="orbs" data-mk-id="mk-kw7mddc"><span class="orb o1" data-mk-id="mk-sid4bcd"></span><span class="orb o2" data-mk-id="mk-p2u5ste"></span><span class="orb o3" data-mk-id="mk-cl7k5qf"></span></div>
+    <span class="badge" data-mk-id="mk-ngr5svg"><span class="pulse" data-mk-id="mk-vfh98lh"></span> About UPQODE</span>
+    <h1 data-mk-id="mk-q7677ji">We're the team behind <span class="accent-text" data-mk-id="mk-3izcvgj">remarkable</span> websites.</h1>
+    <p class="lead" data-mk-id="mk-lwkxcbk">For over a decade we've helped ambitious brands design, build and grow digital products that are fast, beautiful and built to convert.</p>
+    <div class="hero-cta" data-mk-id="mk-2qrdhxl">
+      <a class="btn btn-primary" href="index.html#contact" data-mk-id="mk-323v2vm">Work with us →</a>
+      <a class="btn btn-ghost" href="index.html#work" data-mk-id="mk-78albgn">See our work</a>
+    </div>
+    <div class="hero-stats" data-mk-id="mk-z8q756o">
+      <div class="stat" data-mk-id="mk-jm284gp"><div class="num" data-mk-id="mk-apfbgiq">350+</div><div class="lbl" data-mk-id="mk-p3t3c7r">Projects shipped</div></div>
+      <div class="stat" data-mk-id="mk-rspw7gs"><div class="num" data-mk-id="mk-mhpdo9t">12+</div><div class="lbl" data-mk-id="mk-28zyr8u">Years of craft</div></div>
+      <div class="stat" data-mk-id="mk-4rn9rev"><div class="num" data-mk-id="mk-2gxge1w">30+</div><div class="lbl" data-mk-id="mk-sddkcgx">Team members</div></div>
+      <div class="stat" data-mk-id="mk-m2t9zty"><div class="num" data-mk-id="mk-30jnd0z">14</div><div class="lbl" data-mk-id="mk-25wd0f10">Countries served</div></div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee" data-mk-id="mk-98qfu211">
+    <div class="marquee-track" data-mk-id="mk-0wy2zp12">
+      <span data-mk-id="mk-lkgv7913">WORDPRESS</span><span data-mk-id="mk-6eqveo14">WEBFLOW</span><span data-mk-id="mk-lnih1x15">NEXT.JS</span><span data-mk-id="mk-cbj55516">SHOPIFY</span><span data-mk-id="mk-0azizt17">FIGMA</span><span data-mk-id="mk-oljjmj18">REACT</span><span data-mk-id="mk-4jrior19">HEADLESS CMS</span><span data-mk-id="mk-2rnvsy1a">SEO</span>
+      <span data-mk-id="mk-v47wcb1b">WORDPRESS</span><span data-mk-id="mk-nwx3en1c">WEBFLOW</span><span data-mk-id="mk-qdn2zc1d">NEXT.JS</span><span data-mk-id="mk-4zprwv1e">SHOPIFY</span><span data-mk-id="mk-99yc6l1f">FIGMA</span><span data-mk-id="mk-n9ru361g">REACT</span><span data-mk-id="mk-hrw8yu1h">HEADLESS CMS</span><span data-mk-id="mk-1p2xfz1i">SEO</span>
+    </div>
+  </div>
+
+  <!-- STORY -->
+  <section id="story" class="wrap" data-mk-id="mk-4o2xye1j">
+    <div class="split" data-mk-id="mk-lt31h01k">
+      <div class="reveal" data-mk-id="mk-74q6f51l" style="transition-delay: 0ms;">
+        <div class="eyebrow" data-mk-id="mk-abnem51m">Our story</div>
+        <h2 data-mk-id="mk-btm9zn1n">Built on craft, driven by results.</h2>
+        <p data-mk-id="mk-x9ti2u1o">UPQODE started with a simple belief: a website should do more than look good — it should grow the business behind it. What began as a small studio is now a tight-knit team of designers, engineers and strategists working with brands across the globe.</p>
+        <p data-mk-id="mk-toxvgj1p">We pair thoughtful design with clean, scalable engineering, and we treat every project like it's our own. No bloated processes, no surprises — just work that moves the needle.</p>
+      </div>
+      <div class="panel reveal" data-mk-id="mk-c0ddx61q" style="transition-delay: 80ms;">
+        <div data-mk-id="mk-tkvm1s1r"><div class="num" data-mk-id="mk-hbz8ox1s">98%</div><div class="lbl" data-mk-id="mk-7ztmzc1t">Client retention</div></div>
+        <div data-mk-id="mk-s9m6301u"><div class="num" data-mk-id="mk-2z95hi1v">4.9★</div><div class="lbl" data-mk-id="mk-do0r601w">Average rating</div></div>
+        <div data-mk-id="mk-es0x3t1x"><div class="num" data-mk-id="mk-j0j5pa1y">&lt;1s</div><div class="lbl" data-mk-id="mk-twitmb1z">Avg. load time</div></div>
+        <div data-mk-id="mk-402ijz20"><div class="num" data-mk-id="mk-0majfl21">24h</div><div class="lbl" data-mk-id="mk-cubvx022">Reply time</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUES -->
+  <section id="values" class="wrap" data-mk-id="mk-ixtczo23">
+    <div class="sec-head reveal" data-mk-id="mk-uaxrdr24" style="transition-delay: 160ms;">
+      <div class="eyebrow" data-mk-id="mk-odxrzf25">What we value</div>
+      <h2 data-mk-id="mk-fpsyzh26">Principles that guide our work</h2>
+      <p data-mk-id="mk-b7lg9f27">The standards we hold ourselves to on every project, big or small.</p>
+    </div>
+    <div class="grid" data-mk-id="mk-dj4bc328">
+      <div class="card reveal" data-mk-id="mk-9r0x4b29" style="transition-delay: 0ms;"><div class="ico" data-mk-id="mk-y4vlgy2a">🎯</div><h3 data-mk-id="mk-2fmrgk2b">Results first</h3><p data-mk-id="mk-fxxihq2c">Beautiful is the baseline. We design and build for conversions, speed and real business outcomes.</p></div>
+      <div class="card reveal" data-mk-id="mk-05ex1g2d" style="transition-delay: 80ms;"><div class="ico" data-mk-id="mk-a28ky72e">⚡</div><h3 data-mk-id="mk-944qmp2f">Speed &amp; quality</h3><p data-mk-id="mk-p5xu722g">Fast doesn't mean sloppy. We ship quickly without ever cutting corners on craft.</p></div>
+      <div class="card reveal" data-mk-id="mk-nf986z2h" style="transition-delay: 160ms;"><div class="ico" data-mk-id="mk-jp4vdr2i">🤝</div><h3 data-mk-id="mk-3bfp4a2j">True partnership</h3><p data-mk-id="mk-temla32k">We work as an extension of your team — transparent, collaborative and invested in your success.</p></div>
+      <div class="card reveal" data-mk-id="mk-aigriz2l" style="transition-delay: 0ms;"><div class="ico" data-mk-id="mk-vy50ap2m">🔍</div><h3 data-mk-id="mk-6w6pig2n">Attention to detail</h3><p data-mk-id="mk-e3l6d32o">Pixels, performance and micro-interactions — the small things add up to a premium experience.</p></div>
+      <div class="card reveal" data-mk-id="mk-45v3o52p" style="transition-delay: 80ms;"><div class="ico" data-mk-id="mk-skwiez2q">📈</div><h3 data-mk-id="mk-h4aqbi2r">Always improving</h3><p data-mk-id="mk-0c5z482s">We measure, learn and optimize long after launch so your site keeps getting better.</p></div>
+      <div class="card reveal" data-mk-id="mk-htqy9u2t" style="transition-delay: 160ms;"><div class="ico" data-mk-id="mk-ovl3uf2u">💙</div><h3 data-mk-id="mk-3pk0n52v">Genuine care</h3><p data-mk-id="mk-n0ft7l2w">We genuinely care about your brand, your users and the work we put our name on.</p></div>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section id="team" class="wrap" data-mk-id="mk-81b7c62x">
+    <div class="sec-head reveal" data-mk-id="mk-aoyr4d2y" style="transition-delay: 0ms;">
+      <div class="eyebrow" data-mk-id="mk-3n4xhj2z">The people</div>
+      <h2 data-mk-id="mk-k4dop230">Meet the team</h2>
+      <p data-mk-id="mk-fug2u131">A small, senior team of makers who love what they do.</p>
+    </div>
+    <div class="team-grid" data-mk-id="mk-bkphav32">
+      <div class="member reveal" data-mk-id="mk-aqmqvt33" style="transition-delay: 80ms;"><div class="ava" data-mk-id="mk-49c7lt34">NP</div><div class="mname" data-mk-id="mk-zzbptp35">Nicolae Pase</div><div class="mrole" data-mk-id="mk-jgtxoy36">Founder &amp; CEO</div></div>
+      <div class="member reveal" data-mk-id="mk-njvqjk37" style="transition-delay: 160ms;"><div class="ava" data-mk-id="mk-3959mh38">DK</div><div class="mname" data-mk-id="mk-4yslgh39">David Kane</div><div class="mrole" data-mk-id="mk-xz4ouk3a">Creative Director</div></div>
+      <div class="member reveal" data-mk-id="mk-btbibi3b" style="transition-delay: 0ms;"><div class="ava" data-mk-id="mk-zk5ciz3c">AL</div><div class="mname" data-mk-id="mk-5j7wwr3d">Amara Lopez</div><div class="mrole" data-mk-id="mk-e6dnsh3e">Head of Engineering</div></div>
+      <div class="member reveal" data-mk-id="mk-4eu0cn3f" style="transition-delay: 80ms;"><div class="ava" data-mk-id="mk-5cfjzx3g">SM</div><div class="mname" data-mk-id="mk-aj9yux3h">Sara Mitchell</div><div class="mrole" data-mk-id="mk-u1rch63i">Head of Strategy</div></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="contact" class="wrap" data-mk-id="mk-4qr67s3j">
+    <div class="cta reveal" data-mk-id="mk-y6jz213k" style="transition-delay: 160ms;">
+      <div class="cta-glow" data-mk-id="mk-owbhjt3l"></div>
+      <div class="cta-inner" data-mk-id="mk-2ydcys3m">
+        <div data-mk-id="mk-3e3msc3n">
+          <h2 data-mk-id="mk-kqcbfq3o">Let's build something <span class="accent-text" data-mk-id="mk-qsqmb43p">remarkable</span>.</h2>
+          <p data-mk-id="mk-wkq5kf3q">Tell us about your project — we'll reply within one business day.</p>
+        </div>
+        <div class="hero-cta" data-mk-id="mk-33ik8w3r">
+          <a class="btn btn-primary" href="mailto:hello@upqode.com" data-mk-id="mk-cho0g53s">Get a free quote →</a>
+          <a class="btn btn-ghost" href="index.html#work" data-mk-id="mk-wezaxg3t">See more work</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer data-mk-id="mk-39e7hc3u">
+  <div class="wrap" data-mk-id="mk-rnm0df3v">
+    <div class="foot-grid" data-mk-id="mk-a9w0rn3w">
+      <div class="foot-brand" data-mk-id="mk-2kc6243x">
+        <a class="logo" href="index.html" data-mk-id="mk-6jwbqh3y">UPQODE</a>
+        <p data-mk-id="mk-h7xbmw3z">A web design &amp; development studio building digital products that perform.</p>
+      </div>
+      <div class="foot-col" data-mk-id="mk-vfksjs40">
+        <h5 data-mk-id="mk-remgr441">Services</h5>
+        <a href="index.html#services" data-mk-id="mk-6ot2xh42">Web Design</a>
+        <a href="index.html#services" data-mk-id="mk-unj5z743">Development</a>
+        <a href="index.html#services" data-mk-id="mk-49mkg044">SEO &amp; Growth</a>
+        <a href="index.html#services" data-mk-id="mk-dkaf6245">E-Commerce</a>
+      </div>
+      <div class="foot-col" data-mk-id="mk-92yzjn46">
+        <h5 data-mk-id="mk-uwt9ms47">Company</h5>
+        <a href="index.html#work" data-mk-id="mk-emwxyq48">Work</a>
+        <a href="index.html#process" data-mk-id="mk-ms2mk149">Process</a>
+        <a href="about.html" data-mk-id="mk-5l8myw4a">About</a>
+        <a href="index.html#contact" data-mk-id="mk-cqklof4b">Contact</a>
+      </div>
+      <div class="foot-col" data-mk-id="mk-y2uss14c">
+        <h5 data-mk-id="mk-tf6uzr4d">Connect</h5>
+        <a href="#" data-mk-id="mk-h369zy4e">Twitter / X</a>
+        <a href="#" data-mk-id="mk-20ekyw4f">LinkedIn</a>
+        <a href="#" data-mk-id="mk-r8s2oa4g">Dribbble</a>
+        <a href="mailto:hello@upqode.com" data-mk-id="mk-8mlisj4h">hello@upqode.com</a>
+      </div>
+    </div>
+    <div class="foot-bottom" data-mk-id="mk-9qw11k4i">
+      <span data-mk-id="mk-4qeu244j">© 2026 UPQODE. All rights reserved.</span>
+      <span data-mk-id="mk-82waoo4k">Crafted with care ✦ Built for speed</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const io=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+  },{threshold:.14});
+  document.querySelectorAll('.reveal').forEach((el,i)=>{el.style.transitionDelay=(i%3)*80+'ms';io.observe(el);});
+
+  document.querySelector('.nav-toggle').addEventListener('click',()=>{
+    const n=document.querySelector('.nav-links');
+    const open=n.style.display==='flex';
+    n.style.display=open?'':'flex';
+    if(!open){n.style.position='absolute';n.style.top='70px';n.style.right='24px';n.style.flexDirection='column';n.style.background='var(--surface)';n.style.padding='18px 22px';n.style.borderRadius='14px';n.style.border='1px solid var(--line)';}
+  });
+</script>
+
+
+</body></html>

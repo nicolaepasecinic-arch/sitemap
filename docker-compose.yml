@@ -1,0 +1,38 @@
+# Local full-stack dev: Postgres + backend API + frontend.
+# Run: docker compose up --build   →  frontend on http://localhost:8080
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: qoders
+      POSTGRES_PASSWORD: qoders
+      POSTGRES_DB: qoders
+    volumes:
+      - qoders_db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgres://qoders:qoders@db:5432/qoders
+      JWT_SECRET: local-dev-secret
+      CORS_ORIGIN: http://localhost:8080
+      PORT: "3000"
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+
+  frontend:
+    build:
+      context: .
+      args:
+        REACT_APP_API_URL: http://localhost:3000
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+
+volumes:
+  qoders_db:

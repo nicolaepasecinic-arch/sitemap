@@ -1,0 +1,111 @@
+/* Notion-like skin for the BlockNote editor used in board Text elements. */
+.board-rte .bn-container {
+  --bn-colors-editor-text: #37352F;
+  --bn-colors-editor-background: transparent;
+  --bn-colors-menu-text: #37352F;
+  --bn-colors-highlights-gray-background: #F1F1EF;
+  --bn-font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif;
+  --bn-border-radius: 6px;
+}
+.board-rte .bn-editor {
+  padding-inline: 16px;
+  padding-block: 10px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #37352F;
+  background: transparent;
+}
+/* tighter, Notion-ish block rhythm */
+.board-rte .bn-block-outer { margin-top: 1px; }
+.board-rte .bn-block-content { padding-block: 3px; }
+.board-rte .bn-inline-content { caret-color: #37352F; }
+
+/* headings — weight + sizes close to Notion */
+.board-rte .bn-block-content[data-content-type="heading"][data-level="1"] .bn-inline-content { font-size: 1.875em; font-weight: 700; line-height: 1.25; }
+.board-rte .bn-block-content[data-content-type="heading"][data-level="2"] .bn-inline-content { font-size: 1.5em;  font-weight: 600; line-height: 1.3; }
+.board-rte .bn-block-content[data-content-type="heading"][data-level="3"] .bn-inline-content { font-size: 1.25em; font-weight: 600; line-height: 1.3; }
+.board-rte .bn-block-outer:has(> .bn-block > .bn-block-content[data-content-type="heading"]) { margin-top: 14px; }
+
+/* selection + placeholder */
+.board-rte .bn-editor ::selection { background: rgba(35,131,226,0.20); }
+.board-rte .bn-inline-content[data-placeholder]::before { color: #C4C4C4; }
+
+/* ---- custom blocks ---- */
+.board-rte .bn-callout {
+  display: flex; gap: 10px; align-items: flex-start;
+  background: #F1F0EF; border-radius: 6px; padding: 12px 14px; width: 100%;
+}
+.board-rte .bn-callout-emoji { font-size: 18px; line-height: 1.5; cursor: pointer; user-select: none; }
+.board-rte .bn-callout-body { flex: 1; min-width: 0; }
+
+.board-rte .bn-divider { width: 100%; padding-block: 6px; }
+.board-rte .bn-divider hr { border: none; border-top: 1px solid #E3E2E0; margin: 0; }
+
+.board-rte .bn-bookmark, .board-rte .bn-bookmark-empty {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  border: 1px solid #E3E2E0; border-radius: 8px; padding: 12px 14px; text-decoration: none;
+}
+.board-rte .bn-bookmark:hover { background: #F7F7F5; }
+.board-rte .bn-bookmark-text { flex: 1; min-width: 0; }
+.board-rte .bn-bookmark-title { font-size: 14px; font-weight: 600; color: #37352F; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.board-rte .bn-bookmark-host { font-size: 12px; color: #9B9A97; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.board-rte .bn-bookmark-fav { width: 28px; height: 28px; object-fit: contain; border-radius: 4px; }
+.board-rte .bn-bookmark-empty input { flex: 1; border: none; outline: none; font-size: 14px; background: transparent; color: #37352F; }
+
+/* ---- Notion-style slash menu (screen 3) ---- */
+.bn-slash {
+  width: 340px;
+  max-height: 360px;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #E6E6E4;
+  border-radius: 12px;
+  box-shadow: 0 14px 40px rgba(15,15,15,0.16), 0 2px 8px rgba(15,15,15,0.08);
+  overflow: hidden;
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+.bn-slash-scroll { overflow-y: auto; padding: 6px; flex: 1; }
+.bn-slash-group { margin-bottom: 2px; }
+.bn-slash-label {
+  font-size: 11px; font-weight: 600; letter-spacing: .02em;
+  color: #9B9A97; padding: 8px 8px 4px;
+}
+.bn-slash-item {
+  width: 100%; display: flex; align-items: center; gap: 10px;
+  padding: 5px 8px; border-radius: 6px; cursor: pointer; text-align: left;
+  background: transparent; border: none;
+}
+.bn-slash-item:hover { background: #F1F1EF; }
+.bn-slash-item[data-sel="true"] { background: #EAEAEA; }
+.bn-slash-ic {
+  width: 34px; height: 34px; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid #E6E6E4; border-radius: 6px; color: #37352F; background: #fff;
+}
+.bn-slash-ic svg { width: 18px; height: 18px; }
+.bn-slash-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.25; }
+.bn-slash-title { font-size: 14px; color: #37352F; }
+.bn-slash-sub { font-size: 12px; color: #9B9A97; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bn-slash-badge {
+  font-size: 11px; color: #9B9A97; background: #F1F1EF;
+  border-radius: 4px; padding: 2px 6px; white-space: nowrap; flex: none;
+}
+.bn-slash-empty { padding: 14px; font-size: 13px; color: #9B9A97; text-align: center; }
+.bn-slash-close {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px; border-top: 1px solid #EEEEED; cursor: pointer;
+  background: #fff; border-left: none; border-right: none; border-bottom: none;
+  font-size: 13px; color: #6B6B6B;
+}
+.bn-slash-close:hover { background: #F7F7F5; }
+
+/* use the same popover shadow as the rest of the app (Tailwind shadow-xl + gray-100 border) */
+.bn-slash { box-shadow: 0 20px 25px -5px rgba(0,0,0,0.10), 0 8px 10px -6px rgba(0,0,0,0.10); border-color: #F3F4F6; }
+/* small search header inside the slash menu */
+.bn-slash-search {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 12px; border-bottom: 1px solid #EEEEED; color: #9B9A97; font-size: 13px;
+}
+.bn-slash-search .q { color: #37352F; }
+.bn-slash-search .ph { color: #B9B9B6; }

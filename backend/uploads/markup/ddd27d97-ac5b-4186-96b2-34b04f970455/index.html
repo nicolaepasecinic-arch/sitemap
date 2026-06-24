@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en" data-scribe-recorder-ready="true"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UPQODE — Web Design &amp; Development Studio</title>
+<meta name="description" content="UPQODE is a web design and development studio crafting fast, beautiful, conversion-focused websites for ambitious brands.">
+<style>
+  :root{
+    --bg:#070711;
+    --bg-soft:#0d0d1c;
+    --surface:#12122a;
+    --surface-2:#181838;
+    --line:rgba(255,255,255,.08);
+    --txt:#eef0ff;
+    --muted:#a3a6c9;
+    --accent:#7c5cff;
+    --accent-2:#19e3c2;
+    --accent-3:#ff5c9d;
+    --grad:linear-gradient(120deg,#7c5cff 0%,#19e3c2 100%);
+    --grad-soft:linear-gradient(120deg,rgba(124,92,255,.18),rgba(25,227,194,.12));
+    --radius:18px;
+    --maxw:1180px;
+    --ease:cubic-bezier(.16,1,.3,1);
+    font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--txt);
+    line-height:1.6;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  .accent-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+  /* ambient glow */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:-2;
+    background:
+      radial-gradient(600px 400px at 12% 8%,rgba(124,92,255,.22),transparent 60%),
+      radial-gradient(700px 480px at 88% 22%,rgba(25,227,194,.16),transparent 60%),
+      radial-gradient(700px 500px at 50% 100%,rgba(255,92,157,.12),transparent 60%);
+  }
+  body::after{
+    content:"";position:fixed;inset:0;z-index:-1;opacity:.4;
+    background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+    background-size:64px 64px;
+    -webkit-mask-image:radial-gradient(circle at 50% 30%,#000,transparent 75%);
+            mask-image:radial-gradient(circle at 50% 30%,#000,transparent 75%);
+  }
+
+  /* ===== Nav ===== */
+  header{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(7,7,17,.55);border-bottom:1px solid var(--line)}
+  nav{display:flex;align-items:center;justify-content:space-between;height:70px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px;font-size:1.25rem}
+  .logo .dot{width:12px;height:12px;border-radius:50%;background:var(--grad);box-shadow:0 0 18px rgba(124,92,255,.8)}
+  .nav-links{display:flex;gap:32px;align-items:center}
+  .nav-links a:not(.btn){color:#ffffff;font-size:.95rem;font-weight:500;transition:opacity .2s}
+  .nav-links a:not(.btn):hover{opacity:.7}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:999px;font-weight:600;font-size:.95rem;cursor:pointer;border:none;transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+  .btn-primary{background:var(--grad);color:#08081a;box-shadow:0 8px 30px rgba(124,92,255,.35)}
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(124,92,255,.5)}
+  .btn-ghost{background:rgba(255,255,255,.05);color:var(--txt);border:1px solid var(--line)}
+  .btn-ghost:hover{background:rgba(255,255,255,.1);transform:translateY(-2px)}
+  .nav-toggle{display:none;background:none;border:none;color:var(--txt);font-size:1.6rem;cursor:pointer}
+
+  /* ===== Hero ===== */
+  .hero{position:relative;padding:110px 0 90px;text-align:center}
+  .badge{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;border:1px solid var(--line);background:var(--grad-soft);color:var(--muted);font-size:.85rem;font-weight:500;margin-bottom:28px}
+  .badge .pulse{width:8px;height:8px;border-radius:50%;background:var(--accent-2);box-shadow:0 0 0 0 rgba(25,227,194,.6);animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(25,227,194,.5)}70%{box-shadow:0 0 0 12px rgba(25,227,194,0)}100%{box-shadow:0 0 0 0 rgba(25,227,194,0)}}
+  .hero h1{font-size:clamp(2.6rem,6vw,4.7rem);font-weight:800;line-height:1.05;letter-spacing:-1.5px;max-width:14ch;margin:0 auto 22px}
+  .hero p.lead{font-size:clamp(1.05rem,2vw,1.3rem);color:var(--muted);max-width:60ch;margin:0 auto 38px}
+  .hero-cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+  .hero-stats{display:flex;gap:48px;justify-content:center;flex-wrap:wrap;margin-top:96px;padding-top:24px}
+  .stat .num{font-size:2.4rem;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat .lbl{color:var(--muted);font-size:.9rem}
+
+  /* marquee */
+  .marquee{margin-top:70px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+  .marquee-track{display:flex;gap:64px;width:max-content;animation:scroll 26s linear infinite}
+  .marquee-track span{color:var(--muted);font-weight:700;font-size:1.15rem;letter-spacing:1px;opacity:.6;white-space:nowrap}
+  @keyframes scroll{to{transform:translateX(-50%)}}
+
+  /* ===== Sections ===== */
+  section{padding:96px 0}
+  .sec-head{text-align:center;max-width:640px;margin:0 auto 60px}
+  .eyebrow{text-transform:uppercase;letter-spacing:3px;font-size:.78rem;font-weight:700;color:var(--accent-2);margin-bottom:14px}
+  .sec-head h2{font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-1px;line-height:1.1;margin-bottom:16px}
+  .sec-head p{color:var(--muted);font-size:1.05rem}
+
+  /* services */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .card{position:relative;background:linear-gradient(180deg,var(--surface),var(--bg-soft));border:1px solid var(--line);border-radius:var(--radius);padding:34px 30px;transition:transform .35s var(--ease),border-color .35s}
+  .card:hover{transform:translateY(-6px);border-color:rgba(124,92,255,.5)}
+  .card .ico{width:54px;height:54px;border-radius:14px;display:grid;place-items:center;background:var(--grad-soft);border:1px solid var(--line);margin-bottom:20px;font-size:1.5rem}
+  .card h3{font-size:1.25rem;font-weight:700;margin-bottom:10px}
+  .card p{color:var(--muted);font-size:.96rem}
+
+  /* portfolio */
+  .work-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+  .work{position:relative;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);min-height:280px;display:flex;flex-direction:column;justify-content:flex-end;padding:30px;transition:transform .4s var(--ease)}
+  .work:hover{transform:translateY(-6px)}
+  .work::before{content:"";position:absolute;inset:0;z-index:0;opacity:.9;transition:transform .6s var(--ease)}
+  .work:hover::before{transform:scale(1.06)}
+  .work.w1::before{background:linear-gradient(135deg,#7c5cff,#3a1c91)}
+  .work.w2::before{background:linear-gradient(135deg,#19e3c2,#0f6e7a)}
+  .work.w3::before{background:linear-gradient(135deg,#ff5c9d,#7a1f55)}
+  .work.w4::before{background:linear-gradient(135deg,#ffb547,#a8531b)}
+  .work::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,transparent 30%,rgba(7,7,17,.85))}
+  .work .meta{position:relative;z-index:2}
+  .work .tag{font-size:.78rem;text-transform:uppercase;letter-spacing:2px;opacity:.85;font-weight:600}
+  .work h3{position:relative;z-index:2;font-size:1.5rem;font-weight:800;margin-top:6px}
+  .work .arrow{position:absolute;top:24px;right:24px;z-index:2;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.15);backdrop-filter:blur(6px);display:grid;place-items:center;font-size:1.2rem;transition:.3s}
+  .work:hover .arrow{background:#fff;color:#08081a;transform:rotate(-45deg)}
+
+  /* process */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;counter-reset:step}
+  .step{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:30px 24px;position:relative}
+  .step .n{font-size:2.6rem;font-weight:800;line-height:1;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:14px}
+  .step h4{font-size:1.1rem;font-weight:700;margin-bottom:8px}
+  .step p{color:var(--muted);font-size:.92rem}
+
+  /* testimonials */
+  .quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .quote{background:linear-gradient(180deg,var(--surface),var(--bg-soft));border:1px solid var(--line);border-radius:var(--radius);padding:32px 28px}
+  .quote .stars{color:var(--accent-2);letter-spacing:3px;margin-bottom:16px}
+  .quote p{font-size:1rem;margin-bottom:22px}
+  .who{display:flex;align-items:center;gap:12px}
+  .who .av{width:44px;height:44px;border-radius:50%;background:var(--grad);display:grid;place-items:center;font-weight:800;color:#08081a}
+  .who .nm{font-weight:700;font-size:.95rem}
+  .who .rl{color:var(--muted);font-size:.82rem}
+
+  /* extra breathing room before testimonials */
+  #testimonials{padding-top:140px}
+  /* CTA — more compact block */
+  .cta{position:relative;border:1px solid var(--line);border-radius:28px;padding:46px 40px;text-align:center;overflow:hidden;background:var(--grad-soft)}
+  .cta h2{font-size:clamp(2rem,4vw,3.2rem);font-weight:800;letter-spacing:-1px;margin-bottom:18px}
+  .cta p{color:var(--muted);max-width:50ch;margin:0 auto 32px;font-size:1.08rem}
+  .cta-glow{position:absolute;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,rgba(124,92,255,.5),transparent 65%);top:-180px;left:50%;transform:translateX(-50%);z-index:0;filter:blur(20px)}
+  .cta>*{position:relative;z-index:1}
+
+  /* footer */
+  footer{border-top:1px solid var(--line);padding:60px 0 36px;margin-top:40px}
+  .foot-grid{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;margin-bottom:42px}
+  .foot-brand{max-width:300px}
+  .foot-brand p{color:var(--muted);margin-top:14px;font-size:.95rem}
+  .foot-col h5{font-size:.85rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:16px}
+  .foot-col a{display:block;color:var(--txt);opacity:.8;margin-bottom:10px;font-size:.95rem;transition:opacity .2s}
+  .foot-col a:hover{opacity:1}
+  .foot-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;border-top:1px solid var(--line);padding-top:26px;color:var(--muted);font-size:.88rem}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+
+  @media(max-width:900px){
+    .grid,.quotes{grid-template-columns:1fr 1fr}
+    .steps{grid-template-columns:1fr 1fr}
+  }
+  @media(max-width:760px){
+    .nav-links{display:none}
+    .nav-toggle{display:block}
+    .grid,.quotes,.work-grid,.steps{grid-template-columns:1fr}
+    .hero-stats{gap:32px}
+  }
+</style>
+</head>
+<body>
+
+<header data-mk-id="mk-nlyr740">
+  <nav class="wrap" data-mk-id="mk-ebf8zp1">
+    <a class="logo" href="#top" data-mk-id="mk-nvs3552"><span class="dot" data-mk-id="mk-kih3sa3"></span>UPQODE</a>
+    <div class="nav-links" style="font-weight: 800;" data-mk-id="mk-9dezx24">
+      <a href="#services" data-mk-id="mk-tn23bq5">Services</a>
+      <a href="#work" data-mk-id="mk-j5n22m6">Work</a>
+      <a href="#process" data-mk-id="mk-yr05ks7">Process</a>
+      <a href="#testimonials" data-mk-id="mk-robdv38">Clients</a>
+      <a class="btn btn-primary" href="#contact" data-mk-id="mk-hup0s89">Start a project →</a>
+    </div>
+    <button class="nav-toggle" aria-label="Menu" data-mk-id="mk-pdwjhea">☰</button>
+  </nav>
+</header>
+
+<main id="top" data-mk-id="mk-s1qr1sb">
+
+  <!-- HERO -->
+  <section class="hero wrap" data-mk-id="mk-7xdodcc">
+    <span class="badge" data-mk-id="mk-w6c42zd"><span class="pulse" data-mk-id="mk-vpp001e"></span> Now booking Q3 2026 projects</span>
+    <h1 data-mk-id="mk-b8qlydf">We build <span class="accent-text" data-mk-id="mk-t0hihbg">website</span> that grow your business.</h1>
+    <p class="lead" data-mk-id="mk-d0fj5dh">UPQODE is a design &amp; development studio crafting fast, beautiful, conversion-focused websites for ambitious brands — from first pixel to launch and beyond.</p>
+    <div class="hero-cta" data-mk-id="mk-1xkv09i">
+      <a class="btn btn-primary" href="#contact" data-mk-id="mk-xgp2l4j">Start a project →</a>
+      <a class="btn btn-ghost" href="#work" data-mk-id="mk-1gfneyk">View our work</a>
+    </div>
+    <div class="hero-stats" data-mk-id="mk-q4eqp9l">
+      <div class="stat" data-mk-id="mk-3k27o9m"><div class="num" data-mk-id="mk-ia0otmn">350+</div><div class="lbl" data-mk-id="mk-mx31eno">Projects shipped</div></div>
+      <div class="stat" data-mk-id="mk-hbcqemp"><div class="num" data-mk-id="mk-myhe93q">98%</div><div class="lbl" data-mk-id="mk-15yu4cr">Client retention</div></div>
+      <div class="stat" data-mk-id="mk-7tas56s"><div class="num" data-mk-id="mk-l96x0tt">12+</div><div class="lbl" data-mk-id="mk-h68zhfu">Years of craft</div></div>
+      <div class="stat" data-mk-id="mk-r3wgrrv"><div class="num" data-mk-id="mk-33p67sw">4.9★</div><div class="lbl" data-mk-id="mk-z2dk2fx">Average rating</div></div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee" data-mk-id="mk-bu77h2y">
+    <div class="marquee-track" data-mk-id="mk-umx3gnz">
+      <span data-mk-id="mk-tr985910">WORDPRESS</span><span data-mk-id="mk-k5bi0s11">WEBFLOW</span><span data-mk-id="mk-0rc6lp12">NEXT.JS</span><span data-mk-id="mk-1wewo513">SHOPIFY</span><span data-mk-id="mk-5tcme114">FIGMA</span><span data-mk-id="mk-fdkftu15">REACT</span><span data-mk-id="mk-a28wwr16">HEADLESS CMS</span><span data-mk-id="mk-3fgzj617">SEO</span>
+      <span data-mk-id="mk-g8kgi818">WORDPRESS</span><span data-mk-id="mk-sx14sn19">WEBFLOW</span><span data-mk-id="mk-hthupk1a">NEXT.JS</span><span data-mk-id="mk-82yy0i1b">SHOPIFY</span><span data-mk-id="mk-6s3xww1c">FIGMA</span><span data-mk-id="mk-n8ukky1d">REACT</span><span data-mk-id="mk-92qbng1e">HEADLESS CMS</span><span data-mk-id="mk-ppk4hr1f">SEO</span>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <section id="services" class="wrap" data-mk-id="mk-ulbcas1g">
+    <div class="sec-head reveal" style="transition-delay: 0ms;" data-mk-id="mk-nhkzqh1h">
+      <div class="eyebrow" data-mk-id="mk-ut9mgi1i">What we do</div>
+      <h2 data-mk-id="mk-9yzc3j1j">Everything you need to win online</h2>
+      <p data-mk-id="mk-ibq9bo1k">Strategy, design and engineering under one roof — so your website ships faster and performs harder.</p>
+    </div>
+    <div class="grid" data-mk-id="mk-gylmoq1l">
+      <div class="card reveal" style="transition-delay: 80ms;" data-mk-id="mk-0xbmir1m"><div class="ico" data-mk-id="mk-rlzbwf1n">🎨</div><h3 data-mk-id="mk-6uotwr1o">Web Design</h3><p data-mk-id="mk-ckcflg1p">Distinctive, on-brand interfaces designed to convert. Wireframes, UI systems and pixel-perfect prototypes.</p></div>
+      <div class="card reveal" style="transition-delay: 160ms;" data-mk-id="mk-qzpi2e1q"><div class="ico" data-mk-id="mk-ka4ybx1r">⚙️</div><h3 data-mk-id="mk-emmno41s">Development</h3><p data-mk-id="mk-at3sk81t">Blazing-fast, secure builds on WordPress, Webflow, Shopify or Next.js — coded to scale.</p></div>
+      <div class="card reveal" style="transition-delay: 0ms;" data-mk-id="mk-subx791u"><div class="ico" data-mk-id="mk-h1t88e1v">📈</div><h3 data-mk-id="mk-pqegxv1w">SEO &amp; Growth</h3><p data-mk-id="mk-rj82zj1x">Technical SEO, Core Web Vitals and content strategy that puts you in front of the right people.</p></div>
+      <div class="card reveal" style="transition-delay: 80ms;" data-mk-id="mk-16oslh1y"><div class="ico" data-mk-id="mk-nylt0z1z">🛒</div><h3 data-mk-id="mk-vqpmzg20">E-Commerce</h3><p data-mk-id="mk-7hgb9x21">High-converting storefronts with seamless checkout, integrations and analytics baked in.</p></div>
+      <div class="card reveal" style="transition-delay: 160ms;" data-mk-id="mk-cebblz22"><div class="ico" data-mk-id="mk-6eyl7f23">🔧</div><h3 data-mk-id="mk-2lbbyc24">Care &amp; Support</h3><p data-mk-id="mk-x4rlbi25">Ongoing maintenance, monitoring and optimization so your site stays fast, safe and fresh.</p></div>
+      <div class="card reveal" style="transition-delay: 0ms;" data-mk-id="mk-zn20pg26"><div class="ico" data-mk-id="mk-mzwm9g27">✨</div><h3 data-mk-id="mk-0k4dam28">Branding</h3><p data-mk-id="mk-h0sf4129">Logo, identity systems and messaging that make your brand impossible to ignore.</p></div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work" class="wrap" data-mk-id="mk-3zmlfa2a">
+    <div class="sec-head reveal" style="transition-delay: 80ms;" data-mk-id="mk-84hpdq2b">
+      <div class="eyebrow" data-mk-id="mk-jngxyr2c">Selected work</div>
+      <h2 data-mk-id="mk-ygqli22d">Projects we're proud of</h2>
+      <p data-mk-id="mk-6t2eyy2e">A glimpse at the brands we've helped design, build and scale.</p>
+    </div>
+    <div class="work-grid" data-mk-id="mk-s3mj7o2f">
+      <a class="work w1 reveal" href="#" style="transition-delay: 160ms;" data-mk-id="mk-mk0apt2g"><span class="arrow" data-mk-id="mk-wnal5c2h">↗</span><div class="meta" data-mk-id="mk-l58do02i"><span class="tag" data-mk-id="mk-5vmdfg2j">SaaS · Web App</span></div><h3 data-mk-id="mk-rk5cyp2k">Nimbus Analytics</h3></a>
+      <a class="work w2 reveal" href="#" style="transition-delay: 0ms;" data-mk-id="mk-x7rhim2l"><span class="arrow" data-mk-id="mk-0lxj4o2m">↗</span><div class="meta" data-mk-id="mk-zxjb132n"><span class="tag" data-mk-id="mk-mnkstn2o">E-Commerce · Shopify</span></div><h3 data-mk-id="mk-o96gxw2p">Verdant Goods</h3></a>
+      <a class="work w3 reveal" href="#" style="transition-delay: 80ms;" data-mk-id="mk-tthj382q"><span class="arrow" data-mk-id="mk-v2b5ek2r">↗</span><div class="meta" data-mk-id="mk-nn5saf2s"><span class="tag" data-mk-id="mk-y23g782t">Healthcare · WordPress</span></div><h3 data-mk-id="mk-2lgq8k2u">Pulse Clinic</h3></a>
+      <a class="work w4 reveal" href="#" style="transition-delay: 160ms;" data-mk-id="mk-mvexib2v"><span class="arrow" data-mk-id="mk-kwn75x2w">↗</span><div class="meta" data-mk-id="mk-af1tr42x"><span class="tag" data-mk-id="mk-3gejgt2y">Fintech · Next.js</span></div><h3 data-mk-id="mk-tyvz1g2z">Ledgerly</h3></a>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="process" class="wrap" data-mk-id="mk-s9xvka30">
+    <div class="sec-head reveal" style="transition-delay: 0ms;" data-mk-id="mk-sd6k0y31">
+      <div class="eyebrow" data-mk-id="mk-dtgz7132">How we work</div>
+      <h2 data-mk-id="mk-ex3c0s33">A simple, proven process</h2>
+      <p data-mk-id="mk-giyw5v34">Clear milestones, no surprises — you always know exactly where your project stands.</p>
+    </div>
+    <div class="steps" data-mk-id="mk-a3n8eb35">
+      <div class="step reveal" style="transition-delay: 80ms;" data-mk-id="mk-pyy1cu36"><div class="n" data-mk-id="mk-uvzi9037">01</div><h4 data-mk-id="mk-y21efd38">Discover</h4><p data-mk-id="mk-wip9ff39">We dig into your goals, audience and competitors to shape the right strategy.</p></div>
+      <div class="step reveal" style="transition-delay: 160ms;" data-mk-id="mk-cbfhic3a"><div class="n" data-mk-id="mk-rs3r5e3b">02</div><h4 data-mk-id="mk-vsdkga3c">Design</h4><p data-mk-id="mk-yhrq023d">We craft the look, feel and flow — validated with you at every step.</p></div>
+      <div class="step reveal" style="transition-delay: 0ms;" data-mk-id="mk-atl0t13e"><div class="n" data-mk-id="mk-msqsy13f">03</div><h4 data-mk-id="mk-ad09n33g">Build</h4><p data-mk-id="mk-i7e6q73h">Clean, scalable code brings the design to life with performance in mind.</p></div>
+      <div class="step reveal" style="transition-delay: 80ms;" data-mk-id="mk-g7rn9o3i"><div class="n" data-mk-id="mk-yj10de3j">04</div><h4 data-mk-id="mk-6l81pa3k">Launch</h4><p data-mk-id="mk-grbkc93l">We test, optimize and ship — then support you as you grow.</p></div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials" class="wrap" data-mk-id="mk-llvm3z3m">
+    <div class="sec-head reveal" style="transition-delay: 160ms;" data-mk-id="mk-70jhcl3n">
+      <div class="eyebrow" data-mk-id="mk-03qzqz3o">Client love</div>
+      <h2 data-mk-id="mk-zufg7u3p">Don't just take our word for it</h2>
+      <p data-mk-id="mk-lztdan3q">Teams of every size trust UPQODE to deliver work that moves the needle.</p>
+    </div>
+    <div class="quotes" data-mk-id="mk-09ygu03r">
+      <div class="quote reveal" style="transition-delay: 0ms;" data-mk-id="mk-eq185v3s"><div class="stars" data-mk-id="mk-enshaa3t">★★★★★</div><p data-mk-id="mk-bnni973u">"UPQODE rebuilt our site and conversions jumped 42% in the first month. The process was smooth and genuinely collaborative."</p><div class="who" data-mk-id="mk-ky9he53v"><div class="av" data-mk-id="mk-gcu9if3w">SM</div><div data-mk-id="mk-teyk3i3x"><div class="nm" data-mk-id="mk-3ve73q3y">Sara Mitchell</div><div class="rl" data-mk-id="mk-zq2o7g3z">CMO, Nimbus</div></div></div></div>
+      <div class="quote reveal" style="transition-delay: 80ms;" data-mk-id="mk-b1emey40"><div class="stars" data-mk-id="mk-mrabhh41">★★★★★</div><p data-mk-id="mk-djd4s642">"Fast, thoughtful and pixel-perfect. They felt like an extension of our own team rather than an outside agency."</p><div class="who" data-mk-id="mk-0ovap343"><div class="av" data-mk-id="mk-tyi0t844">DK</div><div data-mk-id="mk-uoz1rd45"><div class="nm" data-mk-id="mk-nj45s146">David Kane</div><div class="rl" data-mk-id="mk-4eqj7747">Founder, Verdant</div></div></div></div>
+      <div class="quote reveal" style="transition-delay: 160ms;" data-mk-id="mk-v4iguw48"><div class="stars" data-mk-id="mk-msslct49">★★★★★</div><p data-mk-id="mk-o1ivmm4a">"The new site loads in under a second and looks incredible on every device. Couldn't recommend them more highly."</p><div class="who" data-mk-id="mk-rndu114b"><div class="av" data-mk-id="mk-6jay5s4c">AL</div><div data-mk-id="mk-rwki2z4d"><div class="nm" data-mk-id="mk-2myspt4e">Amara Lopez</div><div class="rl" data-mk-id="mk-sg4eom4f">Dir. Ops, Pulse</div></div></div></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="contact" class="wrap" data-mk-id="mk-se91un4g">
+    <div class="cta reveal" style="transition-delay: 0ms;" data-mk-id="mk-0aghor4h">
+      <div class="cta-glow" data-mk-id="mk-a3xjrd4i"></div>
+      <h2 data-mk-id="mk-oldz7t4j">Let's build something <span class="accent-text" data-mk-id="mk-gzienf4k">remarkable</span>.</h2>
+      <p data-mk-id="mk-vouhm54l">Tell us about your project and we'll get back within one business day with ideas and a clear next step.</p>
+      <div class="hero-cta" data-mk-id="mk-k319wg4m">
+        <a class="btn btn-primary" href="mailto:hello@upqode.com" data-mk-id="mk-k5d45u4n">Get a free quote →</a>
+        <a class="btn btn-ghost" href="#work" data-mk-id="mk-v7mux84o">See more work</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer data-mk-id="mk-303hk84p">
+  <div class="wrap" data-mk-id="mk-cblqei4q">
+    <div class="foot-grid" data-mk-id="mk-6btnqt4r">
+      <div class="foot-brand" data-mk-id="mk-kqdi864s">
+        <a class="logo" href="#top" data-mk-id="mk-iytr9t4t"><span class="dot" data-mk-id="mk-t095134u"></span>UPQODE</a>
+        <p data-mk-id="mk-c4htnc4v">A web design &amp; development studio building digital products that perform.</p>
+      </div>
+      <div class="foot-col" data-mk-id="mk-fxb3fr4w">
+        <h5 data-mk-id="mk-gzmkyf4x">Services</h5>
+        <a href="#services" data-mk-id="mk-koj36w4y">Web Design</a>
+        <a href="#services" data-mk-id="mk-se2o164z">Development</a>
+        <a href="#services" data-mk-id="mk-x0aa8c50">SEO &amp; Growth</a>
+        <a href="#services" data-mk-id="mk-6z48j951">E-Commerce</a>
+      </div>
+      <div class="foot-col" data-mk-id="mk-zo9ypw52">
+        <h5 data-mk-id="mk-kyamf153">Company</h5>
+        <a href="#work" data-mk-id="mk-apceku54">Work</a>
+        <a href="#process" data-mk-id="mk-jnot9q55">Process</a>
+        <a href="#testimonials" data-mk-id="mk-ibzy3c56">Clients</a>
+        <a href="#contact" data-mk-id="mk-gx6q6057">Contact</a>
+      </div>
+      <div class="foot-col" data-mk-id="mk-ibsmce58">
+        <h5 data-mk-id="mk-f4dtv659">Connect</h5>
+        <a href="#" data-mk-id="mk-w81s2w5a">Twitter / X</a>
+        <a href="#" data-mk-id="mk-jo3vvd5b">LinkedIn</a>
+        <a href="#" data-mk-id="mk-19lark5c">Dribbble</a>
+        <a href="mailto:hello@upqode.com" data-mk-id="mk-fsyiux5d">hello@upqode.com</a>
+      </div>
+    </div>
+    <div class="foot-bottom" data-mk-id="mk-mgmwl55e">
+      <span data-mk-id="mk-fgj1qr5f">© 2026 UPQODE. All rights reserved.</span>
+      <span data-mk-id="mk-xp8z5x5g">Crafted with care ✦ Built for speed</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // scroll reveal
+  const io=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+  },{threshold:.14});
+  document.querySelectorAll('.reveal').forEach((el,i)=>{el.style.transitionDelay=(i%3)*80+'ms';io.observe(el);});
+
+  // mobile nav
+  document.querySelector('.nav-toggle').addEventListener('click',()=>{
+    const n=document.querySelector('.nav-links');
+    const open=n.style.display==='flex';
+    n.style.display=open?'':'flex';
+    if(!open){n.style.position='absolute';n.style.top='70px';n.style.right='24px';n.style.flexDirection='column';n.style.background='var(--surface)';n.style.padding='18px 22px';n.style.borderRadius='14px';n.style.border='1px solid var(--line)';}
+  });
+</script>
+
+
+</body></html>

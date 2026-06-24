@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BuildCore — Construction & Infrastructure</title>
+  <meta name="description" content="A premium construction landing page concept for commercial, residential and infrastructure projects." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#12201C;
+      --ink-2:#24352F;
+      --muted:#66746E;
+      --line:rgba(18,32,28,.12);
+      --cream:#F4EFE4;
+      --sand:#E9DDC7;
+      --paper:#FBF8EF;
+      --clay:#B96A42;
+      --terracotta:#95452C;
+      --olive:#596A4C;
+      --moss:#2E463B;
+      --deep:#0E1A17;
+      --white:#FFFFFF;
+      --shadow:0 24px 70px rgba(18,32,28,.14);
+      --radius-xl:34px;
+      --radius-lg:24px;
+      --radius-md:16px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 8% 4%, rgba(185,106,66,.16), transparent 26%),
+        linear-gradient(180deg,var(--paper) 0%, var(--cream) 42%, #fff 100%);
+      letter-spacing:-.02em;
+      overflow-x:hidden;
+    }
+
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .container{width:min(1180px, calc(100% - 40px));margin-inline:auto}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;
+      font-size:12px;line-height:1;font-weight:800;text-transform:uppercase;
+      letter-spacing:.12em;color:var(--terracotta);
+    }
+    .eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--clay)}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      min-height:52px;padding:0 22px;border-radius:999px;font-weight:800;
+      font-size:14px;letter-spacing:-.01em;transition:.25s ease;
+    }
+    .btn.primary{background:var(--deep);color:var(--white);box-shadow:0 16px 36px rgba(14,26,23,.22)}
+    .btn.primary:hover{transform:translateY(-2px);background:#1A2B26}
+    .btn.secondary{background:rgba(255,255,255,.68);border:1px solid var(--line);backdrop-filter:blur(14px)}
+    .btn.secondary:hover{transform:translateY(-2px);background:#fff}
+    .nav{
+      position:sticky;top:0;z-index:20;
+      backdrop-filter:blur(18px);
+      background:rgba(251,248,239,.76);
+      border-bottom:1px solid var(--line);
+    }
+    .nav-inner{height:76px;display:flex;align-items:center;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:-.05em;font-size:22px}
+    .brand-mark{
+      width:38px;height:38px;border-radius:12px;background:
+      linear-gradient(135deg,var(--clay),var(--terracotta));
+      position:relative;box-shadow:0 12px 28px rgba(149,69,44,.25)
+    }
+    .brand-mark::after{content:"";position:absolute;inset:10px;border:2px solid rgba(255,255,255,.75);border-radius:6px}
+    .menu{display:flex;gap:28px;align-items:center;color:var(--ink-2);font-size:14px;font-weight:700}
+    .nav-actions{display:flex;gap:10px;align-items:center}
+    .mobile-note{display:none}
+
+    .hero{padding:88px 0 54px;position:relative}
+    .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:54px;align-items:center}
+    h1{
+      margin:18px 0 22px;
+      font-size:clamp(54px,7vw,104px);
+      line-height:.9;
+      letter-spacing:-.085em;
+      max-width:820px;
+    }
+    .lead{
+      margin:0;color:var(--muted);font-size:clamp(18px,2vw,22px);line-height:1.55;
+      max-width:650px;letter-spacing:-.035em;
+    }
+    .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}
+    .trust-strip{
+      display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:42px;max-width:720px
+    }
+    .trust-item{
+      padding:18px;border:1px solid var(--line);background:rgba(255,255,255,.56);
+      border-radius:20px;box-shadow:0 10px 30px rgba(18,32,28,.06)
+    }
+    .trust-item strong{display:block;font-size:28px;letter-spacing:-.07em}
+    .trust-item span{display:block;margin-top:4px;color:var(--muted);font-size:12px;font-weight:700;line-height:1.25}
+
+    .hero-visual{
+      min-height:620px;border-radius:var(--radius-xl);position:relative;overflow:hidden;
+      background:
+        linear-gradient(145deg, rgba(18,32,28,.1), transparent 35%),
+        linear-gradient(135deg, var(--moss), var(--deep));
+      box-shadow:var(--shadow);
+      padding:22px;
+      isolation:isolate;
+    }
+    .beam{position:absolute;background:rgba(255,255,255,.08);border-radius:999px;transform:rotate(-34deg);z-index:-1}
+    .beam.one{width:520px;height:88px;right:-180px;top:90px}
+    .beam.two{width:620px;height:120px;left:-230px;bottom:90px}
+    .site-photo{
+      height:390px;border-radius:28px;overflow:hidden;border:1px solid rgba(255,255,255,.16);
+      background:
+        linear-gradient(rgba(18,32,28,.18),rgba(18,32,28,.18)),
+        url("https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1400&q=80") center/cover;
+    }
+    .floating-card{
+      position:absolute;background:rgba(251,248,239,.92);border:1px solid rgba(255,255,255,.4);
+      box-shadow:0 20px 60px rgba(0,0,0,.2);border-radius:24px;padding:18px;backdrop-filter:blur(16px)
+    }
+    .progress{left:28px;bottom:28px;width:260px}
+    .safety{right:28px;bottom:150px;width:220px}
+    .floating-card small{color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.1em;font-size:11px}
+    .floating-card h3{margin:8px 0 12px;font-size:22px;letter-spacing:-.06em}
+    .bar{height:10px;background:rgba(18,32,28,.1);border-radius:99px;overflow:hidden}
+    .bar span{display:block;height:100%;width:76%;background:linear-gradient(90deg,var(--clay),var(--terracotta));border-radius:99px}
+    .mini-list{display:grid;gap:8px;margin-top:12px}
+    .mini-list div{display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--ink-2)}
+    .badge-stack{position:absolute;top:28px;left:28px;display:flex;gap:8px;flex-wrap:wrap}
+    .badge{padding:10px 12px;border-radius:999px;background:rgba(255,255,255,.14);color:#fff;font-weight:800;font-size:12px;border:1px solid rgba(255,255,255,.18)}
+
+    .section{padding:104px 0}
+    .section-head{display:flex;align-items:end;justify-content:space-between;gap:30px;margin-bottom:36px}
+    .section-head h2{margin:10px 0 0;font-size:clamp(38px,5vw,72px);line-height:.92;letter-spacing:-.08em;max-width:760px}
+    .section-head p{margin:0;max-width:430px;color:var(--muted);font-size:17px;line-height:1.55}
+
+    .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .service-card{
+      min-height:300px;border-radius:30px;padding:28px;border:1px solid var(--line);
+      background:rgba(255,255,255,.64);box-shadow:0 14px 40px rgba(18,32,28,.06);
+      display:flex;flex-direction:column;justify-content:space-between;transition:.25s ease;overflow:hidden;position:relative
+    }
+    .service-card:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
+    .service-card.dark{background:var(--deep);color:#fff}
+    .service-card.dark p{color:rgba(255,255,255,.68)}
+    .service-icon{width:54px;height:54px;border-radius:18px;background:var(--sand);display:grid;place-items:center;font-weight:900;color:var(--terracotta)}
+    .service-card.dark .service-icon{background:rgba(255,255,255,.12);color:#fff}
+    .service-card h3{font-size:26px;letter-spacing:-.06em;margin:24px 0 10px}
+    .service-card p{color:var(--muted);line-height:1.55;margin:0;font-size:15px}
+
+    .workflow{background:var(--deep);color:#fff;border-radius:44px;padding:34px;position:relative;overflow:hidden}
+    .workflow::before{content:"";position:absolute;inset:auto -120px -120px auto;width:360px;height:360px;border-radius:50%;background:rgba(185,106,66,.24);filter:blur(20px)}
+    .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:34px}
+    .step{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:26px;padding:22px;min-height:240px}
+    .step-num{font-size:13px;font-weight:900;color:#F2B990;letter-spacing:.08em}
+    .step h3{font-size:24px;line-height:1;letter-spacing:-.06em;margin:56px 0 12px}
+    .step p{color:rgba(255,255,255,.68);line-height:1.55;margin:0;font-size:14px}
+
+    .projects-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+    .project-card{
+      border-radius:34px;overflow:hidden;background:#fff;border:1px solid var(--line);box-shadow:0 18px 55px rgba(18,32,28,.08)
+    }
+    .project-img{height:360px;background:center/cover}
+    .project-body{padding:26px;display:flex;justify-content:space-between;gap:22px;align-items:end}
+    .project-body h3{font-size:30px;line-height:.95;letter-spacing:-.07em;margin:0 0 10px}
+    .project-body p{color:var(--muted);margin:0;line-height:1.45}
+    .project-meta{white-space:nowrap;font-weight:900;color:var(--terracotta);font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+
+    .split{
+      display:grid;grid-template-columns:.9fr 1.1fr;gap:16px;align-items:stretch
+    }
+    .quote-card{
+      border-radius:34px;background:var(--sand);padding:34px;display:flex;flex-direction:column;justify-content:space-between;min-height:480px
+    }
+    .quote-card blockquote{font-size:36px;line-height:1.05;letter-spacing:-.07em;margin:0}
+    .quote-card p{color:var(--muted);font-weight:700}
+    .metrics-panel{border-radius:34px;background:#fff;border:1px solid var(--line);padding:22px;display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .metric{border-radius:24px;background:var(--paper);padding:26px;min-height:210px;display:flex;flex-direction:column;justify-content:space-between}
+    .metric strong{font-size:54px;letter-spacing:-.09em;line-height:.9}
+    .metric span{color:var(--muted);font-weight:700;line-height:1.35}
+
+    .cta{
+      margin:80px 0 0;border-radius:44px;padding:60px;
+      background:
+        linear-gradient(120deg, rgba(185,106,66,.92), rgba(89,106,76,.92)),
+        url("https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1600&q=80") center/cover;
+      color:#fff;display:grid;grid-template-columns:1fr auto;align-items:end;gap:30px;overflow:hidden
+    }
+    .cta h2{font-size:clamp(42px,5.5vw,78px);line-height:.9;letter-spacing:-.08em;margin:0 0 18px}
+    .cta p{margin:0;color:rgba(255,255,255,.78);font-size:18px;line-height:1.5;max-width:680px}
+    footer{padding:42px 0;border-top:1px solid var(--line);color:var(--muted);font-weight:700}
+    .footer-inner{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+
+    @media (max-width: 980px){
+      .menu{display:none}.mobile-note{display:inline-flex}
+      .hero-grid,.projects-grid,.split,.cta{grid-template-columns:1fr}
+      .hero-visual{min-height:560px}
+      .services-grid,.steps{grid-template-columns:repeat(2,1fr)}
+      .section-head{display:block}
+      .section-head p{margin-top:16px}
+    }
+    @media (max-width: 640px){
+      .container{width:min(100% - 28px,1180px)}
+      .nav-inner{height:68px}.nav-actions .secondary{display:none}
+      h1{font-size:56px}
+      .trust-strip,.services-grid,.steps,.metrics-panel{grid-template-columns:1fr}
+      .hero{padding-top:54px}
+      .section{padding:72px 0}
+      .hero-visual{min-height:560px;padding:14px;border-radius:28px}
+      .site-photo{height:330px;border-radius:22px}
+      .floating-card{position:relative;left:auto!important;right:auto!important;bottom:auto!important;margin-top:14px;width:auto!important}
+      .badge-stack{position:relative;top:auto;left:auto;margin-bottom:14px}
+      .project-img{height:260px}
+      .project-body{display:block}
+      .project-meta{margin-top:18px;display:block}
+      .quote-card blockquote{font-size:30px}
+      .cta{padding:34px;border-radius:30px}
+    }
+  </style>
+</head>
+<body>
+  <!--
+  CONTENT MAP
+  1. Announcement/Nav: Construction brand, core pages, CTA.
+  2. Hero: strong promise, 2 CTAs, construction site visual, trust cards.
+  3. Services: commercial, residential, infrastructure, renovation, project management, safety/compliance.
+  4. Process: plan, cost, build, handover.
+  5. Featured projects: proof of quality through project cards.
+  6. Safety/Performance: testimonial + measurable operational metrics.
+  7. Final CTA: book consultation.
+  8. Footer: core contact/location links.
+  -->
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#">
+        <span class="brand-mark" aria-hidden="true"></span>
+        BuildCore
+      </a>
+      <nav class="menu" aria-label="Primary navigation">
+        <a href="#services">Services</a>
+        <a href="#process">Process</a>
+        <a href="#projects">Projects</a>
+        <a href="#safety">Safety</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="btn secondary" href="tel:+15550198400">Call us</a>
+        <a class="btn primary" href="#contact">Start a project</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">Commercial construction partner</span>
+          <h1>Building spaces that move business forward.</h1>
+          <p class="lead">From ground-up construction to complex renovations, BuildCore delivers predictable timelines, transparent budgets, and field-tested execution for companies that cannot afford delays.</p>
+          <div class="hero-ctas">
+            <a class="btn primary" href="#contact">Request project estimate</a>
+            <a class="btn secondary" href="#projects">View selected work</a>
+          </div>
+          <div class="trust-strip" aria-label="Company highlights">
+            <div class="trust-item"><strong>18+</strong><span>years building complex sites</span></div>
+            <div class="trust-item"><strong>240</strong><span>completed commercial projects</span></div>
+            <div class="trust-item"><strong>96%</strong><span>repeat client & referral work</span></div>
+            <div class="trust-item"><strong>0.82</strong><span>safety incident rate</span></div>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-label="Construction project dashboard visual">
+          <span class="beam one"></span>
+          <span class="beam two"></span>
+          <div class="badge-stack">
+            <span class="badge">On-site coordination</span>
+            <span class="badge">Budget control</span>
+            <span class="badge">Safety first</span>
+          </div>
+          <div class="site-photo"></div>
+          <div class="floating-card progress">
+            <small>Project status</small>
+            <h3>Downtown Office Fit-Out</h3>
+            <div class="bar"><span></span></div>
+            <div class="mini-list">
+              <div><span>Schedule</span><span>76%</span></div>
+              <div><span>Inspections</span><span>Passed</span></div>
+              <div><span>Budget</span><span>On track</span></div>
+            </div>
+          </div>
+          <div class="floating-card safety">
+            <small>Weekly report</small>
+            <h3>42,800 safe work hours</h3>
+            <p style="margin:0;color:var(--muted);line-height:1.45;font-weight:700">Daily safety huddles, site documentation, and subcontractor accountability.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="services">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">What we build</span>
+            <h2>Construction services with one accountable team.</h2>
+          </div>
+          <p>Every service is structured around fewer surprises: clear scopes, tighter coordination, cleaner communication, and quality control from preconstruction to handover.</p>
+        </div>
+        <div class="services-grid">
+          <article class="service-card dark">
+            <div>
+              <div class="service-icon">01</div>
+              <h3>Commercial construction</h3>
+              <p>Offices, retail, hospitality, industrial units, and mixed-use spaces delivered with strict cost and timeline discipline.</p>
+            </div>
+          </article>
+          <article class="service-card">
+            <div>
+              <div class="service-icon">02</div>
+              <h3>Residential development</h3>
+              <p>Premium homes, multi-family builds, and residential upgrades with clean detailing and practical site management.</p>
+            </div>
+          </article>
+          <article class="service-card">
+            <div>
+              <div class="service-icon">03</div>
+              <h3>Renovation & fit-out</h3>
+              <p>Complex refurbishments, tenant improvements, and operational remodels built around minimal disruption.</p>
+            </div>
+          </article>
+          <article class="service-card">
+            <div>
+              <div class="service-icon">04</div>
+              <h3>Preconstruction planning</h3>
+              <p>Budget validation, feasibility checks, phasing, value engineering, and schedule risk review before work starts.</p>
+            </div>
+          </article>
+          <article class="service-card">
+            <div>
+              <div class="service-icon">05</div>
+              <h3>Project management</h3>
+              <p>A single reporting system for owners, architects, engineers, suppliers, and subcontractors.</p>
+            </div>
+          </article>
+          <article class="service-card">
+            <div>
+              <div class="service-icon">06</div>
+              <h3>Safety & compliance</h3>
+              <p>Daily documentation, permit tracking, inspection support, and site standards that protect people and timelines.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="process">
+      <div class="container workflow">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">How we work</span>
+            <h2>Designed to reduce construction chaos.</h2>
+          </div>
+          <p style="color:rgba(255,255,255,.68)">The process is built around visibility. You know what is happening, what changed, what it costs, and what comes next.</p>
+        </div>
+        <div class="steps">
+          <article class="step"><span class="step-num">STEP 01</span><h3>Define scope</h3><p>We clarify requirements, risks, permits, site constraints, and budget expectations.</p></article>
+          <article class="step"><span class="step-num">STEP 02</span><h3>Plan the build</h3><p>We create a phased schedule, assign teams, lock procurement, and reduce hidden dependencies.</p></article>
+          <article class="step"><span class="step-num">STEP 03</span><h3>Control execution</h3><p>Daily field coordination, quality checks, issue tracking, and transparent reporting.</p></article>
+          <article class="step"><span class="step-num">STEP 04</span><h3>Handover cleanly</h3><p>Final inspections, punch list closure, documentation, and operational readiness.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="projects">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Selected projects</span>
+            <h2>Built for owners who value precision.</h2>
+          </div>
+          <p>Use this block for real case studies later. For now it shows the intended card structure, hierarchy, and visual rhythm.</p>
+        </div>
+        <div class="projects-grid">
+          <article class="project-card">
+            <div class="project-img" style="background-image:url('https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1400&q=80')"></div>
+            <div class="project-body">
+              <div><h3>Northline Corporate Offices</h3><p>Full commercial fit-out with phased delivery while adjacent floors stayed operational.</p></div>
+              <span class="project-meta">58,000 sq ft</span>
+            </div>
+          </article>
+          <article class="project-card">
+            <div class="project-img" style="background-image:url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80')"></div>
+            <div class="project-body">
+              <div><h3>Harbor Mixed-Use Block</h3><p>Structural upgrades, facade coordination, retail shell delivery, and tenant-ready systems.</p></div>
+              <span class="project-meta">14 months</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="safety">
+      <div class="container split">
+        <article class="quote-card">
+          <span class="eyebrow">Client confidence</span>
+          <blockquote>“They kept the project moving without hiding problems. Every issue had a clear owner, cost impact, and next action.”</blockquote>
+          <p>— Property Director, commercial real estate group</p>
+        </article>
+        <div class="metrics-panel">
+          <div class="metric"><strong>24h</strong><span>standard response time for owner-side project questions</span></div>
+          <div class="metric"><strong>99%</strong><span>documented inspection readiness before city visits</span></div>
+          <div class="metric"><strong>12%</strong><span>average cost exposure reduced during preconstruction review</span></div>
+          <div class="metric"><strong>1</strong><span>accountable construction lead from kickoff to handover</span></div>
+        </div>
+      </div>
+
+      <div class="container cta" id="contact">
+        <div>
+          <h2>Have a site, deadline, or scope that needs control?</h2>
+          <p>Send the drawings, rough scope, or project idea. We’ll review the risk points and give you a practical next step.</p>
+        </div>
+        <a class="btn primary" style="background:#fff;color:var(--deep)" href="mailto:hello@buildcore.example">Book consultation</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <span>© 2026 BuildCore Construction Group</span>
+      <span>Commercial · Residential · Infrastructure · Renovation</span>
+    </div>
+  </footer>
+</body>
+</html>

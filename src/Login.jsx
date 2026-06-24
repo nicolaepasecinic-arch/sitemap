@@ -1,16 +1,38 @@
 import React, { useState } from 'react';
-import { Star, ArrowRight } from 'lucide-react';
-import BrandStar from './Brand';
+import { Star, ArrowRight, Mail, Lock } from 'lucide-react';
+import BrandStar from './components/Brand';
+import { loginUser, registerUser, forgotPassword } from './auth';
 
 export default function Login({ onLogin }) {
+  const [mode, setMode] = useState('login'); // login | signup | forgot
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [pw, setPw] = useState('');
+  const [err, setErr] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [sent, setSent] = useState(false);
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
-    if (!email.trim()) return;
-    onLogin({ name: email.split('@')[0] || 'User', email: email.trim() });
+    if (mode === 'forgot') {
+      if (!email.trim()) { setErr('Enter your email.'); return; }
+      setBusy(true); setErr('');
+      try { await forgotPassword(email.trim()); setSent(true); } catch (e2) { setErr(e2.message || 'Something went wrong.'); }
+      setBusy(false);
+      return;
+    }
+    if (!email.trim() || !pw) { setErr('Enter your email and password.'); return; }
+    setBusy(true); setErr('');
+    try {
+      const user = mode === 'signup'
+        ? await registerUser(name, email.trim(), pw)
+        : await loginUser(email.trim(), pw);
+      onLogin(user);
+    } catch (e2) {
+      setErr(e2.message || 'Something went wrong.');
+      setBusy(false);
+    }
   };
-  const google = () => onLogin({ name: 'Qoders User', email: 'user@qoders.app' });
 
   return (
     <div className="fixed inset-0 flex bg-white"
@@ -23,29 +45,59 @@ export default function Login({ onLogin }) {
         </div>
 
         <div className="flex-1 flex flex-col justify-center max-w-sm w-full">
-          <h1 className="text-3xl font-extrabold text-gray-900">Welcome to Qoders</h1>
-          <p className="text-gray-500 mt-1 mb-7">Enter your email to continue</p>
+          <h1 className="text-3xl font-extrabold text-gray-900">{mode === 'login' ? 'Welcome back' : mode === 'signup' ? 'Create your account' : 'Reset your password'}</h1>
+          <p className="text-gray-500 mt-1 mb-7">{mode === 'login' ? 'Sign in to your sitemaps' : mode === 'signup' ? 'Start mapping your sites' : 'We’ll email you a reset link'}</p>
 
-          <form onSubmit={submit}>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Email</label>
-            <input type="email" autoFocus value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email…"
-                   className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-300" />
-            <button type="submit"
-                    className="w-full mt-4 flex items-center justify-center gap-2 bg-[#473AE0] text-white font-medium rounded-xl py-3 hover:bg-[#3a2fc0]">
-              Continue <ArrowRight size={16} />
+          {mode === 'forgot' && sent ? (
+            <div className="rounded-xl bg-green-50 border border-green-200 p-4 text-sm text-gray-700">
+              If an account exists for <span className="font-medium">{email}</span>, a reset link is on its way. Check your inbox (and spam).
+              <button onClick={() => { setMode('login'); setSent(false); setErr(''); }} className="block mt-3 text-[#473AE0] font-medium hover:underline">Back to sign in</button>
+            </div>
+          ) : (
+          <form onSubmit={submit} className="space-y-3">
+            {mode === 'signup' && (
+              <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name"
+                     className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-300" />
+            )}
+            <div className="flex items-center gap-2 border border-gray-200 rounded-xl px-3 py-3 focus-within:ring-2 focus-within:ring-indigo-200 focus-within:border-indigo-300">
+              <Mail size={16} className="text-gray-400" />
+              <input type="email" autoFocus value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email"
+                     className="flex-1 outline-none text-sm bg-transparent" />
+            </div>
+            {mode !== 'forgot' && (
+              <div className="flex items-center gap-2 border border-gray-200 rounded-xl px-3 py-3 focus-within:ring-2 focus-within:ring-indigo-200 focus-within:border-indigo-300">
+                <Lock size={16} className="text-gray-400" />
+                <input type="password" value={pw} onChange={(e) => setPw(e.target.value)} placeholder="Password"
+                       className="flex-1 outline-none text-sm bg-transparent" />
+              </div>
+            )}
+            {mode === 'login' && (
+              <div className="text-right">
+                <button type="button" onClick={() => { setMode('forgot'); setErr(''); setSent(false); }} className="text-xs text-gray-500 hover:text-[#473AE0]">Forgot password?</button>
+              </div>
+            )}
+
+            {err && <div className="text-sm text-red-500">{err}</div>}
+
+            <button type="submit" disabled={busy}
+                    className="w-full flex items-center justify-center gap-2 bg-[#473AE0] text-white font-medium rounded-xl py-3 hover:bg-[#3a2fc0] disabled:opacity-60">
+              {busy ? 'Please wait…' : (mode === 'login' ? 'Sign in' : mode === 'signup' ? 'Create account' : 'Send reset link')} <ArrowRight size={16} />
             </button>
           </form>
+          )}
 
-          <div className="flex items-center gap-3 my-6 text-gray-400 text-sm">
-            <div className="h-px bg-gray-200 flex-1" /> Or continue with <div className="h-px bg-gray-200 flex-1" />
+          <div className="text-sm text-gray-500 mt-5">
+            {mode === 'forgot' ? (
+              <button onClick={() => { setMode('login'); setErr(''); setSent(false); }} className="text-[#473AE0] font-medium hover:underline">Back to sign in</button>
+            ) : (
+              <>
+                {mode === 'login' ? "Don't have an account? " : 'Already have an account? '}
+                <button onClick={() => { setMode(mode === 'login' ? 'signup' : 'login'); setErr(''); }} className="text-[#473AE0] font-medium hover:underline">
+                  {mode === 'login' ? 'Sign up' : 'Sign in'}
+                </button>
+              </>
+            )}
           </div>
-
-          <button onClick={google}
-                  className="w-full flex items-center justify-center gap-2 border border-gray-200 rounded-xl py-3 text-sm font-medium text-gray-700 hover:bg-gray-50">
-            <span className="font-bold text-base" style={{ color: '#4285F4' }}>G</span> Continue with Google
-          </button>
-
-          <p className="text-xs text-gray-400 mt-5">By continuing, you agree to our Terms and Privacy Policy.</p>
         </div>
         <div className="pb-8" />
       </div>
@@ -66,9 +118,6 @@ export default function Login({ onLogin }) {
               <div className="font-semibold">Maria Pop</div>
               <div className="text-white/70 text-sm">Product Designer</div>
             </div>
-          </div>
-          <div className="mt-10 text-white/80 text-sm">
-            <span className="text-white font-bold text-base">12k+</span> sitemaps built by <span className="text-white font-bold text-base">2,000+</span> teams
           </div>
         </div>
       </div>
