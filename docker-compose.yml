@@ -19,6 +19,9 @@ services:
       JWT_SECRET: local-dev-secret
       CORS_ORIGIN: http://localhost:8080
       PORT: "3000"
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-5.4}
+      OPENAI_CHEAP_MODEL: ${OPENAI_CHEAP_MODEL:-gpt-5.4-mini}
     depends_on:
       - db
     ports:
