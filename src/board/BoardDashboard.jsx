@@ -296,7 +296,7 @@ export default function BoardDashboard({ onOpen }) {
                 <div className="w-32 text-sm text-gray-400">{relTime(p.updatedAt)}</div>
                 <div className="w-10 flex justify-end relative">
                   <button onClick={(e) => { e.stopPropagation(); setMenuId(menuId === p.id ? null : p.id); }}
-                          className="w-7 h-7 rounded-full text-gray-400 flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-gray-100"
+                          className="w-7 h-7 rounded-full text-gray-400 flex items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:bg-gray-100"
                           title="Project options"><Settings size={15} /></button>
                   {menuId === p.id && (
                     <CardMenu

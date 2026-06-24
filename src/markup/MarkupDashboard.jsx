@@ -141,7 +141,7 @@ export default function MarkupDashboard({ onOpen, heading = 'Markup projects', u
                   </div>
                   {/* options menu (outside the thumbnail so it isn't clipped) */}
                   <button onClick={(e) => { e.stopPropagation(); setMenuId(menuId === p.id ? null : p.id); }}
-                          className="absolute right-2 top-2 z-10 w-7 h-7 rounded-full bg-white border border-gray-100 shadow-sm text-gray-500 flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-gray-50" title="Options"><Settings size={15} /></button>
+                          className="absolute right-2 top-2 z-10 w-7 h-7 rounded-full bg-white border border-gray-100 shadow-sm text-gray-500 flex items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:bg-gray-50" title="Options"><Settings size={15} /></button>
                   {menuId === p.id && (
                     <CardMenu
                       onRename={() => startRename(p)}
