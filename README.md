@@ -1,4 +1,15 @@
-# 🎨 Sitemap Builder - React Component
+# 🎨 Qoders — Sitemap & Style-Guide Builder
+
+> **Installing the app?** Start with **[INSTALL.md](./INSTALL.md)** — full setup for local
+> development and production (Coolify), with every step explained.
+> Deploying to Coolify specifically? See **[DEPLOY-COOLIFY.md](./DEPLOY-COOLIFY.md)**.
+>
+> Quick start (local, everything in Docker):
+> ```bash
+> docker compose up --build      # frontend → http://localhost:8080
+> ```
+
+---
 
 ## 📊 Structura Proiectului
 
