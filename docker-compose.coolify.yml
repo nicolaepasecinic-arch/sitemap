@@ -2,8 +2,19 @@
 # The frontend proxies /api → backend on the shared compose network, so everything is served
 # from ONE domain (design.upqode.com). Postgres is a SEPARATE Coolify resource (set DATABASE_URL).
 #
+# Both services also join Coolify's predefined `coolify` network so the backend can reach the
+# Postgres resource (by its service name) and Traefik can reach the frontend.
+#
 # In Coolify: New Resource → Docker Compose → point to this file. Set the env vars below in the
 # Coolify UI, and map the domain design.upqode.com to the `frontend` service (port 80).
+
+networks:
+  # Coolify's shared network (where database resources + the proxy live). Created by Coolify.
+  coolify:
+    external: true
+  # internal network for frontend ↔ backend communication
+  internal:
+    driver: bridge
 
 services:
   backend:
@@ -24,6 +35,9 @@ services:
       CORS_ORIGIN: ${APP_URL}
       PORT: "3000"
     restart: unless-stopped
+    networks:
+      - internal   # talk to frontend
+      - coolify    # reach the Postgres resource
     expose:
       - "3000"
 
@@ -36,5 +50,8 @@ services:
     depends_on:
       - backend
     restart: unless-stopped
+    networks:
+      - internal   # reach the backend
+      - coolify    # reachable by the Traefik proxy
     expose:
       - "80"
