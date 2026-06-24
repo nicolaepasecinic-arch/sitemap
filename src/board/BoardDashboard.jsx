@@ -193,10 +193,10 @@ export default function BoardDashboard({ onOpen }) {
   };
 
   return (
-    <div className="absolute inset-0 flex bg-[#FBFCFE]"
+    <div className="absolute inset-0 flex flex-col md:flex-row bg-[#FBFCFE]"
          style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
-      {/* left sidebar */}
-      <aside className="w-64 shrink-0 bg-white border-r border-gray-100 flex flex-col">
+      {/* left sidebar (desktop) */}
+      <aside className="hidden md:flex md:flex-col w-64 shrink-0 bg-white border-r border-gray-100">
         <nav className="flex-1 overflow-y-auto px-3 py-4">
           <div className="px-3 pt-1 pb-2 text-[11px] font-semibold text-gray-400 uppercase tracking-wide">Create</div>
           <button onClick={() => setNewOpen(true)} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-100 text-left">
@@ -206,12 +206,13 @@ export default function BoardDashboard({ onOpen }) {
       </aside>
 
       {/* content */}
-      <div className="flex-1 overflow-auto">
-        <div className="px-10 py-10 max-w-6xl mx-auto">
+      <div className="flex-1 min-w-0 overflow-auto">
+        <div className="px-4 py-6 md:px-10 md:py-10 max-w-6xl mx-auto">
 
         <div className="flex items-center justify-between mb-5 gap-3 flex-wrap">
-          <div className="flex items-center gap-3 mr-auto">
+          <div className="flex items-center gap-3">
             <h2 className="text-xl font-bold text-gray-800">Projects</h2>
+            <button onClick={() => setNewOpen(true)} className="md:hidden flex items-center gap-1.5 bg-[#473AE0] text-white text-sm font-medium rounded-full px-3 py-1.5"><FilePlus2 size={15} /> New</button>
             <div className="flex items-center bg-indigo-50 rounded-full p-0.5 text-[11px]">
               {[['all', 'All'], ['mine', 'Mine'], ['shared', 'Shared']].map(([k, label]) => (
                 <button key={k} onClick={() => setScope(k)} className={`px-2 py-0.5 rounded-full ${scope === k ? 'bg-[#473AE0] text-white font-medium' : 'text-[#473AE0]'}`}>{label}</button>
@@ -219,41 +220,42 @@ export default function BoardDashboard({ onOpen }) {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 bg-gray-100 rounded-full px-3 py-2 w-56">
-            <Search size={15} className="text-gray-400" />
-            <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search projects…"
-                   className="flex-1 bg-transparent outline-none text-sm" />
-            {query && <button onClick={() => setQuery('')}><X size={14} className="text-gray-400" /></button>}
-          </div>
-
-          <div className="flex items-center bg-gray-100 rounded-full p-1 text-sm">
-            <button onClick={() => setViewMode('active')}
-                    className={`px-3 py-1.5 rounded-full ${viewMode === 'active' ? 'bg-white shadow-sm text-gray-800 font-medium' : 'text-gray-500'}`}>Active</button>
-            <button onClick={() => setViewMode('completed')}
-                    className={`px-3 py-1.5 rounded-full ${viewMode === 'completed' ? 'bg-white shadow-sm text-gray-800 font-medium' : 'text-gray-500'}`}>
-              Complete{completedCount ? ` (${completedCount})` : ''}
-            </button>
-            <button onClick={() => setViewMode('archived')}
-                    className={`px-3 py-1.5 rounded-full ${viewMode === 'archived' ? 'bg-white shadow-sm text-gray-800 font-medium' : 'text-gray-500'}`}>
-              Archived{archivedCount ? ` (${archivedCount})` : ''}
-            </button>
-          </div>
-
-          <div className="relative">
-            <button onClick={() => setSortOpen((v) => !v)}
-                    className="flex items-center gap-2 text-sm text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-full px-4 py-2">
-              {SORT_LABEL[sortBy]} <ChevronDown size={15} />
-            </button>
-            {sortOpen && (
-              <div className="absolute right-0 top-11 z-20 w-44 bg-white rounded-xl shadow-xl border border-gray-100 p-1.5">
-                {Object.entries(SORT_LABEL).map(([k, label]) => (
-                  <button key={k} onClick={() => setSort(k)}
-                          className={`w-full text-left px-3 py-2 rounded-lg text-sm ${sortBy === k ? 'bg-indigo-50 text-[#473AE0]' : 'text-gray-700 hover:bg-gray-50'}`}>
-                    {label}
-                  </button>
-                ))}
+          {/* right group: search (with status toggle inside) + sort — aligned with the scope filter */}
+          <div className="flex items-center gap-3 flex-wrap">
+            <div className="flex items-center bg-gray-100 rounded-full p-1 pr-3 gap-1.5 w-full sm:w-auto">
+              <div className="flex items-center text-[13px] shrink-0">
+                <button onClick={() => setViewMode('active')}
+                        className={`px-2.5 py-1 rounded-full ${viewMode === 'active' ? 'bg-white shadow-sm text-gray-800 font-medium' : 'text-gray-500'}`}>Active</button>
+                <button onClick={() => setViewMode('completed')}
+                        className={`px-2.5 py-1 rounded-full ${viewMode === 'completed' ? 'bg-white shadow-sm text-gray-800 font-medium' : 'text-gray-500'}`}>Completed{completedCount ? ` (${completedCount})` : ''}</button>
+                <button onClick={() => setViewMode('archived')}
+                        className={`px-2.5 py-1 rounded-full ${viewMode === 'archived' ? 'bg-white shadow-sm text-gray-800 font-medium' : 'text-gray-500'}`}>Archived{archivedCount ? ` (${archivedCount})` : ''}</button>
               </div>
-            )}
+              <div className="w-px h-5 bg-gray-300/70 shrink-0" />
+              <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                <Search size={15} className="text-gray-400 shrink-0" />
+                <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search…"
+                       className="bg-transparent outline-none text-sm flex-1 min-w-0 sm:w-36" />
+                {query && <button onClick={() => setQuery('')}><X size={14} className="text-gray-400" /></button>}
+              </div>
+            </div>
+
+            <div className="relative">
+              <button onClick={() => setSortOpen((v) => !v)}
+                      className="flex items-center gap-2 text-sm text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-full px-4 py-2">
+                {SORT_LABEL[sortBy]} <ChevronDown size={15} />
+              </button>
+              {sortOpen && (
+                <div className="absolute right-0 top-11 z-20 w-44 bg-white rounded-xl shadow-xl border border-gray-100 p-1.5">
+                  {Object.entries(SORT_LABEL).map(([k, label]) => (
+                    <button key={k} onClick={() => setSort(k)}
+                            className={`w-full text-left px-3 py-2 rounded-lg text-sm ${sortBy === k ? 'bg-indigo-50 text-[#473AE0]' : 'text-gray-700 hover:bg-gray-50'}`}>
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 

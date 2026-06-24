@@ -4,7 +4,7 @@ import {
   ArrowLeft, Undo2, Redo2, Save, ChevronDown as Caret, Type, Loader2, Plus, Play, Palette, Check,
 } from 'lucide-react';
 import BrandStar from '../components/Brand';
-import { getMarkupProject, listMarkupVersions, markupFileUrl, saveMarkupPage, saveMarkupStyles, createMarkupPage, updateMarkupPage, duplicateMarkupPageFile, deleteMarkupPage } from './markupApi';
+import { getMarkupProject, listMarkupVersions, markupFileUrl, saveMarkupPage, saveMarkupStyles, createMarkupPage, updateMarkupPage, duplicateMarkupPageFile, deleteMarkupPage } from '../markup/markupApi';
 import { StylesPanel, ComponentsPanel, normalizeStyles, genStylesCss, seedTextStylesFromDoc, applyStyleGuideTheme, newTextStyle } from './designStyles';
 import { listStyleGuides } from '../styleguide/styleguideStore';
 import { apiGetStyleGuideTheme } from '../styleguide/styleguideApi';
@@ -47,6 +47,10 @@ export default function DesignEditor({ id, onBack, embedded = false, styleguideI
   const ctxOpenRef = useRef(() => {});  // opens the context menu from inside the iframe
   const stylesRef = useRef(styles);
   const saveStylesTimer = useRef(null);
+  const autoSaveTimer = useRef(null);   // debounced page auto-save
+  const saveRef = useRef(null);         // always points at the latest save()
+  const savingGuard = useRef(false);    // prevents overlapping saves
+  useEffect(() => () => { if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current); }, []);
   const seedRef = useRef(() => {});
   const syncHandlesRef = useRef(() => {});   // (re)draw resize handles over the selected element
   const autoAppliedRef = useRef(false);          // guard: auto-apply linked guide only once
@@ -77,7 +81,12 @@ export default function DesignEditor({ id, onBack, embedded = false, styleguideI
 
   const snapshot = () => { const d = doc(); return d ? d.documentElement.outerHTML : null; };
   const pushUndo = useCallback(() => { const s = snapshot(); if (s == null) return; undoRef.current.push(s); if (undoRef.current.length > 40) undoRef.current.shift(); redoRef.current = []; }, []);
-  const markDirty = () => setDirty(true);
+  const markDirty = () => {
+    setDirty(true);
+    // debounced auto-save — no need to press Save
+    if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current);
+    autoSaveTimer.current = setTimeout(() => { if (saveRef.current) saveRef.current(); }, 1200);
+  };
 
   const clearSelection = useCallback(() => {
     const d = doc(); if (d) d.querySelectorAll('[data-dz-selected]').forEach((el) => el.removeAttribute('data-dz-selected'));
@@ -501,8 +510,11 @@ export default function DesignEditor({ id, onBack, embedded = false, styleguideI
     d.querySelectorAll('[data-dz-anim]').forEach((el) => { el.style.removeProperty('opacity'); el.style.removeProperty('transform'); el.style.removeProperty('transition'); el.style.removeProperty('will-change'); });
   };
 
-  const save = async () => {
+  const save = async (silent = false) => {
     const d = doc(); if (!d || !version) return;
+    if (savingGuard.current) return;                     // avoid overlapping saves
+    if (autoSaveTimer.current) { clearTimeout(autoSaveTimer.current); autoSaveTimer.current = null; }
+    savingGuard.current = true;
     if (preview) { clearPreviewDom(); setPreview(false); } // don't bake the preview runtime / hidden states into the file
     setSaving(true); setErr('');
     try {
@@ -517,12 +529,15 @@ export default function DesignEditor({ id, onBack, embedded = false, styleguideI
       if (body && clone.querySelector('[data-dz-anim]')) { const sc = d.createElement('script'); sc.id = ANIM_RUNTIME_ID; sc.textContent = ANIM_RUNTIME; body.appendChild(sc); }
       const html = '<!DOCTYPE html>\n<html' + attrStr(clone) + '>' + clone.innerHTML + '</html>';
       await saveMarkupPage(version.id, page, html);
-      setDirty(false); toastMsg('Saved');
+      setDirty(false); if (!silent) toastMsg('Saved');
     } catch (e) { setErr(e.message || 'Could not save.'); }
     setSaving(false);
+    savingGuard.current = false;
   };
+  saveRef.current = save;
 
-  const guardSwitch = (fn) => { if (dirty && !window.confirm('Discard unsaved changes?')) return; fn(); };
+  // Auto-save before leaving the page / switching pages or versions (no Save needed).
+  const guardSwitch = async (fn) => { if (dirty) { try { await save(true); } catch (e) {} } fn(); };
   const switchPage = (p) => guardSwitch(() => { setPage(p); setDirty(false); setLoadingIframe(true); clearSelection(); });
   const switchVersion = (vid) => guardSwitch(() => { const v = versions.find((x) => x.id === vid); if (!v) return; setVersion(v); setPage(v.type === 'zip' && (v.pages || []).length ? v.pages[0].path : ''); setDirty(false); setLoadingIframe(true); clearSelection(); });
 
@@ -617,9 +632,15 @@ export default function DesignEditor({ id, onBack, embedded = false, styleguideI
         <button onClick={togglePreview} disabled={!editable} title={preview ? 'Exit preview' : 'Preview scroll animations'} className={`w-9 h-9 rounded-lg flex items-center justify-center disabled:opacity-40 ${preview ? 'bg-[#473AE0]/10 text-[#473AE0]' : 'hover:bg-gray-100 text-gray-500'}`}><Play size={16} /></button>
         <button onClick={undo} disabled={!editable} title="Undo (⌘Z)" className="w-9 h-9 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-500 disabled:opacity-40"><Undo2 size={17} /></button>
         <button onClick={redo} disabled={!editable} title="Redo (⌘⇧Z)" className="w-9 h-9 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-500 disabled:opacity-40"><Redo2 size={17} /></button>
-        <button onClick={save} disabled={!editable || saving || !dirty} className="ml-1 flex items-center gap-1.5 bg-[#473AE0] text-white text-sm font-medium px-4 h-9 rounded-full hover:bg-[#3a2fc0] disabled:opacity-50">
-          {saving ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />} Save
-        </button>
+        {editable && (
+          <div className="ml-1 flex items-center gap-1.5 text-sm font-medium px-3 h-9 select-none">
+            {saving
+              ? <><Loader2 size={14} className="animate-spin text-gray-400" /> <span className="text-gray-400">Saving…</span></>
+              : dirty
+                ? <button onClick={() => save()} title="Save now" className="flex items-center gap-1.5 text-amber-500 hover:text-amber-600"><Save size={14} /> Save now</button>
+                : <><Check size={14} className="text-green-500" /> <span className="text-green-600">Saved</span></>}
+          </div>
+        )}
       </div>
 
       <div className="flex-1 flex min-h-0">

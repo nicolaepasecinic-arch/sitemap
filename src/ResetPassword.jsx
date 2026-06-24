@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Lock, ArrowRight } from 'lucide-react';
-import BrandStar from './components/Brand';
+import BrandStar, { BrandWordmark } from './components/Brand';
 import { resetPassword } from './auth';
 
 export default function ResetPassword({ token, onDone }) {
@@ -21,7 +21,7 @@ export default function ResetPassword({ token, onDone }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-[#FBFCFE] p-6" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
       <div className="w-full max-w-sm">
-        <div className="flex items-center gap-2 mb-6"><BrandStar size={24} /><span className="font-bold text-gray-900 text-lg">Qoders</span></div>
+        <div className="flex items-center gap-2 mb-6"><BrandStar size={24} /><BrandWordmark /></div>
         <h1 className="text-2xl font-extrabold text-gray-900">Choose a new password</h1>
         <p className="text-gray-500 mt-1 mb-6 text-sm">Enter a new password for your account.</p>
         <form onSubmit={submit} className="space-y-3">

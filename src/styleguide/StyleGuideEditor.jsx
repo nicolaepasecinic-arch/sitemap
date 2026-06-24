@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { ArrowLeft, Download, Share2, X, Check, Loader2, Copy, Users, ChevronDown, ChevronLeft, ChevronRight, Settings, Bot, LogOut, Save, Plus, Trash2, History, Sparkles, Send } from 'lucide-react';
+import { ArrowLeft, Download, Share2, X, Check, Loader2, Copy, Users, ChevronDown, ChevronLeft, ChevronRight, Settings, Bot, LogOut, Plus, Trash2, History, Sparkles, Send, SlidersHorizontal, MousePointerClick } from 'lucide-react';
 import InvitePanel from '../components/InvitePanel';
 import Account from '../components/Account';
 import Team from '../components/Team';
@@ -288,10 +288,6 @@ export default function StyleGuideEditor({ id, user, onBack, onLogout, onUserCha
                     className={`flex items-center gap-1.5 text-sm font-medium rounded-full px-4 py-1.5 text-white ${aiOpen ? 'ring-2 ring-violet-300' : ''}`}
                     style={{ background: 'linear-gradient(135deg,#7c3aed,#d946ef)' }}><Sparkles size={15} /> AI</button>
           )}
-          {!readOnly && (
-            <button onClick={() => save()} disabled={status === 'saving'}
-                    className="flex items-center gap-1.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-full px-4 py-1.5 disabled:opacity-50"><Save size={15} /> Save</button>
-          )}
           {hasBackend() && guide && !guide.shared && (
             <button onClick={() => setShareOpen(true)}
                     className="flex items-center gap-1.5 text-sm font-medium text-white bg-[#473AE0] hover:bg-[#3a2fc0] rounded-full px-4 py-1.5"><Share2 size={15} /> Share</button>
@@ -341,10 +337,11 @@ export default function StyleGuideEditor({ id, user, onBack, onLogout, onUserCha
         <button onClick={() => pillsRef.current && pillsRef.current.scrollBy({ left: 260, behavior: 'smooth' })}
                 className="w-7 h-7 rounded-full hover:bg-gray-100 text-gray-400 flex items-center justify-center shrink-0" title="Scroll right"><ChevronRight size={16} /></button>
         {!readOnly && (
-          <div className="inline-flex items-center bg-gray-100 rounded-full p-0.5 shrink-0 ml-2" title="Properties: edit design tokens (they propagate everywhere). Everything: edit any element freely.">
-            {[['properties', 'Properties'], ['everything', 'Everything']].map(([m, label]) => (
-              <button key={m} onClick={() => setEditMode(m)}
-                      className={`px-3 h-7 rounded-full text-xs font-medium transition ${editMode === m ? 'bg-white shadow-sm text-[#473AE0]' : 'text-gray-500 hover:text-gray-700'}`}>{label}</button>
+          <div className="inline-flex items-center bg-gray-100 rounded-full p-0.5 shrink-0 ml-2">
+            {[['properties', 'Properties', SlidersHorizontal, 'Properties — edit design tokens (they propagate everywhere)'],
+              ['everything', 'Everything', MousePointerClick, 'Everything — edit any element freely']].map(([m, label, Icon, tip]) => (
+              <button key={m} onClick={() => setEditMode(m)} title={tip} aria-label={label}
+                      className={`w-8 h-7 rounded-full flex items-center justify-center transition ${editMode === m ? 'bg-white shadow-sm text-[#473AE0]' : 'text-gray-400 hover:text-gray-700'}`}><Icon size={15} /></button>
             ))}
           </div>
         )}

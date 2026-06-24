@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Map, MessageSquare, ChevronDown, User, LogOut, Bot, Users, Wand2, FolderKanban, Palette, LayoutGrid } from 'lucide-react';
-import BrandStar from '../components/Brand';
+import BrandStar, { BrandWordmark } from '../components/Brand';
 import Account from '../components/Account';
 import ConnectAI from '../components/ConnectAI';
 import Team from '../components/Team';
@@ -21,23 +21,23 @@ export default function ProductTabs({ active, user, onLogout, onUserChange }) {
 
   const go = (hash) => { if (window.location.hash !== hash) window.location.hash = hash; };
   const tab = (id, label, Icon, hash) => (
-    <button onClick={() => go(hash)}
-            className={`flex items-center gap-2 px-4 h-9 rounded-full text-sm font-medium transition
+    <button onClick={() => go(hash)} title={label}
+            className={`flex items-center gap-2 px-3 sm:px-4 h-9 rounded-full text-sm font-medium transition shrink-0 whitespace-nowrap
               ${active === id ? 'bg-white shadow-sm text-gray-800' : 'text-gray-500 hover:text-gray-700'}`}>
-      <Icon size={16} className={active === id ? 'text-[#473AE0]' : 'text-gray-400'} /> {label}
+      <Icon size={16} className={active === id ? 'text-[#473AE0]' : 'text-gray-400'} /> <span className="hidden sm:inline">{label}</span>
     </button>
   );
 
   return (
-    <div className="h-14 shrink-0 bg-white border-b border-gray-100 flex items-center px-5">
+    <div className="h-14 shrink-0 bg-white border-b border-gray-100 flex items-center gap-2 px-3 sm:px-5">
       {/* logo */}
-      <div className="flex items-center gap-2.5 w-56">
+      <div className="flex items-center gap-2.5 flex-1 min-w-0">
         <BrandStar size={22} />
-        <span className="font-semibold text-gray-800 text-lg">Qoders</span>
+        <span className="hidden sm:flex"><BrandWordmark /></span>
       </div>
 
-      {/* tabs */}
-      <div className="flex-1 flex justify-center">
+      {/* tabs (centered) */}
+      <div className="shrink min-w-0 flex justify-center overflow-x-auto no-scrollbar">
         <div className="flex items-center gap-1 bg-gray-100 rounded-full p-1">
           {['pm', 'production'].includes(user?.teamRole) && tab('projects', 'Projects', FolderKanban, '#/projects')}
           {tab('sitemap', 'Sitemap', Map, '#/')}
@@ -49,12 +49,12 @@ export default function ProductTabs({ active, user, onLogout, onUserChange }) {
       </div>
 
       {/* account */}
-      <div className="w-56 flex justify-end">
+      <div className="flex-1 min-w-0 flex justify-end">
         <div className="relative" ref={ref}>
-          <button onClick={() => setOpen((v) => !v)} className="flex items-center gap-2 hover:bg-gray-50 rounded-full pl-1 pr-3 py-1">
+          <button onClick={() => setOpen((v) => !v)} className="flex items-center gap-2 hover:bg-gray-50 rounded-full pl-1 pr-1 sm:pr-3 py-1">
             <span className="w-8 h-8 rounded-full bg-pink-500 text-white flex items-center justify-center text-xs font-bold">{initials(user?.name)}</span>
-            <span className="text-sm text-gray-700 whitespace-nowrap max-w-[120px] truncate">{user?.name || 'My account'}</span>
-            <ChevronDown size={15} className="text-gray-400" />
+            <span className="hidden sm:inline text-sm text-gray-700 whitespace-nowrap max-w-[120px] truncate">{user?.name || 'My account'}</span>
+            <ChevronDown size={15} className="hidden sm:block text-gray-400" />
           </button>
           {open && (
             <div className="absolute right-0 top-12 z-50 w-48 bg-white rounded-xl shadow-xl border border-gray-100 p-1.5">

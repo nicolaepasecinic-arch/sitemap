@@ -7,7 +7,7 @@ import BrandStar from './components/Brand';
 import ProductTabs from './markup/ProductTabs';
 import MarkupDashboard from './markup/MarkupDashboard';
 import MarkupEditor from './markup/MarkupEditor';
-import DesignEditor from './markup/DesignEditor';
+import DesignEditor from './design/DesignEditor';
 import BoardDashboard from './board/BoardDashboard';
 import ProjectShell from './board/ProjectShell';
 import StyleGuideDashboard from './styleguide/StyleGuideDashboard';

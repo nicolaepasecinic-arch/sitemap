@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Star, ArrowRight, Mail, Lock } from 'lucide-react';
-import BrandStar from './components/Brand';
+import BrandStar, { BrandWordmark } from './components/Brand';
 import { loginUser, registerUser, forgotPassword } from './auth';
 
 export default function Login({ onLogin }) {
@@ -38,10 +38,10 @@ export default function Login({ onLogin }) {
     <div className="fixed inset-0 flex bg-white"
          style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
       {/* left: form */}
-      <div className="flex-1 flex flex-col px-10 sm:px-16">
+      <div className="flex-1 flex flex-col px-6 sm:px-16">
         <div className="flex items-center gap-2 pt-8">
           <BrandStar size={24} />
-          <span className="font-bold text-gray-900 text-lg">Qoders</span>
+          <BrandWordmark />
         </div>
 
         <div className="flex-1 flex flex-col justify-center max-w-sm w-full">
@@ -110,7 +110,7 @@ export default function Login({ onLogin }) {
             {[0, 1, 2, 3, 4].map((i) => <Star key={i} size={20} fill="currentColor" stroke="none" />)}
           </div>
           <p className="text-lg font-medium leading-relaxed">
-            Plan complete sitemaps — pages, sections and wireframes — in minutes. Qoders keeps our whole team aligned before a single line of design.
+            Plan complete sitemaps — pages, sections and wireframes — in minutes. UPQODE design keeps our whole team aligned before a single line of design.
           </p>
           <div className="flex items-center gap-3 mt-7">
             <span className="w-11 h-11 rounded-full bg-white/20 flex items-center justify-center font-bold">MP</span>

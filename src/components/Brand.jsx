@@ -11,3 +11,13 @@ export default function BrandStar({ size = 22, color = '#EF3B2D', bg = '#FDE7E4'
     </svg>
   );
 }
+
+/* Two-line wordmark: "UPQODE" (bold) with "design" beneath it (small, grey). */
+export function BrandWordmark({ className = '' }) {
+  return (
+    <span className={`flex flex-col ${className}`}>
+      <span className="font-bold text-gray-900 text-[15px] leading-none tracking-tight">UPQODE</span>
+      <span className="text-[12px] font-normal text-gray-400 tracking-wide leading-none mt-px">design</span>
+    </span>
+  );
+}

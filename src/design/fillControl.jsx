@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useRef, useEffect } from 'react';
 import { X, ChevronDown, Pipette, Plus, Search, Trash2, Upload, Loader2 } from 'lucide-react';
-import { uploadMarkupAttachment } from './markupApi';
+import { uploadMarkupAttachment } from '../markup/markupApi';
 
 /* ------------------------------------------------------------------ *
  *  Fill control — produces a CSS `background` value with 5 fill types:

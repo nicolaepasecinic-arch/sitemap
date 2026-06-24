@@ -16,7 +16,7 @@ import { hasBackend, apiListBoardMembers, apiAddBoardMember, apiRemoveBoardMembe
 import PageEditor from './PageEditor';
 import SitemapBuilder from '../sitemap/SitemapBuilder';
 import StyleGuideEditor from '../styleguide/StyleGuideEditor';
-import DesignEditor from '../markup/DesignEditor';
+import DesignEditor from '../design/DesignEditor';
 import { getProject, saveProject, createProject, createProjectFromTemplate, uid } from '../projectStore';
 import { createStyleGuide, listStyleGuides } from '../styleguide/styleguideStore';
 import { apiGenerateStyleGuide } from '../styleguide/styleguideApi';
