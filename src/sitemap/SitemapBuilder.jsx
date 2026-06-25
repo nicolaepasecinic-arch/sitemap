@@ -1347,8 +1347,11 @@ export default function SitemapBuilder({ project, onBack, onChange, user, onLogo
                   {/* body */}
                   {n.blocks.length > 0 ? (
                     <div className="px-2.5 pb-2.5 flex flex-col" style={{ gap: BLOCK_GAP }}
-                         onDragOver={(e) => { if (blockDragRef.current) e.preventDefault(); }}
-                         onDrop={(e) => { const d = blockDragRef.current; if (d && d.nodeId !== n.id) moveBlockToPage(d.nodeId, d.blockId, n.id); blockDragRef.current = null; }}>
+                         onDragOver={(e) => { if (blockDragRef.current || dragId) e.preventDefault(); }}
+                         onDrop={(e) => {
+                           if (dragId && !blockDragRef.current) { if (dragId !== n.id) { e.preventDefault(); e.stopPropagation(); moveNode(dragId, n.id); } setDragId(null); setDropTargetId(null); return; }
+                           const d = blockDragRef.current; if (d && d.nodeId !== n.id) moveBlockToPage(d.nodeId, d.blockId, n.id); blockDragRef.current = null;
+                         }}>
                       {n.blocks.map((b) => {
                         const bc = resolveColor(b.color);
                         const blkSel = selectedBlock && selectedBlock.blockId === b.id;
@@ -1356,8 +1359,11 @@ export default function SitemapBuilder({ project, onBack, onChange, user, onLogo
                           <div key={b.id} data-ui
                                draggable={!(editingBlock && editingBlock.blockId === b.id)}
                                onDragStart={(e) => { e.stopPropagation(); blockDragRef.current = { nodeId: n.id, blockId: b.id }; }}
-                               onDragOver={(e) => { if (blockDragRef.current) { e.preventDefault(); e.stopPropagation(); } }}
-                               onDrop={(e) => { e.stopPropagation(); const d = blockDragRef.current; if (d) { if (d.nodeId === n.id) moveBlock(n.id, d.blockId, b.id); else moveBlockToPage(d.nodeId, d.blockId, n.id, b.id); } blockDragRef.current = null; }}
+                               onDragOver={(e) => { if (blockDragRef.current) { e.preventDefault(); e.stopPropagation(); } else if (dragId) { e.preventDefault(); } }}
+                               onDrop={(e) => {
+                                 if (dragId && !blockDragRef.current) { if (dragId !== n.id) { e.preventDefault(); e.stopPropagation(); moveNode(dragId, n.id); } setDragId(null); setDropTargetId(null); return; }
+                                 e.stopPropagation(); const d = blockDragRef.current; if (d) { if (d.nodeId === n.id) moveBlock(n.id, d.blockId, b.id); else moveBlockToPage(d.nodeId, d.blockId, n.id, b.id); } blockDragRef.current = null;
+                               }}
                                onDragEnd={() => { blockDragRef.current = null; }}
                                onClick={(e) => { e.stopPropagation(); if (arrowMode) return; setSelectedId(n.id); setSelectedBlock({ nodeId: n.id, blockId: b.id }); setFramePickerId(null); }}
                                className="relative group rounded-md flex flex-col px-2 py-1.5 text-white cursor-pointer"
@@ -1414,8 +1420,11 @@ export default function SitemapBuilder({ project, onBack, onChange, user, onLogo
                     </div>
                   ) : (
                     <div className="flex-1 flex items-center justify-center px-2.5 pb-2.5"
-                         onDragOver={(e) => { if (blockDragRef.current) e.preventDefault(); }}
-                         onDrop={(e) => { const d = blockDragRef.current; if (d && d.nodeId !== n.id) moveBlockToPage(d.nodeId, d.blockId, n.id); blockDragRef.current = null; }}>
+                         onDragOver={(e) => { if (blockDragRef.current || dragId) e.preventDefault(); }}
+                         onDrop={(e) => {
+                           if (dragId && !blockDragRef.current) { if (dragId !== n.id) { e.preventDefault(); e.stopPropagation(); moveNode(dragId, n.id); } setDragId(null); setDropTargetId(null); return; }
+                           const d = blockDragRef.current; if (d && d.nodeId !== n.id) moveBlockToPage(d.nodeId, d.blockId, n.id); blockDragRef.current = null;
+                         }}>
                       <button
                         data-ui
                         onClick={(e) => { e.stopPropagation(); setSelectedId(n.id); addBlock(n.id); }}
