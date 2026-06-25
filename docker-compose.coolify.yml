@@ -35,6 +35,22 @@ services:
       CORS_ORIGIN: ${APP_URL}
       PORT: "3000"
     restart: unless-stopped
+    # init: reap zombie Chromium processes (Puppeteer can leave defunct children that
+    # slowly eat memory). tini becomes PID 1 and cleans them up.
+    init: true
+    # Memory ceiling so a runaway Chromium restarts THIS container in isolation instead of
+    # OOM-killing the whole 4GB host. Generous on purpose (one browser ≈ 400MB + Node);
+    # the concurrency lock means only one Chromium runs at a time. Lower if Postgres shares
+    # the host and needs more headroom.
+    mem_limit: 3g
+    healthcheck:
+      # Mark the container unhealthy if the API stops responding, so Coolify/Docker can
+      # surface it and restart. Uses Node's built-in fetch (Node 22) — no extra tooling.
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/api/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
     networks:
       - internal   # talk to frontend
       - coolify    # reach the Postgres resource

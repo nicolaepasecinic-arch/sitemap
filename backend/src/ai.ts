@@ -44,12 +44,48 @@ function loadPuppeteer(): any {
   try { _puppeteer = (0, eval)('require')('puppeteer'); } catch { _puppeteer = null; }
   return _puppeteer;
 }
+
+// STABILITY: only ONE headless Chromium may run at a time across the whole process.
+// Each Chromium costs ~200-400MB; without this lock, concurrent style-guide generations
+// stack several browsers at once and OOM-kill the server (the 503s we saw). Calls queue
+// and run one after another instead of piling up. PROBE_MAX_WAIT caps how long a request
+// waits in the queue so a stuck job can't block everyone forever.
+let _browserChain: Promise<void> = Promise.resolve();
+const PROBE_MAX_WAIT = 120000;
+function withBrowserLock<T>(fn: () => Promise<T>): Promise<T> {
+  const prev = _browserChain;
+  let release!: () => void;
+  _browserChain = new Promise<void>((r) => { release = r; });
+  const waited = prev.then(() => fn());
+  // free the lock for the next caller no matter how this one ends
+  waited.then(release, release);
+  return waited;
+}
+
 export async function probeSite(url: string): Promise<{ computed: any; screenshot: string }> {
   const puppeteer = loadPuppeteer();
   if (!puppeteer || !url) return { computed: null, screenshot: '' };
+  // Bound the wait so a slow/stuck browser job can't hang the request indefinitely.
+  const guard = new Promise<{ computed: any; screenshot: string }>((resolve) =>
+    setTimeout(() => resolve({ computed: null, screenshot: '' }), PROBE_MAX_WAIT));
+  return Promise.race([withBrowserLock(() => runProbe(puppeteer, url)), guard]);
+}
+
+async function runProbe(puppeteer: any, url: string): Promise<{ computed: any; screenshot: string }> {
   let browser: any = null;
   try {
-    browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'] });
+    browser = await puppeteer.launch({
+      headless: true,
+      // Lighter, more stable flags for a headless server: no GPU, no zygote/extensions,
+      // and a hard protocol timeout so a hung page can't wedge the browser.
+      protocolTimeout: 60000,
+      args: [
+        '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage',
+        '--disable-gpu', '--no-zygote', '--disable-extensions',
+        '--disable-background-networking', '--disable-background-timer-throttling',
+        '--mute-audio', '--no-first-run',
+      ],
+    });
     const page = await browser.newPage();
     await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 1 });
     await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36');
@@ -61,7 +97,12 @@ export async function probeSite(url: string): Promise<{ computed: any; screensho
     try { const buf = await page.screenshot({ type: 'jpeg', quality: 70, fullPage: false }); screenshot = 'data:image/jpeg;base64,' + Buffer.from(buf).toString('base64'); } catch {}
     return { computed, screenshot };
   } catch (e) { console.error('puppeteer probe failed:', (e as Error).message); return { computed: null, screenshot: '' }; }
-  finally { try { if (browser) await browser.close(); } catch {} }
+  finally {
+    // Guarantee the Chromium process is gone — close(), then SIGKILL the process if it lingers,
+    // so no zombie browsers accumulate and slowly eat the server's memory.
+    try { if (browser) await browser.close(); } catch {}
+    try { const proc = browser && browser.process && browser.process(); if (proc && !proc.killed) proc.kill('SIGKILL'); } catch {}
+  }
 }
 
 // Fetch text (HTML/CSS) with a timeout. Returns '' on any failure.
