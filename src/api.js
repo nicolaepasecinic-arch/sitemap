@@ -86,3 +86,17 @@ export const apiListMembers = (id) => request(`/api/projects/${id}/members`);
 export const apiAddMember = (id, email, role) => request(`/api/projects/${id}/members`, { method: 'POST', body: { email, role } });
 export const apiRemoveMember = (id, userId) => request(`/api/projects/${id}/members/${userId}`, { method: 'DELETE' });
 export const apiRemoveInvite = (id, email) => request(`/api/projects/${id}/invites/${encodeURIComponent(email)}`, { method: 'DELETE' });
+
+/* ---- moodboards ---- */
+export const apiListMoodboards = () => request('/api/moodboards');
+export const apiGetMoodboard = (id) => request(`/api/moodboards/${id}`);
+export const apiCreateMoodboard = (payload) => request('/api/moodboards', { method: 'POST', body: payload });
+export const apiPatchMoodboard = (id, patch) => request(`/api/moodboards/${id}`, { method: 'PATCH', body: patch });
+export const apiDuplicateMoodboard = (id) => request(`/api/moodboards/${id}/duplicate`, { method: 'POST' });
+export const apiDeleteMoodboard = (id) => request(`/api/moodboards/${id}`, { method: 'DELETE' });
+export const apiUploadMoodboardImage = (id, dataUrl) => request(`/api/moodboards/${id}/images`, { method: 'POST', body: { dataUrl } });
+/* moodboard sharing (same shape InvitePanel expects) */
+export const apiListMoodboardMembers = (id) => request(`/api/moodboards/${id}/members`);
+export const apiAddMoodboardMember = (id, email, role) => request(`/api/moodboards/${id}/members`, { method: 'POST', body: { email, role } });
+export const apiRemoveMoodboardMember = (id, userId) => request(`/api/moodboards/${id}/members/${userId}`, { method: 'DELETE' });
+export const apiRemoveMoodboardInvite = (id, email) => request(`/api/moodboards/${id}/invites/${encodeURIComponent(email)}`, { method: 'DELETE' });

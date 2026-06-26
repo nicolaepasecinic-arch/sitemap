@@ -298,6 +298,46 @@ export async function initDb() {
       PRIMARY KEY (style_guide_id, user_id)
     );
 
+    -- ====================== MoodBoards ======================
+    -- A free canvas of cards (notes, comments, text, images). Mirrors projects:
+    -- owner in moodboards.user_id, shared via moodboard_members / moodboard_invites.
+    CREATE TABLE IF NOT EXISTS moodboards (
+      id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      user_id     UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      name        TEXT NOT NULL,
+      items       JSONB NOT NULL DEFAULT '[]'::jsonb,
+      settings    JSONB NOT NULL DEFAULT '{}'::jsonb,
+      archived    BOOLEAN NOT NULL DEFAULT false,
+      completed   BOOLEAN NOT NULL DEFAULT false,
+      created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+      updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+    );
+    CREATE INDEX IF NOT EXISTS moodboards_user_id_idx ON moodboards(user_id);
+
+    CREATE TABLE IF NOT EXISTS moodboard_members (
+      moodboard_id UUID NOT NULL REFERENCES moodboards(id) ON DELETE CASCADE,
+      user_id      UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      role         TEXT NOT NULL DEFAULT 'editor',   -- 'editor' | 'viewer'
+      created_at   TIMESTAMPTZ NOT NULL DEFAULT now(),
+      PRIMARY KEY (moodboard_id, user_id)
+    );
+    CREATE INDEX IF NOT EXISTS moodboard_members_user_idx ON moodboard_members(user_id);
+
+    CREATE TABLE IF NOT EXISTS moodboard_invites (
+      moodboard_id UUID NOT NULL REFERENCES moodboards(id) ON DELETE CASCADE,
+      email        TEXT NOT NULL,
+      role         TEXT NOT NULL DEFAULT 'editor',
+      created_at   TIMESTAMPTZ NOT NULL DEFAULT now(),
+      PRIMARY KEY (moodboard_id, email)
+    );
+    CREATE INDEX IF NOT EXISTS moodboard_invites_email_idx ON moodboard_invites(email);
+
+    CREATE TABLE IF NOT EXISTS moodboard_hidden (
+      moodboard_id UUID NOT NULL REFERENCES moodboards(id) ON DELETE CASCADE,
+      user_id      UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      PRIMARY KEY (moodboard_id, user_id)
+    );
+
     -- Backfill: every existing guide gets a 'v1' from its current content.
     INSERT INTO style_guide_versions (style_guide_id, label, content, created_at)
       SELECT s.id, 'v1', s.content, s.created_at FROM style_guides s
@@ -369,6 +409,14 @@ export async function claimInvites(userId: string, email: string) {
     [userId, e]
   );
   await pool.query('DELETE FROM style_guide_invites WHERE email = $1', [e]);
+  // moodboard invites
+  await pool.query(
+    `INSERT INTO moodboard_members (moodboard_id, user_id, role)
+       SELECT moodboard_id, $1, role FROM moodboard_invites WHERE email = $2
+     ON CONFLICT (moodboard_id, user_id) DO UPDATE SET role = EXCLUDED.role`,
+    [userId, e]
+  );
+  await pool.query('DELETE FROM moodboard_invites WHERE email = $1', [e]);
   // team invites
   await pool.query(
     `INSERT INTO team_members (team_id, user_id, role)

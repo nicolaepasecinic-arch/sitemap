@@ -13,6 +13,8 @@ import ProjectShell from './board/ProjectShell';
 import StyleGuideDashboard from './styleguide/StyleGuideDashboard';
 import StyleGuideEditor from './styleguide/StyleGuideEditor';
 import StyleGuideView from './styleguide/StyleGuideView';
+import MoodboardDashboard from './moodboard/MoodboardDashboard';
+import MoodboardEditor from './moodboard/MoodboardEditor';
 import { getProject, getPublicProject, saveProject } from './projectStore';
 import { getAuth, clearAuth } from './auth';
 
@@ -75,10 +77,13 @@ function parseStyleGuides() {
   if (h === '#/styleguides' || h.startsWith('#/styleguides')) return { id: null };
   return null;
 }
-// moodboard module route (#/moodboard) — placeholder for now
+// moodboard module routes (#/moodboard, #/moodboard/p/<id>)
 function parseMoodboard() {
   const h = window.location.hash || '';
-  return (h === '#/moodboard' || h.startsWith('#/moodboard')) ? {} : null;
+  const m = h.match(/^#\/moodboard\/p\/(.+)$/);
+  if (m) return { id: decodeURIComponent(m[1]) };
+  if (h === '#/moodboard' || h.startsWith('#/moodboard')) return { id: null };
+  return null;
 }
 // public read-only style guide (#/styleguides/view/<id>)
 function parseStyleGuideView() {
@@ -264,14 +269,17 @@ export default function App() {
     );
   }
 
-  // ---- Moodboard module (placeholder) ----
+  // ---- Moodboard module ----
   if (moodboard) {
+    const openMoodboard = (mid) => { window.location.hash = `#/moodboard/p/${mid}`; setMoodboard({ id: mid }); };
+    if (moodboard.id) {
+      return <MoodboardEditor key={moodboard.id} id={moodboard.id} user={auth} onBack={() => { window.location.hash = '#/moodboard'; setMoodboard({ id: null }); }} />;
+    }
     return (
       <div className="fixed inset-0 flex flex-col bg-[#FBFCFE]">
         <ProductTabs active="moodboard" user={auth} onLogout={logout} onUserChange={setAuthState} />
-        <div className="flex-1 flex flex-col items-center justify-center text-gray-400 gap-2">
-          <BrandStar size={34} />
-          <div className="text-sm font-medium text-gray-500">Moodboard — coming soon</div>
+        <div className="flex-1 relative min-h-0">
+          <MoodboardDashboard onOpen={openMoodboard} />
         </div>
       </div>
     );

@@ -16,6 +16,10 @@ networks:
   internal:
     driver: bridge
 
+volumes:
+  # Persists uploaded files (markup sites + moodboard images) across redeploys.
+  backend-uploads:
+
 services:
   backend:
     build:
@@ -35,6 +39,8 @@ services:
       CORS_ORIGIN: ${APP_URL}
       PORT: "3000"
     restart: unless-stopped
+    volumes:
+      - backend-uploads:/app/uploads   # markup sites + moodboard images persist across redeploys
     # init: reap zombie Chromium processes (Puppeteer can leave defunct children that
     # slowly eat memory). tini becomes PID 1 and cleans them up.
     init: true

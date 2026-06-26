@@ -9,6 +9,7 @@ import { boardsRouter } from './boards';
 import { styleGuidesRouter, styleGuidesPublicRouter, buildStyleGuideFromTokens, accessRole as sgAccessRole, parseAllTokens as sgParseTokens } from './styleguides';
 import { handleMcp } from './mcp';
 import { markupRouter, markupPublicRouter, MARKUP_DIR, markupProxyHandler } from './markup';
+import { moodboardsRouter, publicMoodboardsRouter, MOODBOARD_DIR } from './moodboards';
 import { teamsRouter } from './teams';
 import { OPENAI_API_KEY, OPENAI_MODEL, AI_FRAME_KEYS, AI_COLOR_KEYS, FRAME_GUIDE, COLOR_GUIDE, frameLegend, extractResponsesText, generateSitemap, generateStyleGuideTokens, generateStyleGuideCopy, styleGuideAssistant, tokensFromComputed, STYLE_PROBE_JS, captureScreenshot, extractSiteFonts, probeSite } from './ai';
 
@@ -32,12 +33,15 @@ app.use('/api/markup/attachments', express.json({ limit: '32mb' }));
 app.use('/api/markup/public/attachments', express.json({ limit: '32mb' }));
 app.use('/mcp', express.json({ limit: '64mb' })); // MCP can upload ZIPs (base64)
 app.use('/api/styleguides', express.json({ limit: '32mb' })); // design-system HTML docs can be large
+app.use('/api/moodboards', express.json({ limit: '32mb' })); // pasted images (base64) can be large
 app.use(express.json({ limit: '5mb' })); // sitemaps can be large
 
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
 
 // Serve unzipped markup sites (static files). UUID path acts as the access key.
 app.use('/markup-files', express.static(MARKUP_DIR));
+// Serve moodboard images (static files). UUID path acts as the access key.
+app.use('/moodboard-files', express.static(MOODBOARD_DIR));
 // Same-origin live proxy (unauthenticated; before the authed router).
 app.get('/api/markup/proxy', markupProxyHandler);
 app.use('/api/markup/public', markupPublicRouter); // public share-link access, no auth
@@ -52,6 +56,8 @@ app.use('/api/team', teamsRouter);
 app.use('/api/public/projects', publicProjectsRouter); // read-only, no auth
 app.use('/api/projects', projectsRouter);
 app.use('/api/boards', boardsRouter);
+app.use('/api/moodboards/public', publicMoodboardsRouter); // read-only share links, no auth
+app.use('/api/moodboards', moodboardsRouter);
 // Generate a style guide from one or more real websites. Each style site becomes a version;
 // with several sites we also add a blended "Mix" version. An optional content site supplies
 // the brand name / text, so you can take the TEXT from one site and the STYLE from another.
