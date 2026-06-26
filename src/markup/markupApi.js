@@ -26,7 +26,7 @@ export const listMarkupProjects = () => req('/api/markup/projects');
 export const getMarkupProject = (id) => req(`/api/markup/projects/${id}`);
 export const createMarkupFromUrl = (name, url) => req('/api/markup/projects', { method: 'POST', body: { name, url } });
 export const uploadMarkupZip = (name, zipBase64) => req('/api/markup/projects/upload', { method: 'POST', body: { name, zipBase64 } });
-export const createBlankDesign = (name) => req('/api/markup/projects/blank', { method: 'POST', body: { name } });
+export const createBlankDesign = (name, hidden = false) => req('/api/markup/projects/blank', { method: 'POST', body: { name, hidden } });
 export const deleteMarkupProject = (id) => req(`/api/markup/projects/${id}`, { method: 'DELETE' });
 export const patchMarkupProject = (id, patch) => req(`/api/markup/projects/${id}`, { method: 'PATCH', body: patch });
 /* Design style library (project-wide design system): { colors:[], text:[], link:[] } */

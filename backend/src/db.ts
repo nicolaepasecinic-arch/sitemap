@@ -153,6 +153,10 @@ export async function initDb() {
     );
     CREATE INDEX IF NOT EXISTS markup_invites_email_idx ON markup_invites(email);
 
+    -- Designs created as MoodBoard components are hidden from the Design/Markup dashboards
+    -- (still openable by id from the moodboard that owns them).
+    ALTER TABLE markup_projects ADD COLUMN IF NOT EXISTS hidden BOOLEAN NOT NULL DEFAULT false;
+
     -- Versions: a markup project can have several versions (each a URL or unzipped ZIP),
     -- each with its own comments. Unzipped files live at MARKUP_DIR/<version id>/.
     CREATE TABLE IF NOT EXISTS markup_versions (

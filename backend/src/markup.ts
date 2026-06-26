@@ -290,8 +290,9 @@ const LIST_PROJECTS_SQL = `SELECT p.*,
        (SELECT count(*) FROM markup_comments c WHERE c.project_id = p.id AND c.resolved) AS resolved_count
        FROM markup_projects p
        LEFT JOIN markup_members m ON m.project_id = p.id AND m.user_id = $1
-      WHERE p.user_id = $1 OR m.user_id = $1
-         OR EXISTS (SELECT 1 FROM team_members om JOIN team_members mine ON mine.team_id = om.team_id AND mine.user_id = $1 WHERE om.user_id = p.user_id AND mine.role = 'pm')
+      WHERE (p.user_id = $1 OR m.user_id = $1
+         OR EXISTS (SELECT 1 FROM team_members om JOIN team_members mine ON mine.team_id = om.team_id AND mine.user_id = $1 WHERE om.user_id = p.user_id AND mine.role = 'pm'))
+        AND NOT p.hidden
       ORDER BY p.updated_at DESC`;
 
 export const markupAccessRole = (id: string, userId: string) => accessRole(id, userId);
@@ -331,10 +332,10 @@ export async function mkCreateZipProject(userId: string, name: string, buf: Buff
 }
 
 // Create a blank Design project: a ZIP-type version with a single empty index.html.
-export async function mkCreateBlankProject(userId: string, name: string) {
+export async function mkCreateBlankProject(userId: string, name: string, hidden = false) {
   const { rows } = await pool.query(
-    `INSERT INTO markup_projects (user_id, name, type, url, pages) VALUES ($1,$2,'zip','','[]'::jsonb) RETURNING *`,
-    [userId, String(name || 'Untitled design').slice(0, 120)]
+    `INSERT INTO markup_projects (user_id, name, type, url, pages, hidden) VALUES ($1,$2,'zip','','[]'::jsonb,$3) RETURNING *`,
+    [userId, String(name || 'Untitled design').slice(0, 120), !!hidden]
   );
   const proj = rows[0];
   try {
@@ -722,7 +723,7 @@ markupRouter.post('/projects/upload', async (req: AuthedRequest, res: Response) 
 
 // create a blank Design project (empty index.html)
 markupRouter.post('/projects/blank', async (req: AuthedRequest, res: Response) => {
-  try { res.status(201).json(await mkCreateBlankProject(req.userId!, req.body?.name)); }
+  try { res.status(201).json(await mkCreateBlankProject(req.userId!, req.body?.name, req.body?.hidden === true)); }
   catch (e: any) { res.status(400).json({ error: e?.message || 'Could not create the design.' }); }
 });
 
