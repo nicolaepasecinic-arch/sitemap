@@ -51,6 +51,7 @@ export function Inspector({ el, win, title, onTitle, pages, colors, onNewColor, 
   const getv = (prop) => cssNum(inline.getPropertyValue(prop));
   const comp = (prop) => (cs && cs.getPropertyValue ? cs.getPropertyValue(prop) : '');
   const tag = el.tagName.toLowerCase();
+  const isBodyEl = tag === 'body' || tag === 'html'; // page root — show only global style controls
   const isLeaf = el.children.length === 0;
   const isImg = tag === 'img';
   const ctx = { getv, comp, onStyle, onAttr, el, colors, onNewColor, textStyles, appliedTextId, onApplyText, onNewTextStyle };
@@ -72,15 +73,19 @@ export function Inspector({ el, win, title, onTitle, pages, colors, onNewColor, 
         </div>
         <button onClick={onDeselect} className="w-6 h-6 rounded hover:bg-gray-100 text-gray-400 flex items-center justify-center"><X size={14} /></button>
       </div>
-      {/* quick actions */}
-      <div className="flex items-center gap-1 px-3 py-2 border-b border-gray-100">
-        <ActBtn onClick={onMoveUp} title="Move up"><ChevronUp size={16} /></ActBtn>
-        <ActBtn onClick={onMoveDown} title="Move down"><ChevronDown size={16} /></ActBtn>
-        <ActBtn onClick={onDuplicate} title="Duplicate"><Copy size={15} /></ActBtn>
-        <div className="flex-1" />
-        <ActBtn onClick={onDelete} title="Delete" danger><Trash2 size={15} /></ActBtn>
-      </div>
-      <div className="flex items-center gap-1.5 px-4 py-2 text-[11px] text-gray-400 bg-gray-50/60"><Pencil size={12} /> Double-click on the page to edit text inline.</div>
+      {/* quick actions — hidden for the page root (can't move/duplicate/delete the page) */}
+      {!isBodyEl && (
+        <div className="flex items-center gap-1 px-3 py-2 border-b border-gray-100">
+          <ActBtn onClick={onMoveUp} title="Move up"><ChevronUp size={16} /></ActBtn>
+          <ActBtn onClick={onMoveDown} title="Move down"><ChevronDown size={16} /></ActBtn>
+          <ActBtn onClick={onDuplicate} title="Duplicate"><Copy size={15} /></ActBtn>
+          <div className="flex-1" />
+          <ActBtn onClick={onDelete} title="Delete" danger><Trash2 size={15} /></ActBtn>
+        </div>
+      )}
+      {isBodyEl
+        ? <div className="flex items-center gap-1.5 px-4 py-2 text-[11px] text-gray-500 bg-indigo-50/60"><Square size={12} className="text-[#473AE0]" /> Page root — edits here apply globally to the whole page.</div>
+        : <div className="flex items-center gap-1.5 px-4 py-2 text-[11px] text-gray-400 bg-gray-50/60"><Pencil size={12} /> Double-click on the page to edit text inline.</div>}
 
       {/* content — text & image */}
       {(isLeaf || isImg) && (
@@ -95,8 +100,8 @@ export function Inspector({ el, win, title, onTitle, pages, colors, onNewColor, 
         </Section>
       )}
 
-      {/* link — works on any element; wraps non-anchors (e.g. an image) in an <a> */}
-      <LinkSection el={el} pages={pages} onLink={onLink} onLinkTarget={onLinkTarget} />
+      {/* link — works on any element; wraps non-anchors (e.g. an image) in an <a>. Not for the page root. */}
+      {!isBodyEl && <LinkSection el={el} pages={pages} onLink={onLink} onLinkTarget={onLinkTarget} />}
 
       <EditSection title="Text" fields={FIELDS.Typography} ctx={ctx} />
       <EditSection title="Border" fields={FIELDS.Border} ctx={ctx} />
@@ -407,7 +412,19 @@ export function Layers({ getDoc, selectedEl, onSelect, onReorder, onRename, page
         <div className="border-b border-gray-100 mt-1" />
       </div>
       <div className="p-1.5 flex-1">
-        {tab === 'layers' && (body ? Array.from(body.children).filter(okEl).map((c, i) => node(c, 'r' + i, 0)) : <div className="text-xs text-gray-400 p-3">Loading…</div>)}
+        {tab === 'layers' && (body ? (<>
+          {/* Page root — select BODY to edit page-global styles. Children render nested under it. */}
+          <div
+            onClick={() => onSelect(body)}
+            onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); onSelect(body); onCtxMenu && onCtxMenu(body, e.clientX, e.clientY); }}
+            style={{ paddingLeft: 6 }}
+            className={`flex items-center gap-1 h-7 rounded-md cursor-pointer text-[13px] ${body === selectedEl ? 'bg-indigo-50 text-[#473AE0] font-medium' : 'text-gray-600 hover:bg-gray-50'}`}>
+            <span className="w-4 shrink-0" />
+            <Home size={12} className={`shrink-0 ${body === selectedEl ? 'text-[#473AE0]' : 'text-gray-400'}`} />
+            <span className="truncate">Page (Body)</span>
+          </div>
+          {Array.from(body.children).filter(okEl).map((c, i) => node(c, 'r' + i, 1))}
+        </>) : <div className="text-xs text-gray-400 p-3">Loading…</div>)}
         {tab === 'pages' && (<>
           {onNewPage && <button onClick={onNewPage} className="w-full flex items-center gap-2 px-2.5 h-8 rounded-md text-[13px] text-[#473AE0] hover:bg-indigo-50 font-medium mb-1"><Plus size={14} /> New page</button>}
           {pages.length ? pages.map((p) => (
@@ -1095,6 +1112,7 @@ export function ContextMenu({ x, y, el, onClose, actions, components = [] }) {
     [{ label: 'Fit Content', shortcut: '⇧A', onClick: run(actions.fitContent) }],
     [
       { label: 'Select', submenu: [
+        { label: 'Page (Body)', onClick: run(actions.selectBody) },
         { label: 'Top Parent', onClick: run(actions.selectTopParent) },
         { label: 'Parent', shortcut: 'ESC', onClick: run(actions.selectParent) },
         { label: 'First Child', onClick: run(actions.selectFirstChild) },

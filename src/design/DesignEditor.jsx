@@ -97,7 +97,7 @@ export default function DesignEditor({ id, onBack, embedded = false, styleguideI
     const changed = el !== selRef.current;
     d.querySelectorAll('[data-dz-selected]').forEach((x) => x.removeAttribute('data-dz-selected'));
     el.setAttribute('data-dz-selected', '');
-    el.setAttribute('draggable', 'true');
+    if (el.tagName !== 'BODY' && el.tagName !== 'HTML') el.setAttribute('draggable', 'true'); // never drag the page root
     selRef.current = el;
     if (changed) setSelSeq((s) => s + 1);   // remount inspector only on a new element (keeps accordions open while editing)
     setSelTick((t) => t + 1); syncHandlesRef.current();
@@ -263,8 +263,8 @@ export default function DesignEditor({ id, onBack, embedded = false, styleguideI
     else { linkEl.removeAttribute('target'); if (linkEl.getAttribute('rel') === 'noopener noreferrer') linkEl.removeAttribute('rel'); }
     markDirty(); setSelTick((t) => t + 1);
   };
-  const moveSel = (dir) => { const el = selRef.current; if (!el) return; const sib = dir < 0 ? el.previousElementSibling : el.nextElementSibling; if (!sib) return; pushUndo(); if (dir < 0) el.parentNode.insertBefore(el, sib); else el.parentNode.insertBefore(sib, el); markDirty(); setSelTick((t) => t + 1); };
-  const duplicateSel = () => { const el = selRef.current; if (!el) return; pushUndo(); const c = el.cloneNode(true); c.removeAttribute('data-dz-selected'); el.parentNode.insertBefore(c, el.nextSibling); markDirty(); select(c); };
+  const moveSel = (dir) => { const el = selRef.current; if (!el || isBody(el)) return; const sib = dir < 0 ? el.previousElementSibling : el.nextElementSibling; if (!sib) return; pushUndo(); if (dir < 0) el.parentNode.insertBefore(el, sib); else el.parentNode.insertBefore(sib, el); markDirty(); setSelTick((t) => t + 1); };
+  const duplicateSel = () => { const el = selRef.current; if (!el || isBody(el)) return; pushUndo(); const c = el.cloneNode(true); c.removeAttribute('data-dz-selected'); el.parentNode.insertBefore(c, el.nextSibling); markDirty(); select(c); };
   // Insert a new element (text / frame / stack / grid / masonry / image / video) into the
   // selected container (or the body) and select it. Text elements enter inline edit at once.
   const insertEl = (type) => {
@@ -287,6 +287,8 @@ export default function DesignEditor({ id, onBack, embedded = false, styleguideI
 
   /* ---- right-click context-menu actions (operate on the selected element) ---- */
   const isBody = (el) => !el || el === doc()?.body || el.tagName === 'BODY';
+  // Select the page root (BODY) to edit page-global styles (background, base typography, etc.).
+  const selectBody = () => { const d = doc(); if (d && d.body) { select(d.body); try { d.body.scrollIntoView({ block: 'start' }); } catch (e) {} } };
   const selectParent = () => { const el = selRef.current; const p = el && el.parentElement; if (p && !isBody(p)) select(p); };
   const selectTopParent = () => { let el = selRef.current; if (!el) return; while (el.parentElement && !isBody(el.parentElement)) el = el.parentElement; select(el); };
   const selectFirstChild = () => { const el = selRef.current; const c = el && Array.from(el.children).find((x) => x.nodeType === 1); if (c) select(c); };
@@ -406,7 +408,7 @@ export default function DesignEditor({ id, onBack, embedded = false, styleguideI
     updateStyles({ ...stylesRef.current, components: [...(stylesRef.current.components || []), comp] });
     toastMsg('Template created from page');
   };
-  const deleteSel = () => { const el = selRef.current; if (!el) return; pushUndo(); el.remove(); clearSelection(); markDirty(); };
+  const deleteSel = () => { const el = selRef.current; if (!el || isBody(el)) return; pushUndo(); el.remove(); clearSelection(); markDirty(); };
 
   /* design-system styles: update state + debounced save to backend */
   const updateStyles = (next) => {
@@ -686,7 +688,7 @@ export default function DesignEditor({ id, onBack, embedded = false, styleguideI
         <ContextMenu x={ctx.x} y={ctx.y} el={sel} onClose={() => setCtx(null)}
           components={styles.components || []}
           actions={{
-            fitContent, selectParent, selectTopParent, selectFirstChild, selectFirstText,
+            fitContent, selectParent, selectTopParent, selectFirstChild, selectFirstText, selectBody,
             copyEl, pasteEl, canPaste: !!clipRef.current, duplicate: duplicateSel, del: deleteSel,
             rename: renameEl, autoRename: autoRenameEl, toggleLock, toggleHide, setOverflow,
             addFrame: () => wrapIn('frame'), addStack: () => wrapIn('stack'), removeFrame,

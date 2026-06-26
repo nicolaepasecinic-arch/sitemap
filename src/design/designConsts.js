@@ -22,16 +22,19 @@ export const INSERT_ITEMS = [
   ['image', 'Image', ImageIcon],
   ['video', 'Video', Video],
 ];
-// Build a fresh element of the requested kind with sensible, visible default styling.
+// Build a fresh element of the requested kind. Inserted elements are kept "bare": no cosmetic
+// inline styling (no background, radius, padding, min-height, etc.) so the inspector starts clean
+// with no pre-filled rows. Only the single property that makes a type *function* is set —
+// display for Stack/Grid, columns for Masonry. Frame is a plain, unstyled <div>.
 export const makeInsertEl = (d, type) => {
-  if (type === 'text') { const e = d.createElement('p'); e.textContent = 'Text'; e.style.cssText = 'font-size:16px;line-height:1.5;margin:0;'; return e; }
-  if (type === 'image') { const e = d.createElement('img'); e.setAttribute('src', PLACEHOLDER_IMG); e.setAttribute('alt', ''); e.style.cssText = 'max-width:100%;display:block;border-radius:8px;'; return e; }
-  if (type === 'video') { const e = d.createElement('video'); e.setAttribute('controls', ''); e.style.cssText = 'max-width:100%;display:block;background:#000;border-radius:8px;min-height:140px;'; return e; }
+  if (type === 'text') { const e = d.createElement('p'); e.textContent = 'Text'; return e; }
+  if (type === 'image') { const e = d.createElement('img'); e.setAttribute('src', PLACEHOLDER_IMG); e.setAttribute('alt', ''); return e; }
+  if (type === 'video') { const e = d.createElement('video'); e.setAttribute('controls', ''); return e; }
   const e = d.createElement('div');
-  if (type === 'stack') e.style.cssText = 'display:flex;gap:16px;padding:24px;min-height:80px;background:#f3f4f6;border-radius:8px;';
-  else if (type === 'grid') e.style.cssText = 'display:grid;grid-template-columns:repeat(2,1fr);gap:16px;padding:24px;min-height:80px;background:#f3f4f6;border-radius:8px;';
-  else if (type === 'masonry') e.style.cssText = 'columns:3;column-gap:16px;padding:24px;min-height:80px;background:#f3f4f6;border-radius:8px;';
-  else e.style.cssText = 'min-height:80px;padding:24px;background:#f3f4f6;border-radius:8px;'; // frame
+  if (type === 'stack') e.style.setProperty('display', 'flex');
+  else if (type === 'grid') e.style.setProperty('display', 'grid');
+  else if (type === 'masonry') e.style.setProperty('columns', '3');
+  // frame → bare <div>, no inline styles
   return e;
 };
 
